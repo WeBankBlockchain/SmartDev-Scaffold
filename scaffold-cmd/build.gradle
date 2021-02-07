@@ -1,0 +1,54 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+mainClassName = 'com.webank.scaffold.cmd.Main'
+
+group 'com.webank'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://dl.bintray.com/ethereum/maven/" }
+    mavenLocal()
+    mavenCentral()
+}
+
+
+configurations {
+    provided
+    compile.extendsFrom(provided)
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/info.picocli/picocli
+    compile group: 'info.picocli', name: 'picocli', version: '4.6.1'
+    provided project(":scaffold-core")
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources  {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.webank.scaffold.cmd.Main'
+        attributes 'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA' //Otherwise there will be "cannot find main class"
+    destinationDir file('dist')
+    archiveName project.name + '.jar'
+}
+

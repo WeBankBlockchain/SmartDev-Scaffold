@@ -1,0 +1,76 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+
+    }
+    dependencies {
+        classpath 'com.webank:solc-gradle-plugin:1.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'solc-gradle-plugin'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = '${generator.group}'
+version = '1.0.0-SNAPSHOT'
+
+solc{
+    pkg = '${package}.contracts'
+}
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://dl.bintray.com/ethereum/maven/" }
+    maven { url "https://oss.sonatype.org/service/local/staging/deploy/maven2"}
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+dependencies {
+    compile ('org.fisco-bcos.java-sdk:java-sdk:2.7.0')
+    testCompile 'junit:junit:4.12'
+}
+
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources  {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+jar {
+    enabled = true
+    destinationDir file('dist')
+    archiveName project.name + '.jar'
+    exclude '**/*.xml'
+    exclude '**/*.properties'
+    exclude '**/*.yml'
+    //exclude '**/spring.factories'
+    from {
+
+    }
+    doLast {
+        copy {
+            from file('src/main/resources/')
+            into 'dist/config'
+        }
+        copy {
+            from configurations.runtime
+            into 'dist/lib'
+        }
+    }
+}
