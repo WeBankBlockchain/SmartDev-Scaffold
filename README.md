@@ -46,6 +46,7 @@ java -jar scaffold-cmd.jar -p [peers] -s [solidity directory] -c [cert directory
 | --- | --- | --- |
 |-p|连接节点，若多个节点用逗号分隔，例如127.0.0.1:20200,127.0.0.1:20201||
 |-s|智能合约solidity文件的目录||
+|-c|配置目录，包含证书||
 |-o|输出目录，新的项目会在这个目录下被创建。如果同名项目已经存在，则会报错||
 |-f|合约过滤通配符，用于选择合约，例如*Controller，则只会读取Controller结尾的合约。默认选择所有合约|可选|
 
