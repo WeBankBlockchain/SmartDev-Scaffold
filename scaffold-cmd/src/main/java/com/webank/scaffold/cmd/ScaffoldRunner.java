@@ -12,27 +12,27 @@ import picocli.CommandLine;
 
 @CommandLine.Command(name = "ScaffoldRunner")
 public class ScaffoldRunner implements Runnable{
-
-    @CommandLine.Option(names = {"-f", "--filter"}, required = false,defaultValue = "*",description = "Contract filter, you can use wild char")
-    private String filter;
-
-    @CommandLine.Option(names = {"-p", "--peers"}, required = true, description = "Peers to connect, split by comma")
-    private String peers;
-
-    @CommandLine.Option(names = {"-s", "--sol"}, required = true, description = "Solidity contracts dir")
+    @CommandLine.Option(names = {"-s", "--sol"}, required = true, description = "Required. Solidity contracts dir.")
     private String solidityDir;
 
-    @CommandLine.Option(names = {"-c", "--cert"}, required = true, description = "Ca cert directory")
-    private String certDir;
+    @CommandLine.Option(names = {"-c", "--conf"}, required = true, description = "Required. Config dir including certs and config.toml.")
+    private String confDir;
 
+    @CommandLine.Option(names = {"-g", "--group"}, required = true,defaultValue = "org.example",description = "Optional. Group name.")
+    private String group;
 
-    @CommandLine.Option(names = {"-o", "--output"},required = true,description = "Output directory")
+    @CommandLine.Option(names = {"-a", "--artifact"}, required = true, defaultValue = "demo",description = "Optional. Artifact name.")
+    private String artifact;
+
+    @CommandLine.Option(names = {"-o", "--output"},required = true, defaultValue = "artifacts",description = "Optional. Output directory.")
     private String output;
+
+    @CommandLine.Option(names = {"-f", "--filter"}, required = false,defaultValue = "*",description = "Optional. Contract filter, you can use wild char")
+    private String filter;
 
     @Override
     public void run() {
-        new ProjectFactory().buildProjectDir("org.example", "demo",filter, peers,
-                solidityDir, certDir, output);
+        new ProjectFactory().buildProjectDir(solidityDir, group, artifact,confDir, output, filter);
     }
 
 }
