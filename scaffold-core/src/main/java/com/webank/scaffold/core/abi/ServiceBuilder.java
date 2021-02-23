@@ -38,7 +38,7 @@ public class ServiceBuilder {
          * 1. Service class
          */
         ClassName serviceClassName = serviceClassName(contract);
-        TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(serviceClassName);
+        TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(serviceClassName).addModifiers(Modifier.PUBLIC);
         /**
          * 2. Add static field: ABI | BIN | SM_BIN
          */
@@ -129,6 +129,9 @@ public class ServiceBuilder {
         if (ctorInputType != null) {
             ctor2Builder.addParameter(ClassName.get(pkg,ctorInputType.name),"input");
             ctor2Builder.addStatement("this.address = this.txProcessor.deployAndGetResponse(ABI,this.client.getCryptoType()==0?$L:$L, input.toArgs()).getContractAddress()",BIN, SMBIN);
+        }
+        else{
+            ctor2Builder.addStatement("this.address = this.txProcessor.deployAndGetResponse(ABI,this.client.getCryptoType()==0?$L:$L).getContractAddress()",BIN, SMBIN);
         }
 
         MethodSpec ctor2 = ctor2Builder.build();
