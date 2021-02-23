@@ -15,6 +15,8 @@
 
 ## 文档
 - [**中文**](https://toolkit-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-Toolkit-Scaffold/index.html)
+- [**快速开始**](https://toolkit-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-Toolkit-Scaffold/intro.html)
+
 
 ## 贡献代码
 欢迎参与本项目的社区建设：
