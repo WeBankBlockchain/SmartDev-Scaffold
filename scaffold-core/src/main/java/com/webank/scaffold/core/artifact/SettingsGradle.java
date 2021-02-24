@@ -2,28 +2,27 @@ package com.webank.scaffold.core.artifact;
 
 import com.webank.scaffold.core.config.GeneratorOptions;
 import com.webank.scaffold.core.config.UserConfig;
-import com.webank.scaffold.core.util.PackageNameUtil;
 import com.webank.scaffold.core.util.IOUtil;
+import com.webank.scaffold.core.util.PackageNameUtil;
 
 import java.io.File;
 import java.io.InputStream;
 
 /**
- * Generate a build.gradle
  * @author aaronchu
  * @Description
- * @data 2021/01/15
+ * @data 2021/02/24
  */
-public class BuildGradle implements Artifact{
+public class SettingsGradle implements Artifact {
 
     private static final String TEMPLATE_RESOURCE
-            = "templates/build.gradle";
-    private static final String BUILD_GRADLE_FILE = "build.gradle";
+            = "templates/settings.gradle";
+    private static final String SETTINGS_GRADLE_FILE = "settings.gradle";
 
     private File parent;
     private UserConfig userConfig;
 
-    public BuildGradle(File parent, UserConfig userConfig){
+    public SettingsGradle(File parent, UserConfig userConfig){
         this.parent = parent;
         this.userConfig = userConfig;
     }
@@ -51,7 +50,7 @@ public class BuildGradle implements Artifact{
          */
         template = replaceAllVars(template);
         /**
-         * 3. Outpu
+         * 3. Output
          */
         IOUtil.writeString(outputPath, template);
     }
@@ -59,7 +58,7 @@ public class BuildGradle implements Artifact{
 
     @Override
     public File toFile() {
-        return new File(parent, BUILD_GRADLE_FILE);
+        return new File(parent, SETTINGS_GRADLE_FILE);
     }
 
     @Override
@@ -69,15 +68,12 @@ public class BuildGradle implements Artifact{
 
     @Override
     public String getName() {
-        return BUILD_GRADLE_FILE;
+        return SETTINGS_GRADLE_FILE;
     }
 
     private String replaceAllVars(String template){
-        String group = this.userConfig.getProperty(GeneratorOptions.GENERATOR_GROUP);
         String artifact =  this.userConfig.getProperty(GeneratorOptions.GENERATOR_ARTIFACT);
-        template = template.replace("${"+ GeneratorOptions.GENERATOR_GROUP+"}", group);
-        String pkg = PackageNameUtil.getRootPackageName(group, artifact);
-        template = template.replace("${package}", pkg);
+        template = template.replace("${"+ GeneratorOptions.GENERATOR_ARTIFACT+"}", artifact);
         return template;
     }
 }

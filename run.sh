@@ -41,8 +41,11 @@ function check_conf_dir(){
 function clean(){
   rm -rf dist
   mkdir dist
-  rm -rf artifacts
-  mkdir artifacts
+
+  if [ ! -d "artifacts" ]; then
+    mkdir artifacts
+  fi
+
 }
 
 
@@ -59,12 +62,17 @@ if [ -z "$ARTIFACT" ]; then ARTIFACT="demo"; fi
 echo group name : $GROUP
 echo artifact name: $ARTIFACT
 
+ARTIFACT_DIR="artifacts/$ARTIFACT"
+if [ -d "$ARTIFACT_DIR" ]; then
+    echo "\"$ARTIFACT_DIR \" directory ALREADY exists. Please remove it."
+    exit 0
+fi
+
 cd scaffold-cmd
 gradle build
 cd ..
 cp -r scaffold-cmd/dist/* dist
-cd dist
-java -jar scaffold-cmd.jar -g $GROUP -a $ARTIFACT -s ../$SOL_DIR -c ../$CONF_DIR -o ../artifacts
+java -jar dist/scaffold-cmd.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -c $CONF_DIR -o artifacts
 
 
 

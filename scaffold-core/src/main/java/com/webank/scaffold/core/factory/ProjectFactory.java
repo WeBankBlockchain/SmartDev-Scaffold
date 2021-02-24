@@ -75,6 +75,7 @@ public class ProjectFactory {
         TestDir testDir = new TestDir(srcDir.toFile());
         TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
         BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
+        SettingsGradle settingsGradle = new SettingsGradle(project.toFile(), config);
         project.generate();
         srcDir.generate();
         mainDir.generate();
@@ -82,6 +83,7 @@ public class ProjectFactory {
         testDir.generate();
         testJavaDir.generate();
         buildGradle.generate();
+        settingsGradle.generate();
     }
 
 }

@@ -12,3 +12,8 @@ tmp/
 out/
 artifacts/
 contracts/*.sol
+conf/*key*
+conf/*crt*
+conf/*config*
+conf/*toml*
+conf/*yaml*
