@@ -11,5 +11,4 @@ tmp/
 .idea/
 out/
 artifacts/
-conf/*
 contracts/*.sol
