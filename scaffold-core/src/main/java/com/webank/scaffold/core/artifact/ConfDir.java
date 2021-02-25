@@ -13,15 +13,12 @@ public class ConfDir extends DirectoryArtifact {
 
     private static final String CONF_DIR = "conf";
 
-    private File srcConfDir;
-    public ConfDir(File path, File srcConfDir) {
+    public ConfDir(File path) {
         super(path);
-        this.srcConfDir = srcConfDir;
     }
 
     @Override
     protected void doGenerateSubContents() throws Exception {
-        new DirectoryCopier().copy(this.srcConfDir.getAbsolutePath(), this.toFile().getAbsolutePath());
     }
 
     @Override

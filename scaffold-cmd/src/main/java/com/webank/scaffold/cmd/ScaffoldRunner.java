@@ -15,9 +15,6 @@ public class ScaffoldRunner implements Runnable{
     @CommandLine.Option(names = {"-s", "--sol"}, required = true, description = "Required. Solidity contracts dir.")
     private String solidityDir;
 
-    @CommandLine.Option(names = {"-c", "--conf"}, required = true, description = "Required. Config dir including certs and config.toml.")
-    private String confDir;
-
     @CommandLine.Option(names = {"-g", "--group"}, required = true,defaultValue = "org.example",description = "Optional. Group name.")
     private String group;
 
@@ -32,7 +29,7 @@ public class ScaffoldRunner implements Runnable{
 
     @Override
     public void run() {
-        new ProjectFactory().buildProjectDir(solidityDir, group, artifact,confDir, output, filter);
+        new ProjectFactory().buildProjectDir(solidityDir, group, artifact, output, filter);
     }
 
 }
