@@ -3,6 +3,7 @@ package com.webank.scaffold.core.abi;
 import com.squareup.javapoet.*;
 import com.webank.scaffold.core.config.UserConfig;
 import com.webank.scaffold.core.util.PackageNameUtil;
+import lombok.Getter;
 import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
 import org.fisco.bcos.sdk.client.Client;
 import org.fisco.bcos.sdk.transaction.manager.AssembleTransactionProcessor;
@@ -95,6 +96,7 @@ public class ServiceBuilder {
     private TypeSpec.Builder populateInstanceFields(TypeSpec.Builder typeBuilder){
         FieldSpec addressField
                 = FieldSpec.builder(String.class, "address")
+                .addAnnotation(Getter.class)
                 .addModifiers(Modifier.PRIVATE)
                 .build();
         FieldSpec clientField
