@@ -23,59 +23,46 @@ function check_java(){
 }
 
 function check_sol_dir(){
-  SOL_DIR="contracts"
+  SOL_DIR="$(pwd)/contracts"
   if [ ! -d "$SOL_DIR" ]; then
     echo " \" ${SOL_DIR} \" directory not exists. Please copy solidity files here"
     exit 0
   fi
-}
-
-function check_conf_dir(){
-  CONF_DIR="conf"
-  if [ ! -d "$CONF_DIR" ]; then
-    echo "\"${CONF_DIR} \" directory not exists. Please copy certs and config to this folder. See https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/sdk/java_sdk/configuration.html for more info"
+  if [ ! "$(ls -A $SOL_DIR)" ]; then
+    echo " \" ${SOL_DIR} \" directory is empty. Please copy solidity files here"
     exit 0
   fi
-}
-
-function clean(){
-  rm -rf dist
-  mkdir dist
-
-  if [ ! -d "artifacts" ]; then
-    mkdir artifacts
-  fi
-
 }
 
 
 check_java
 check_sol_dir
-check_conf_dir
-clean
 
-GROUP=${1}
-ARTIFACT=${2}
-if [ -z "$GROUP" ]; then GROUP="org.example"; fi
+ARTIFACT=${1}
+GROUP=${2}
+
 if [ -z "$ARTIFACT" ]; then ARTIFACT="demo"; fi
+if [ -z "$GROUP" ]; then GROUP="org.example"; fi
 
-echo group name : $GROUP
 echo artifact name: $ARTIFACT
+echo group name : $GROUP
+echo package name: $GROUP.$ARTIFACT
 
-ARTIFACT_DIR="artifacts/$ARTIFACT"
+ARTIFACT_DIR="$(pwd)/$ARTIFACT"
 if [ -d "$ARTIFACT_DIR" ]; then
-    echo "\"$ARTIFACT_DIR \" directory ALREADY exists. Please remove it."
-    exit 0
+   echo "\"$ARTIFACT_DIR \" directory ALREADY exists. Please remove it if you want to override"
+   exit 0
 fi
 
-cd scaffold-cmd
+TOOLS_DIR=$(pwd)
+echo start compiling scaffold...
+cd ../scaffold-cmd
 gradle build
-cd ..
-cp -r scaffold-cmd/dist/* dist
-java -jar dist/scaffold-cmd.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -c $CONF_DIR -o artifacts
+echo end compiling scaffold...
 
-
-
-#java -cp "apps/*:lib/*:conf/" console.common.ConsoleUtils $@
-
+cd dist
+echo start building $ARTIFACT...
+java -jar scaffold-cmd.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
+#
+#
 
