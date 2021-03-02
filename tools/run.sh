@@ -6,18 +6,18 @@ function check_java(){
    IFS='.' arr=($version)
    IFS=' '
    if [ -z ${arr[0]} ];then
-      LOG_ERROR "At least Java8 is required."
+      echo "At least Java8 is required."
       exit 1
    fi
    if [ ${arr[0]} -eq 1 ];then
       if [ ${arr[1]} -lt 8 ];then
-           LOG_ERROR "At least Java8 is required."
+           echo "At least Java8 is required."
            exit 1
       fi
    elif [ ${arr[0]} -gt 8 ];then
           :
    else
-       LOG_ERROR "At least Java8 is required."
+       echo "At least Java8 is required."
        exit 1
    fi
 }
@@ -57,12 +57,13 @@ fi
 TOOLS_DIR=$(pwd)
 echo start compiling scaffold...
 cd ../scaffold-cmd
-gradle build
+gradle bootJar
 echo end compiling scaffold...
 
 cd dist
 echo start building $ARTIFACT...
-java -jar scaffold-cmd.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
+echo $SOL_DIR
+java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
 #
 #
 
