@@ -1,6 +1,6 @@
-plugins {
-    id 'java'
-}
+
+apply plugin: 'java'
+
 
 group 'com.webank'
 version '1.0-SNAPSHOT'
@@ -12,6 +12,5 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    implementation 'junit:junit:4.12'
+
 }

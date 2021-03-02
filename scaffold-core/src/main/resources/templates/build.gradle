@@ -11,10 +11,14 @@ buildscript {
         classpath 'com.webank:solc-gradle-plugin:1.0.0-SNAPSHOT'
     }
 }
-
-apply plugin: 'maven'
+plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+}
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
 apply plugin: 'solc-gradle-plugin'
 
 sourceCompatibility = 1.8
@@ -35,12 +39,23 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     maven { url "https://dl.bintray.com/ethereum/maven/" }
     maven { url "https://oss.sonatype.org/service/local/staging/deploy/maven2"}
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
     compile ('org.fisco-bcos.java-sdk:java-sdk:2.7.0')
-    testCompile 'junit:junit:4.12'
 }
 
 
@@ -54,26 +69,24 @@ sourceSets {
         }
     }
 }
-
-jar {
-    enabled = true
+test {
+    useJUnitPlatform()
+}
+bootJar {
     destinationDir file('dist')
-    archiveName project.name + '.jar'
+    archiveName project.name + '-exec.jar'
     exclude '**/*.xml'
     exclude '**/*.properties'
     exclude '**/*.yml'
-    //exclude '**/spring.factories'
-    from {
-
-    }
     doLast {
         copy {
-            from file('src/main/resources/')
-            into 'dist/config'
-        }
-        copy {
-            from configurations.runtime
-            into 'dist/lib'
+            from file('src/main/resources')
+            into 'dist/config/'
         }
     }
+}
+
+clean {
+    println "delete ${projectDir}/dist"
+    delete "${projectDir}/dist"
 }

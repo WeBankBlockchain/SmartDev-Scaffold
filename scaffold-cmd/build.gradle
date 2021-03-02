@@ -1,9 +1,30 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/spring/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
+
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
+    }
+}
+plugins{
+    id 'org.springframework.boot' version '2.1.1.RELEASE'
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'application'
 mainClassName = 'com.webank.scaffold.cmd.Main'
-
 group 'com.webank'
 version '1.0-SNAPSHOT'
 
@@ -24,9 +45,10 @@ configurations {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     // https://mvnrepository.com/artifact/info.picocli/picocli
     compile group: 'info.picocli', name: 'picocli', version: '4.6.1'
-    provided project(":scaffold-core")
+    compile project(":scaffold-core")
 }
 sourceSets {
     main {
@@ -39,16 +61,22 @@ sourceSets {
     }
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'com.webank.scaffold.cmd.Main'
-        attributes 'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
-    }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA' //Otherwise there will be "cannot find main class"
+bootJar {
     destinationDir file('dist')
-    archiveName project.name + '.jar'
+    archiveName project.name + '-exec.jar'
+    exclude '**/*.xml'
+    exclude '**/*.properties'
+    exclude '**/*.yml'
+    doLast {
+        copy {
+            from file('src/main/resources')
+            into 'dist/config/'
+        }
+    }
+}
+
+clean {
+    println "delete ${projectDir}/dist"
+    delete "${projectDir}/dist"
 }
 
