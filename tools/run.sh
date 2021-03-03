@@ -34,20 +34,17 @@ function check_sol_dir(){
   fi
 }
 
-configFile="./config.ini"
-function readINI()
-{
- FILENAME=$1; SECTION=$2; KEY=$3
- RESULT=`awk -F '=' '/\['$SECTION'\]/{a=1}a==1&&$1~/'$KEY'/{print $2;exit}' $FILENAME`
- echo $KEY : $RESULT
-}
-
 check_java
 check_sol_dir
+ARTIFACT=$(grep artifact config.ini |  cut  -d '=' -f 2)
+GROUP=$(grep group config.ini |  cut  -d '=' -f 2)
+NEED=$(grep need config.ini |  cut  -d '=' -f 2)
 
-ARTIFACT=$(readINI configFile "general" "artifact")
-GROUP=$(readINI configFile "general" "group")
-FILTER=$(readINI configFile "general" "filter")
+echo "GROUP=$GROUP"
+echo "ARTIFACT=$ARTIFACT"
+echo "SOL_DIR=$SOL_DIR"
+echo "NEED=$NEED"
+
 
 ARTIFACT_DIR="$(pwd)/$ARTIFACT"
 if [ -d "$ARTIFACT_DIR" ]; then
@@ -63,8 +60,11 @@ echo end compiling scaffold...
 
 cd dist
 echo start building $ARTIFACT...
-echo $SOL_DIR
-java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -f $FILTER
-#
-#
+if [ -z "$NEED"]; then
+  java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
+else
+  java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $NEED
+fi
+
+
 
