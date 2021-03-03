@@ -34,19 +34,20 @@ function check_sol_dir(){
   fi
 }
 
+configFile="./config.ini"
+function readINI()
+{
+ FILENAME=$1; SECTION=$2; KEY=$3
+ RESULT=`awk -F '=' '/\['$SECTION'\]/{a=1}a==1&&$1~/'$KEY'/{print $2;exit}' $FILENAME`
+ echo $KEY : $RESULT
+}
 
 check_java
 check_sol_dir
 
-ARTIFACT=${1}
-GROUP=${2}
-
-if [ -z "$ARTIFACT" ]; then ARTIFACT="demo"; fi
-if [ -z "$GROUP" ]; then GROUP="org.example"; fi
-
-echo artifact name: $ARTIFACT
-echo group name : $GROUP
-echo package name: $GROUP.$ARTIFACT
+ARTIFACT=$(readINI configFile "general" "artifact")
+GROUP=$(readINI configFile "general" "group")
+FILTER=$(readINI configFile "general" "filter")
 
 ARTIFACT_DIR="$(pwd)/$ARTIFACT"
 if [ -d "$ARTIFACT_DIR" ]; then
@@ -63,7 +64,7 @@ echo end compiling scaffold...
 cd dist
 echo start building $ARTIFACT...
 echo $SOL_DIR
-java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
+java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -f $FILTER
 #
 #
 

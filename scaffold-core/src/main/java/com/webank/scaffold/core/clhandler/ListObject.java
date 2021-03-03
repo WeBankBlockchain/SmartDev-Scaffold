@@ -1,4 +1,4 @@
-package com.webank.scaffold.core.abi;
+package com.webank.scaffold.core.builder;
 
 import java.util.List;
 

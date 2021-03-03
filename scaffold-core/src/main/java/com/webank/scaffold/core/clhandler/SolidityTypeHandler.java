@@ -1,7 +1,6 @@
-package com.webank.scaffold.core.abi;
+package com.webank.scaffold.core.builder;
 
 import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
 import org.fisco.bcos.sdk.codegen.SolidityContractWrapper;
 
 /**

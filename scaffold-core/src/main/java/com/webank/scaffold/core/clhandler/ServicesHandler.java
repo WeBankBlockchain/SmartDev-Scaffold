@@ -1,7 +1,8 @@
-package com.webank.scaffold.core.abi;
+package com.webank.scaffold.core.clhandler;
 
 import com.squareup.javapoet.*;
 import com.webank.scaffold.core.config.UserConfig;
+import com.webank.scaffold.core.constant.CompileConstants;
 import com.webank.scaffold.core.util.PackageNameUtil;
 import lombok.Getter;
 import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
@@ -67,27 +68,27 @@ public class ServiceBuilder {
     }
 
     private TypeSpec.Builder populateStaticFields(String contract, TypeSpec.Builder typeBuilder){
-        String pkg = PackageNameUtil.getRootPackageName(config);
-        String javaContractFullName = pkg+".contracts."+contract;
+        String utilsPackage = PackageNameUtil.getUtilsPackageName(config);
+        String ioUtilFullName = utilsPackage+".IOUtil";
         FieldSpec abiField
                 = FieldSpec
                 .builder(String.class, ABI)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                .initializer(javaContractFullName + "." + ABI)
+                .initializer(ioUtilFullName + ".readResourceAsString(\"$L/$L\")", CompileConstants.ABI_DIR, contract+".abi")
                 .build();
 
         FieldSpec bin
                 = FieldSpec
                 .builder(String.class, BIN)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                .initializer(javaContractFullName+"." +BIN)
+                .initializer(ioUtilFullName + ".readResourceAsString(\"$L/$L\")", CompileConstants.BIN_DIR, contract+".bin")
                 .build();
 
         FieldSpec smbin
                 = FieldSpec
                 .builder(String.class, SMBIN)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                .initializer(javaContractFullName+"." +BIN)
+                .initializer(ioUtilFullName + ".readResourceAsString(\"$L/$L\")", CompileConstants.SMBIN_DIR, contract+".bin")
                 .build();
 
         return typeBuilder.addField(abiField).addField(bin).addField(smbin);

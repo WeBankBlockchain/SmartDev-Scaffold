@@ -1,4 +1,4 @@
-package com.webank.scaffold.core.abi;
+package com.webank.scaffold.core.clhandler;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -18,7 +18,6 @@ import org.fisco.bcos.sdk.crypto.CryptoSuite;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +29,14 @@ import java.util.Map;
  * @Description
  * @data 2021/01/26
  */
-public class BOBuilder {
+public class BOHandler {
 
     private final static String CTOR = "CtorBO";
     private final static String INPUT = "InputBO";
 
     private UserConfig config;
 
-    public BOBuilder(UserConfig config){
+    public BOHandler(UserConfig config){
         this.config = config;
     }
 
@@ -92,7 +91,7 @@ public class BOBuilder {
             List<ABIDefinition> definitions = e.getValue();
             for(int i=0;i<definitions.size();i++){
                 ABIDefinition abiDef = definitions.get(i);
-                String functionName =  CommonUtil.makeFirstCharUpperCase(new StringBuilder(abiDef.getName()));
+                String functionName =  CommonUtil.makeFirstCharUpperCase(abiDef.getName());
                 String overloadMark = i>0?Integer.toString(i):"";
                 String className = contractName
                         + functionName

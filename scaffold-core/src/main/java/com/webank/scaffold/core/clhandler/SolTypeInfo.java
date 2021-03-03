@@ -1,7 +1,6 @@
-package com.webank.scaffold.core.abi;
+package com.webank.scaffold.core.builder;
 
 import lombok.Data;
-import org.fisco.bcos.sdk.abi.datatypes.generated.AbiTypes;
 
 /**
  * @author aaronchu
