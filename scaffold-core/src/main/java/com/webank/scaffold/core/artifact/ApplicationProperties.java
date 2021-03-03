@@ -52,7 +52,7 @@ public class ApplicationProperties implements Artifact {
         for(String contractName :contracts){
             contractName = CommonUtil.makeFirstCharLowerCase(contractName);
             writer.write("### Optional. Please fill this address if you want to use related service\n");
-            writer.write("system."+contractName+"Address=\n");
+            writer.write("system.contract."+contractName+"Address=\n");
         }
     }
 

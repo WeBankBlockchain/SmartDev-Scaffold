@@ -48,10 +48,10 @@ public class SdkBeanConfig {
                 return client;
             }
             catch (Exception ex){
-                log.warn("tried {} with exception {}",certPath, ex.getMessage());
+                log.warn("tried {} with exception {}",certPath, ex);
             }
         }
-        throw new ConfigException("Failed to load certs in all path:"+certPaths);
+        throw new ConfigException("Failed to connect to peers:" + config.getPeers());
     }
 
     public void configNetwork(ConfigProperty configProperty){
@@ -70,7 +70,8 @@ public class SdkBeanConfig {
     }
 
     public void configCryptoKeyPair(Client client){
-        if(config.getHexPrivateKey() == null){
+        if(config.getHexPrivateKey() == null || config.getHexPrivateKey().isEmpty()){
+            client.getCryptoSuite().setCryptoKeyPair(client.getCryptoSuite().createKeyPair());
             return;
         }
         client.getCryptoSuite().setCryptoKeyPair(client.getCryptoSuite().createKeyPair(config.getHexPrivateKey()));
