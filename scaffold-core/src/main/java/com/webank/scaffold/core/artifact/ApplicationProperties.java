@@ -42,7 +42,7 @@ public class ApplicationProperties implements Artifact {
         writer.write("### Required\n");
         writer.write("system.groupId=1\n");
         writer.write("### Optional. Default will search conf,config,src/main/conf/src/main/config\n");
-        writer.write("system.certPath=conf,config,src/main/conf,src/main/config\n");
+        writer.write("system.certPath=conf,config,src/main/resources/conf,src/main/resources/config\n");
         writer.write("### Optional. If don't specify a random private key will be used\n");
         writer.write("system.hexPrivateKey=\n");
     }

@@ -88,7 +88,7 @@ bootJar {
     doLast {
         copy {
             from file('src/main/resources')
-            into 'dist/config/'
+            into 'dist'
         }
     }
 }

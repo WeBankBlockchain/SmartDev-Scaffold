@@ -15,10 +15,6 @@ public class ConfDir extends DirectoryArtifact {
 
     private static final String CONF_DIR = "conf";
 
-    private static final String TEMPLATE_RESOURCE
-            = "templates/config.toml";
-    private static final String CONFIG_TOML = "config.toml";
-
     public ConfDir(File path) {
         super(path);
     }

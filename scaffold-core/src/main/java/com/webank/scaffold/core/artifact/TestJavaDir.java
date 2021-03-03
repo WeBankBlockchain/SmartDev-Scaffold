@@ -29,11 +29,6 @@ public class TestJavaDir extends DirectoryArtifact{
         String packageName = groupName + "." + artifactName;
         File packageDir = new File(this.toFile(), packageName);
         packageDir.mkdirs();
-
-        /**
-         * 2. Generate test code
-         */
-        new TestConnectionJava(packageDir, this.config).generate();
     }
 
     @Override
