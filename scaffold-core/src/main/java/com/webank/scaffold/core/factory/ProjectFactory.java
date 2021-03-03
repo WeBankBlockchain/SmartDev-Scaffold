@@ -20,7 +20,7 @@ public class ProjectFactory {
     /**
      * Build project, which can be ran by users by using gradle test.
      */
-    public ProjectArtifact buildProjectDir(String solidityDir, String group, String artifact, String outputDir, String filter){
+    public ProjectArtifact buildProjectDir(String solidityDir, String group, String artifact, String outputDir, String need){
         /**
          * 1. Create UserConfig object
          */
@@ -34,7 +34,7 @@ public class ProjectFactory {
          * 3. Create sub contents in project
          */
         try{
-            createSubContents(filter, project, solidityDir, config);
+            createSubContents(need, project, solidityDir, config);
             System.out.println("Project build complete:"+project.toFile());
         }
         catch (Exception ex){
@@ -67,11 +67,10 @@ public class ProjectFactory {
         return config;
     }
 
-    private void createSubContents(String filter, ProjectArtifact project, String solidityDir, UserConfig config)
+    private void createSubContents(String need, ProjectArtifact project, String solidityDir, UserConfig config)
     throws Exception{
         SrcDir srcDir = new SrcDir(project.toFile());
-        MainDir mainDir = new MainDir(filter, srcDir.toFile(), new File(solidityDir), config);
-        ConfDir confDir = new ConfDir(project.toFile());
+        MainDir mainDir = new MainDir(need, srcDir.toFile(), new File(solidityDir), config);
         TestDir testDir = new TestDir(srcDir.toFile());
         TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
         BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
@@ -79,7 +78,6 @@ public class ProjectFactory {
         project.generate();
         srcDir.generate();
         mainDir.generate();
-        confDir.generate();
         testDir.generate();
         testJavaDir.generate();
         buildGradle.generate();

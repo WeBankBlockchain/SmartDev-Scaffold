@@ -19,17 +19,18 @@ public class ApplicationJava implements Artifact {
     public static final String APPLICATION_JAVA = "Application.java";
 
 
-    private File parent;
+    private File parentDir;
     private UserConfig userConfig;
 
     public ApplicationJava(File parent, UserConfig userConfig){
-        this.parent = parent;
+        this.parentDir = parent;
         this.userConfig = userConfig;
     }
 
 
     @Override
     public void generate() throws Exception {
+        this.parentDir.mkdirs();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try(InputStream is = classLoader.getResourceAsStream(TEMPLATE_APPLICATION)){
             this.generate(is, this.toFile());
@@ -66,7 +67,7 @@ public class ApplicationJava implements Artifact {
 
     @Override
     public File getParentDir() {
-        return this.parent;
+        return this.parentDir;
     }
 
     @Override

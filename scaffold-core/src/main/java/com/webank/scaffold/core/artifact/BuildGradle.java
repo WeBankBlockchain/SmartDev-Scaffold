@@ -51,7 +51,7 @@ public class BuildGradle implements Artifact{
          */
         template = replaceAllVars(template);
         /**
-         * 3. Outpu
+         * 3. Output
          */
         IOUtil.writeString(outputPath, template);
     }

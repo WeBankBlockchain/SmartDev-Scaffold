@@ -24,5 +24,7 @@ public class Main implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         CommandLine cmd = new CommandLine(new ScaffoldRunner());
         cmd.execute(args.getSourceArgs());
+
+        System.exit(0);
     }
 }

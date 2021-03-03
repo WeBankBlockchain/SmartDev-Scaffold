@@ -24,12 +24,12 @@ public class ScaffoldRunner implements Runnable{
     @CommandLine.Option(names = {"-o", "--output"},required = true, defaultValue = "artifacts",description = "Optional. Output directory.")
     private String output;
 
-    @CommandLine.Option(names = {"-f", "--filter"}, required = false,defaultValue = "*",description = "Optional. Contract filter, you can use wild char")
-    private String filter;
+    @CommandLine.Option(names = {"-n", "--need"}, required = false,defaultValue = "",description = "Optional. The contracts you need,for example Contract1,Contract2,Contract3")
+    private String need;
 
     @Override
     public void run() {
-        new ProjectFactory().buildProjectDir(solidityDir, group, artifact, output, filter);
+        new ProjectFactory().buildProjectDir(solidityDir, group, artifact, output, need);
     }
 
 }

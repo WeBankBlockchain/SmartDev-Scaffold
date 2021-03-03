@@ -15,13 +15,9 @@ import java.io.File;
 public class ContractCompiler {
 
     private File solDir;
-    private File outputBaseDir;
-    private UserConfig config;
 
-    public ContractCompiler(File solDir, File outputBaseDir, UserConfig config){
+    public ContractCompiler(File solDir){
         this.solDir = solDir;
-        this.outputBaseDir = outputBaseDir;
-        this.config = config;
     }
 
     /**
@@ -29,22 +25,18 @@ public class ContractCompiler {
      * abi、bin、smbin、javacontract.
      * @throws Exception
      */
-    public void compile() throws Exception{
+    public void compile(File abiOut, File binOut, File smBinOut ) throws Exception{
         CompileSolToJava compiler = new CompileSolToJava();
         String solName = "*";//Compile everything
 
-        String group = this.config.getProperty(GeneratorOptions.GENERATOR_GROUP);
-        String artifact =  this.config.getProperty(GeneratorOptions.GENERATOR_ARTIFACT);
-        String packageName = PackageNameUtil.getRootPackageName(group, artifact) + ".contracts";
-
         compiler.compileSolToJava(
                 solName,
-                packageName,
+                null,
                 solDir,
-                new File(outputBaseDir, "abi"),
-                new File(outputBaseDir, "bin/ecc"),
-                new File(outputBaseDir, "bin/sm"),
-                new File(outputBaseDir, "java")
+                abiOut,
+                binOut,
+                smBinOut,
+                null
                 );
     }
 

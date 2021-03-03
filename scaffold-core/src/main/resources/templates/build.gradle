@@ -9,26 +9,28 @@ buildscript {
     }
     dependencies {
         classpath 'com.webank:solc-gradle-plugin:1.0.0-SNAPSHOT'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
     }
 }
 plugins {
-    id 'org.springframework.boot' version '2.2.5.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.1.1.RELEASE'
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'solc-gradle-plugin'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
 group = '${generator.group}'
 version = '1.0.0-SNAPSHOT'
 
 solc{
-    pkg = '${package}.contracts'
+    output = 'src/main/resources'
+    onlyAbiBin = true
 }
 
 
@@ -45,17 +47,25 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+    }
 }
 
 dependencies {
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.slf4j:slf4j-api:1.7.5'
+    // implementation 'org.slf4j:slf4j-log4j12:1.7.5'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    compile ('org.fisco-bcos.java-sdk:java-sdk:2.7.0')
+    compile ('org.fisco-bcos.java-sdk:java-sdk:2.7.0'){
+        exclude group: 'org.slf4j'
+    }
 }
 
 
@@ -75,9 +85,6 @@ test {
 bootJar {
     destinationDir file('dist')
     archiveName project.name + '-exec.jar'
-    exclude '**/*.xml'
-    exclude '**/*.properties'
-    exclude '**/*.yml'
     doLast {
         copy {
             from file('src/main/resources')

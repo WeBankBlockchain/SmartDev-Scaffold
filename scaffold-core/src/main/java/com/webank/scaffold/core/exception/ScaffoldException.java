@@ -7,6 +7,10 @@ package com.webank.scaffold.core.exception;
  */
 public class ScaffoldException extends RuntimeException{
 
+    public ScaffoldException(Exception error){
+        super(error);
+    }
+
     public ScaffoldException(String message){
         super(message);
     }

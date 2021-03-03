@@ -23,7 +23,7 @@ import java.util.Map;
  * @Description
  * @data 2021/01/27
  */
-public class ServiceBuilder {
+public class ServicesHandler {
 
     private static final String ABI = "ABI";
     private static final String BIN = "BINARY";
@@ -31,7 +31,7 @@ public class ServiceBuilder {
 
     private UserConfig config;
 
-    public ServiceBuilder(UserConfig config){
+    public ServicesHandler(UserConfig config){
         this.config = config;
     }
 

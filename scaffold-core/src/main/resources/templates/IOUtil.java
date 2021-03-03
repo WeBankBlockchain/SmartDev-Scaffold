@@ -1,7 +1,10 @@
-package templates;
+package ${package};
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
+@Slf4j
 public class IOUtil {
     private IOUtil(){}
 
@@ -15,12 +18,15 @@ public class IOUtil {
         }
     }
 
-    public static String readResourceAsString(String resource) throws IOException{
+    public static String readResourceAsString(String resource){
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try(InputStream in = classLoader.getResourceAsStream(resource)){
             return readAsString(in);
         }
-
+        catch (IOException ex){
+            log.error("Error reading resource",ex);
+            return null;
+        }
     }
 
     public static String readAsString(InputStream inputStream) throws IOException {

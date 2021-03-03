@@ -1,4 +1,4 @@
-package com.webank.scaffold.core.builder;
+package com.webank.scaffold.core.clhandler;
 
 import lombok.Data;
 

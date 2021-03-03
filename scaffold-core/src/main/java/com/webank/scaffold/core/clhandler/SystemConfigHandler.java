@@ -19,16 +19,16 @@ import java.util.List;
  * @Description
  * @data 2021/03/03
  */
-public class SystemConfigExporter {
+public class SystemConfigHandler {
 
-    private static final String SYSTEN_CONFIG = "SystemConfig";
+    public static final String SYSTEN_CONFIG = "SystemConfig";
     private static final String CONTRACT = "Contract";
 
     private File javaRoot;
     private List<String> contracts;
     private UserConfig config;
 
-    public SystemConfigExporter(File javaRoot, List<String> contracts, UserConfig config){
+    public SystemConfigHandler(File javaRoot, List<String> contracts, UserConfig config){
         this.javaRoot = javaRoot;
         this.contracts = contracts;
         this.config = config;

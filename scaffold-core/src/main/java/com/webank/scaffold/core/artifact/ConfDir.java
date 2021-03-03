@@ -25,11 +25,6 @@ public class ConfDir extends DirectoryArtifact {
 
     @Override
     protected void doGenerateSubContents() throws Exception {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        try(InputStream in = classLoader.getResourceAsStream(TEMPLATE_RESOURCE)){
-            String configContent = IOUtil.readAsString( in );
-            IOUtil.writeString(new File(this.toFile(), CONFIG_TOML),configContent);
-        }
     }
 
     @Override
