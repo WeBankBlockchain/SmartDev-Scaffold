@@ -77,6 +77,9 @@ public class SdkBeanConfig {
             client.getCryptoSuite().setCryptoKeyPair(client.getCryptoSuite().createKeyPair());
             return;
         }
+        if(config.getHexPrivateKey().startsWith("0x") || config.getHexPrivateKey().startsWith("0X")){
+            config.setHexPrivateKey(config.getHexPrivateKey().substring(2));
+        }
         client.getCryptoSuite().setCryptoKeyPair(client.getCryptoSuite().createKeyPair(config.getHexPrivateKey()));
     }
 }
