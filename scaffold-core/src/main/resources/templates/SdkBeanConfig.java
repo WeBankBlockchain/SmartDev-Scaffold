@@ -35,7 +35,7 @@ public class SdkBeanConfig {
             try{
                 ConfigProperty property = new ConfigProperty();
                 configNetwork(property);
-                configCryptoMaterial(property);
+                configCryptoMaterial(property,certPath);
 
                 ConfigOption configOption = new ConfigOption(property);
                 Client client = new BcosSDK(configOption).getClient(config.getGroupId());
@@ -48,7 +48,8 @@ public class SdkBeanConfig {
                 return client;
             }
             catch (Exception ex){
-                log.warn("tried {} with exception {}",certPath, ex);
+                ex.printStackTrace();
+                // log.warn("tried {} with exception {}",certPath, ex);
             }
         }
         throw new ConfigException("Failed to connect to peers:" + config.getPeers());
@@ -63,9 +64,9 @@ public class SdkBeanConfig {
         configProperty.setNetwork(networkConfig);
     }
 
-    public void configCryptoMaterial(ConfigProperty configProperty){
+    public void configCryptoMaterial(ConfigProperty configProperty,String certPath){
         Map<String, Object> cryptoMaterials = new HashMap<>();
-        cryptoMaterials.put("certPath", config.getCertPath());
+        cryptoMaterials.put("certPath", certPath);
         configProperty.setCryptoMaterial(cryptoMaterials);
     }
 
