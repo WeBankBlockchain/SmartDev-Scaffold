@@ -22,7 +22,7 @@ import java.util.List;
 public class SystemConfigHandler {
 
     public static final String SYSTEN_CONFIG = "SystemConfig";
-    private static final String CONTRACT = "Contract";
+    private static final String CONTRACT = "ContractConfig";
 
     private File javaRoot;
     private List<String> contracts;
