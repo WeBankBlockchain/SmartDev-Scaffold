@@ -48,8 +48,10 @@ public class SdkBeanConfig {
                 return client;
             }
             catch (Exception ex){
-                ex.printStackTrace();
-                // log.warn("tried {} with exception {}",certPath, ex);
+                log.error(ex.getMessage());
+                try{
+                    Thread.sleep(5000);
+                }catch (Exception e){}
             }
         }
         throw new ConfigException("Failed to connect to peers:" + config.getPeers());
