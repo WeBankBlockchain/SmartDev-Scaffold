@@ -53,7 +53,7 @@ public class MainJavaDir extends DirectoryArtifact {
         //5. Sdk Bean config
         handleSdkBeanConfig();
         //6. Service Bean config
-        handleServiceBeanConfig();
+       // handleServiceBeanConfig();
     }
 
 

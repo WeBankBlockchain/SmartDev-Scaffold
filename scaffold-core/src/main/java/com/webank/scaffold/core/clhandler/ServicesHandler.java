@@ -3,15 +3,23 @@ package com.webank.scaffold.core.clhandler;
 import com.squareup.javapoet.*;
 import com.webank.scaffold.core.config.UserConfig;
 import com.webank.scaffold.core.constant.CompileConstants;
+import com.webank.scaffold.core.util.CommonUtil;
 import com.webank.scaffold.core.util.PackageNameUtil;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
 import org.fisco.bcos.sdk.client.Client;
+import org.fisco.bcos.sdk.crypto.CryptoSuite;
 import org.fisco.bcos.sdk.transaction.manager.AssembleTransactionProcessor;
 import org.fisco.bcos.sdk.transaction.manager.TransactionProcessorFactory;
 import org.fisco.bcos.sdk.transaction.model.dto.CallResponse;
 import org.fisco.bcos.sdk.transaction.model.dto.TransactionResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +48,11 @@ public class ServicesHandler {
          * 1. Service class
          */
         ClassName serviceClassName = serviceClassName(contract);
-        TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(serviceClassName).addModifiers(Modifier.PUBLIC);
+        TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(serviceClassName)
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Service.class)
+                .addAnnotation(NoArgsConstructor.class)
+                .addAnnotation(Data.class);
         /**
          * 2. Add static field: ABI | BIN | SM_BIN
          */
@@ -48,11 +60,11 @@ public class ServicesHandler {
         /**
          * 3. Instance fields: String address|Client client |AssemblyTransactionProcessor processor
          */
-        typeBuilder=  this.populateInstanceFields(typeBuilder);
+        typeBuilder=  this.populateInstanceFields(contract, typeBuilder);
         /**
-         * 4. Add constructor: load |  deploy
+         * 4. Add postcontruct
          */
-        typeBuilder = this.populateConstructors(typeBuilder, ctorInputType);
+        typeBuilder = this.populateInitializer(contract, typeBuilder);
         /**
          * 5. Add method: transaction | call
          */
@@ -94,15 +106,17 @@ public class ServicesHandler {
         return typeBuilder.addField(abiField).addField(bin).addField(smbin);
     }
 
-    private TypeSpec.Builder populateInstanceFields(TypeSpec.Builder typeBuilder){
+    private TypeSpec.Builder populateInstanceFields(String contract, TypeSpec.Builder typeBuilder){
         FieldSpec addressField
                 = FieldSpec.builder(String.class, "address")
-                .addAnnotation(Getter.class)
                 .addModifiers(Modifier.PRIVATE)
+                .addAnnotation(AnnotationSpec.builder(Value.class)
+                        .addMember("value","\"$${system.contract.$LAddress}\"", CommonUtil.makeFirstCharLowerCase(contract)).build())
                 .build();
         FieldSpec clientField
                 = FieldSpec.builder(Client.class, "client")
                 .addModifiers(Modifier.PRIVATE)
+                .addAnnotation(Autowired.class)
                 .build();
         FieldSpec processField
                 = FieldSpec.builder(AssembleTransactionProcessor.class, "txProcessor")
@@ -110,35 +124,13 @@ public class ServicesHandler {
         return typeBuilder.addField(addressField).addField(clientField).addField(processField);
     }
 
-    private TypeSpec.Builder populateConstructors(TypeSpec.Builder typeBuilder, TypeSpec ctorInputType) {
-        //Ctor1
-        MethodSpec ctor1 = MethodSpec.constructorBuilder().addParameter(String.class, "address")
-                .addParameter(Client.class, "client")
-                .addException(Exception.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("this.client = client")
-                .addStatement("this.txProcessor = $T.createAssembleTransactionProcessor(this.client, this.client.getCryptoSuite().getCryptoKeyPair())", TransactionProcessorFactory.class)
-                .addStatement("this.address = address")
-                .build();
-        //Ctor2
-        String pkg = PackageNameUtil.getBOPackageName(config);
-        MethodSpec.Builder ctor2Builder = MethodSpec.constructorBuilder()
-                .addParameter(Client.class, "client");
-        ctor2Builder
-                .addException(Exception.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("this.client = client")
+    private TypeSpec.Builder populateInitializer(String contract, TypeSpec.Builder typeBuilder){
+        MethodSpec.Builder txBuilder = MethodSpec.methodBuilder("init");
+        txBuilder.addModifiers(Modifier.PUBLIC).addAnnotation(PostConstruct.class).addException(Exception.class);
+        txBuilder
                 .addStatement("this.txProcessor = $T.createAssembleTransactionProcessor(this.client, this.client.getCryptoSuite().getCryptoKeyPair())", TransactionProcessorFactory.class);
-        if (ctorInputType != null) {
-            ctor2Builder.addParameter(ClassName.get(pkg,ctorInputType.name),"input");
-            ctor2Builder.addStatement("this.address = this.txProcessor.deployAndGetResponse(ABI,this.client.getCryptoType()==0?$L:$L, input.toArgs()).getContractAddress()",BIN, SMBIN);
-        }
-        else{
-            ctor2Builder.addStatement("this.address = this.txProcessor.deployAndGetResponse(ABI,this.client.getCryptoType()==0?$L:$L).getContractAddress()",BIN, SMBIN);
-        }
-
-        MethodSpec ctor2 = ctor2Builder.build();
-        return typeBuilder.addMethod(ctor1).addMethod(ctor2);
+        typeBuilder.addMethod(txBuilder.build());
+        return typeBuilder;
     }
 
     private TypeSpec.Builder populateMethods(TypeSpec.Builder typeBuilder, Map<ABIDefinition, TypeSpec> functionWithInputBO) {

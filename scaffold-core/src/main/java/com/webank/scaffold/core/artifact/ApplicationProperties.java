@@ -1,17 +1,9 @@
 package com.webank.scaffold.core.artifact;
 
-import com.squareup.javapoet.TypeSpec;
 import com.webank.scaffold.core.util.CommonUtil;
-import com.webank.scaffold.core.util.IOUtil;
-import org.apache.commons.io.FilenameUtils;
-import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
 
 import java.io.*;
-import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author aaronchu
@@ -31,12 +23,13 @@ public class ApplicationProperties implements Artifact {
     @Override
     public void generate() throws Exception {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(this.toFile()))){
-            writeDefaultKeys(writer);
+            writeSdkConnectKeys(writer);
             writeContractKeys(writer);
+            writeSpringBootKeys(writer);
             writer.flush();
         }
     }
-    private void writeDefaultKeys(BufferedWriter writer) throws IOException {
+    private void writeSdkConnectKeys(BufferedWriter writer) throws IOException {
         writer.write("### Required\n");
         writer.write("system.peers=127.0.0.1:20200,127.0.0.1:20201\n");
         writer.write("### Required\n");
@@ -47,6 +40,14 @@ public class ApplicationProperties implements Artifact {
         writer.write("system.hexPrivateKey=\n");
     }
 
+    private void writeSpringBootKeys(BufferedWriter writer) throws IOException {
+        writer.write("### ### Springboot server config\n");
+        writer.write("server.port=8080\n");
+        writer.write("server.session.timeout=60\n");
+        writer.write("banner.charset=UTF-8\n");
+        writer.write("spring.jackson.date-format=yyyy-MM-dd HH:mm:ss\n");
+        writer.write("spring.jackson.time-zone=GMT+8\n");
+    }
 
     private void writeContractKeys(BufferedWriter writer) throws IOException {
         for(String contractName :contracts){
