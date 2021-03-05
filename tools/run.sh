@@ -38,12 +38,12 @@ check_java
 check_sol_dir
 ARTIFACT=$(grep artifact config.ini |  cut  -d '=' -f 2)
 GROUP=$(grep group config.ini |  cut  -d '=' -f 2)
-NEED=$(grep need config.ini |  cut  -d '=' -f 2)
+SELECTOR=$(grep selector config.ini |  cut  -d '=' -f 2)
 
 echo "GROUP=$GROUP"
 echo "ARTIFACT=$ARTIFACT"
 echo "SOL_DIR=$SOL_DIR"
-echo "NEED=$NEED"
+echo "SELECTOR=$SELECTOR"
 
 
 ARTIFACT_DIR="$(pwd)/$ARTIFACT"
@@ -60,10 +60,10 @@ echo end compiling scaffold...
 
 cd dist
 echo start building $ARTIFACT...
-if [ -z "$NEED"]; then
+if [ -z "SELECTOR"]; then
   java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
 else
-  java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $NEED
+  java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $SELECTOR
 fi
 
 
