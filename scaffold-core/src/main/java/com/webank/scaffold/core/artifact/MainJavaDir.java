@@ -53,7 +53,7 @@ public class MainJavaDir extends DirectoryArtifact {
         //5. Sdk Bean config
         handleSdkBeanConfig();
         //6. Service Bean config
-       // handleServiceBeanConfig();
+        handleCommonResponse();
     }
 
 
@@ -102,10 +102,11 @@ public class MainJavaDir extends DirectoryArtifact {
         sdkBeanConfigJava.generate();
     }
 
-    private void handleServiceBeanConfig()  throws Exception{
-        List<String> contracts = CommonUtil.contracts(this.abiDir, this.need);
-        ServiceBeanConfigHandler configBuilder = new ServiceBeanConfigHandler(this.toFile(), contracts, config);
-        configBuilder.export();
+    private void handleCommonResponse()  throws Exception{
+        File javaDir = this.toFile();
+        String utilsPackage = PackageNameUtil.getUtilsPackageName(config);
+        CommonResponseJava commonResponseJava = new CommonResponseJava(PackageNameUtil.convertPackageToFile(javaDir,utilsPackage), config);
+        commonResponseJava.generate();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.webank.scaffold.core.artifact;
 
 import com.webank.scaffold.core.config.GeneratorOptions;
 import com.webank.scaffold.core.config.UserConfig;
+import com.webank.scaffold.core.util.PackageNameUtil;
 
 import java.io.File;
 
@@ -29,10 +30,18 @@ public class TestJavaDir extends DirectoryArtifact{
         String packageName = groupName + "." + artifactName;
         File packageDir = new File(this.toFile(), packageName);
         packageDir.mkdirs();
+        handleDemoPkey();
     }
 
     @Override
     public String getName() {
         return "java";
+    }
+
+    private void handleDemoPkey()  throws Exception{
+        File javaDir = this.toFile();
+        String utilsPackage = PackageNameUtil.getRootPackageName(config);
+        DemoPkeyTestJava demoPkeyTestJava = new DemoPkeyTestJava(PackageNameUtil.convertPackageToFile(javaDir,utilsPackage), config);
+        demoPkeyTestJava.generate();
     }
 }

@@ -39,6 +39,10 @@ public class PackageNameUtil {
         return getRootPackageName(config) + ".service";
     }
 
+
+    public static String getModelPackage(UserConfig config) {
+        return getRootPackageName(config) + ".model";
+    }
     /**
      * com.webank.code -> com/webank/code
      * @param root
@@ -53,4 +57,5 @@ public class PackageNameUtil {
         }
         return dir;
     }
+
 }
