@@ -60,7 +60,7 @@ echo end compiling scaffold...
 
 cd dist
 echo start building $ARTIFACT...
-if [ -z "SELECTOR"]; then
+if [ -z "$SELECTOR"]; then
   java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
 else
   java -jar scaffold-cmd-exec.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $SELECTOR
