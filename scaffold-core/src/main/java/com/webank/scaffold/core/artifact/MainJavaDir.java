@@ -104,7 +104,7 @@ public class MainJavaDir extends DirectoryArtifact {
 
     private void handleCommonResponse()  throws Exception{
         File javaDir = this.toFile();
-        String utilsPackage = PackageNameUtil.getUtilsPackageName(config);
+        String utilsPackage = PackageNameUtil.getModelPackage(config);
         CommonResponseJava commonResponseJava = new CommonResponseJava(PackageNameUtil.convertPackageToFile(javaDir,utilsPackage), config);
         commonResponseJava.generate();
     }

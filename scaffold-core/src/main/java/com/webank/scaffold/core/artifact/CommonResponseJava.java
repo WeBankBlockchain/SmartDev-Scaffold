@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.InputStream;
 
 public class CommonResponseJava implements Artifact{
-    private static final String TEMPLATE_IOUTIL
+    private static final String TEMPLATE_COMMONRESPONSE
             = "templates/CommonResponse.java";
     public static final String COMMONRESPONSE_JAVA = "CommonResponse.java";
 
@@ -24,7 +24,7 @@ public class CommonResponseJava implements Artifact{
     public void generate() throws Exception {
         this.parentDir.mkdirs();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        try(InputStream is = classLoader.getResourceAsStream(TEMPLATE_IOUTIL)){
+        try(InputStream is = classLoader.getResourceAsStream(TEMPLATE_COMMONRESPONSE)){
             this.generate(is, this.toFile());
         }
     }
