@@ -17,3 +17,7 @@ conf/*crt*
 conf/*config*
 conf/*toml*
 conf/*yaml*
+scaffold-cmd/dist/
+scaffold-cmd/build/
+scaffold-core/dist/
+scaffold-core/build/
