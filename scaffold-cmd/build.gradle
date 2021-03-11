@@ -10,11 +10,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.9.RELEASE")
     }
 }
 plugins{
-    id 'org.springframework.boot' version '2.1.1.RELEASE'
+    id 'org.springframework.boot' version '2.3.9.RELEASE'
 }
 
 apply plugin: 'org.springframework.boot'

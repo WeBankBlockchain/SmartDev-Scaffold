@@ -10,7 +10,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.9.RELEASE")
     }
 }
 
@@ -23,7 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'application'
 mainClassName = 'com.example.WebApplication'
-//apply plugin: 'io.spring.dependency-management'
+apply plugin: 'io.spring.dependency-management'
 
 
 group 'com.webank'
@@ -75,10 +75,6 @@ jar {
         copy {
             from file('src/main/resources/')
             into 'dist/config'
-        }
-        copy {
-            from configurations.runtime
-            into 'dist/lib'
         }
     }
 }
