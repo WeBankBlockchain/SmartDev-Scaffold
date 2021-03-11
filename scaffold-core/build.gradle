@@ -49,8 +49,15 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    compile 'com.webank:solc-gradle-plugin:1.0.0-SNAPSHOT'
-    compile ('org.fisco-bcos.java-sdk:java-sdk:2.7.0')
+    compile ('com.webank:solc-gradle-plugin:1.0.0-SNAPSHOT') {
+        exclude group: 'log4j'
+    }
+    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.1') {
+        exclude group: 'log4j'
+        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+    }
+    compile 'org.bouncycastle:bcprov-jdk15on:1.61'
+    compile ("org.slf4j:slf4j-api:1.7.30")
 }
 
 sourceSets {
