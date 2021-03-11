@@ -1,5 +1,7 @@
 package com.webank.scaffold.core.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 
 /**
@@ -7,6 +9,7 @@ import java.io.*;
  * @Description
  * @data 2021/01/15
  */
+@Slf4j
 public class IOUtil {
     private IOUtil(){}
 
@@ -69,7 +72,9 @@ public class IOUtil {
 
     public static void removeItem(File item) {
         if(!item.isDirectory()){
-            item.delete();
+            if(!item.delete()){
+                log.warn("Failed to delete item {}",item.getAbsolutePath());
+            }
             return;
         }
 
