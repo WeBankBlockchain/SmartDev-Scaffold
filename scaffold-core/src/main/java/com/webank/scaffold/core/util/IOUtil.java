@@ -3,6 +3,7 @@ package com.webank.scaffold.core.util;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
+import java.nio.file.Files;
 
 /**
  * @author aaronchu
@@ -72,8 +73,10 @@ public class IOUtil {
 
     public static void removeItem(File item) {
         if(!item.isDirectory()){
-            if(!item.delete()){
-                log.warn("Failed to delete item {}",item.getAbsolutePath());
+            try{
+                Files.delete(item.toPath());
+            }catch (IOException ex){
+                log.error("Failed to delete file {}",item.getAbsolutePath(),ex);
             }
             return;
         }

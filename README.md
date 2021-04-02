@@ -1,7 +1,6 @@
 # 组件介绍
 
-智能合约脚手架用于一键式生成DAPP应用开发工程，从而降低应用开发的难度。用户将自己的合约导入脚手架，即可生成对应的应用开发模板工程，包含了java服务类、POJO类、测试代码等。
-
+智能合约脚手架用于一键生成区块链应用开发工程，从而提高应用开发的效率。用户可将智能合约导入脚手架，即可生成对应的应用开发模板工程，包含了合约函数对应的POJO类、服务类等。用户可基于生成的项目补充自己的业务逻辑。
 
 ## 环境要求
 
@@ -14,8 +13,8 @@
 
 
 ## 文档
-- [**中文**](https://toolkit-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-Toolkit-Scaffold/index.html)
-- [**快速开始**](https://toolkit-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-Toolkit-Scaffold/intro.html)
+- [**中文**](https://toolkit-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-SmartDev-Scaffold/index.html)
+- [**快速开始**](https://toolkit-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-SmartDev-Scaffold/intro.html)
 
 
 ## 贡献代码
