@@ -1,11 +1,11 @@
 buildscript {
     repositories {
         mavenLocal()
-        maven { url 'https://maven.aliyun.com/repository/google/' }
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/spring/' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
-        maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
+//        maven { url 'https://maven.aliyun.com/repository/google/' }
+//        maven { url 'https://maven.aliyun.com/repository/public/' }
+//        maven { url 'https://maven.aliyun.com/repository/spring/' }
+//        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+//        maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
 
         mavenCentral()
     }
@@ -56,7 +56,7 @@ dependencies {
         exclude group: 'log4j'
         exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
     }
-    compile 'org.bouncycastle:bcprov-jdk15on:1.61'
+    //compile 'org.bouncycastle:bcprov-jdk15on:1.61'
     compile ("org.slf4j:slf4j-api:1.7.30")
 }
 
