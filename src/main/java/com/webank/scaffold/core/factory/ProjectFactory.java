@@ -6,9 +6,6 @@ import com.webank.scaffold.core.config.UserConfig;
 import com.webank.scaffold.core.exception.ScaffoldException;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author aaronchu
@@ -75,6 +72,7 @@ public class ProjectFactory {
         TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
         BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
         SettingsGradle settingsGradle = new SettingsGradle(project.toFile(), config);
+        GradleDir gradle = new GradleDir(project.toFile());
         project.generate();
         srcDir.generate();
         mainDir.generate();
@@ -82,6 +80,7 @@ public class ProjectFactory {
         testJavaDir.generate();
         buildGradle.generate();
         settingsGradle.generate();
+        gradle.generate();
     }
 
 }

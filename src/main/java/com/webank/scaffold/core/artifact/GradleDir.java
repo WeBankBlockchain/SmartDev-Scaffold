@@ -9,15 +9,15 @@ import java.io.File;
  * @Description
  * @data 2021/04/06
  */
-public class Gradle  extends DirectoryArtifact  {
+public class GradleDir extends DirectoryArtifact  {
 
-    public Gradle(File parentDir) {
+    public GradleDir(File parentDir) {
         super(parentDir);
     }
 
     @Override
     protected void doGenerateSubContents() throws Exception {
-        IOUtil.copyFile(new File("gradle"),this.toFile());
+        IOUtil.copyFolder(new File("gradle"),this.toFile());
     }
 
     @Override
