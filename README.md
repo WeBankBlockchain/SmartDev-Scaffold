@@ -1,3 +1,6 @@
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+<a href="#"><img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/WeBankBlockchain/SmartDev-Scaffold/total.svg?style=flat-square"></a>
+
 # 组件介绍
 
 应用开发脚手架用于一键生成区块链应用开发工程，从而提高应用开发的效率。用户可将智能合约导入脚手架，即可生成对应的区块链应用开发工程，包含了合约函数对应的DAO（Data Access Object）层代码。用户可基于生成的项目补充自己的业务逻辑。
