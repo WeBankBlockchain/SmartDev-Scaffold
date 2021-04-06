@@ -15,7 +15,6 @@ import org.fisco.bcos.sdk.transaction.manager.AssembleTransactionProcessor;
 import org.fisco.bcos.sdk.transaction.manager.TransactionProcessorFactory;
 import org.fisco.bcos.sdk.transaction.model.dto.CallResponse;
 import org.fisco.bcos.sdk.transaction.model.dto.TransactionResponse;
-import javax.annotation.PostConstruct;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
@@ -122,7 +121,7 @@ public class ServicesHandler {
 
     private TypeSpec.Builder populateInitializer(String contract, TypeSpec.Builder typeBuilder){
         MethodSpec.Builder txBuilder = MethodSpec.methodBuilder("init");
-        txBuilder.addModifiers(Modifier.PUBLIC).addAnnotation(PostConstruct.class).addException(Exception.class);
+        txBuilder.addModifiers(Modifier.PUBLIC).addAnnotation(ClassName.get("javax.annotation","PostConstruct")).addException(Exception.class);
         txBuilder
                 .addStatement("this.txProcessor = $T.createAssembleTransactionProcessor(this.client, this.client.getCryptoSuite().getCryptoKeyPair())", TransactionProcessorFactory.class);
         typeBuilder.addMethod(txBuilder.build());
