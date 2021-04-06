@@ -10,14 +10,3 @@ tmp/
 *.lck
 .idea/
 out/
-artifacts/
-contracts/*.sol
-conf/*key*
-conf/*crt*
-conf/*config*
-conf/*toml*
-conf/*yaml*
-scaffold-cmd/dist/
-scaffold-cmd/build/
-scaffold-core/dist/
-scaffold-core/build/
