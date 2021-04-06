@@ -58,12 +58,11 @@ cd ..
 gradle jar
 echo end compiling scaffold...
 
-cd dist
 echo start generating $ARTIFACT...
 if [ -z "$SELECTOR"]; then
-  java -jar solscaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
+  java -jar dist/solscaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
 else
-  java -jar solscaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $SELECTOR
+  java -jar dist/solscaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $SELECTOR
 fi
 
 
