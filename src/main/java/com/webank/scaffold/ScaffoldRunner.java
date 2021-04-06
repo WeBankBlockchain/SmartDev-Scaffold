@@ -1,7 +1,7 @@
 package com.webank.scaffold;
 
 
-import com.webank.scaffold.core.factory.ProjectFactory;
+import com.webank.scaffold.factory.ProjectFactory;
 import picocli.CommandLine;
 
 /**
