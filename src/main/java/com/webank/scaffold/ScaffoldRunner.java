@@ -1,4 +1,4 @@
-package com.webank.scaffold.cmd;
+package com.webank.scaffold;
 
 
 import com.webank.scaffold.core.factory.ProjectFactory;

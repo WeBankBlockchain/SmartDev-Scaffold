@@ -15,10 +15,6 @@ import org.fisco.bcos.sdk.transaction.manager.AssembleTransactionProcessor;
 import org.fisco.bcos.sdk.transaction.manager.TransactionProcessorFactory;
 import org.fisco.bcos.sdk.transaction.model.dto.CallResponse;
 import org.fisco.bcos.sdk.transaction.model.dto.TransactionResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import javax.lang.model.element.Modifier;
 import java.io.File;
@@ -50,7 +46,7 @@ public class ServicesHandler {
         ClassName serviceClassName = serviceClassName(contract);
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(serviceClassName)
                 .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Service.class)
+                .addAnnotation(ClassName.get("org.springframework.stereotype","Service"))
                 .addAnnotation(NoArgsConstructor.class)
                 .addAnnotation(Data.class);
         /**
@@ -110,13 +106,13 @@ public class ServicesHandler {
         FieldSpec addressField
                 = FieldSpec.builder(String.class, "address")
                 .addModifiers(Modifier.PRIVATE)
-                .addAnnotation(AnnotationSpec.builder(Value.class)
+                .addAnnotation(AnnotationSpec.builder(ClassName.get("org.springframework.beans.factory.annotation","Value"))
                         .addMember("value","\"$${system.contract.$LAddress}\"", CommonUtil.makeFirstCharLowerCase(contract)).build())
                 .build();
         FieldSpec clientField
                 = FieldSpec.builder(Client.class, "client")
                 .addModifiers(Modifier.PRIVATE)
-                .addAnnotation(Autowired.class)
+                .addAnnotation(ClassName.get("org.springframework.beans.factory.annotation","Autowired"))
                 .build();
         FieldSpec processField
                 = FieldSpec.builder(AssembleTransactionProcessor.class, "txProcessor")

@@ -5,9 +5,6 @@ import com.webank.scaffold.core.config.UserConfig;
 import com.webank.scaffold.core.util.CommonUtil;
 import com.webank.scaffold.core.util.PackageNameUtil;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.context.annotation.Configuration;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
@@ -68,10 +65,10 @@ public class SystemConfigHandler {
         TypeSpec systemConfigBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Data.class)
-                .addAnnotation(Configuration.class)
+                .addAnnotation(ClassName.get("org.springframework.context.annotation","Configuration"))
                 .addAnnotation(
                         AnnotationSpec
-                                .builder(ConfigurationProperties.class)
+                                .builder(ClassName.get("org.springframework.boot.context.properties","ConfigurationProperties"))
                                 .addMember("prefix", "\"system\"")
                                 .build())
                 .addField(
@@ -99,7 +96,7 @@ public class SystemConfigHandler {
                 .addField(
                         FieldSpec
                                 .builder(ClassName.get(pkg, contractClass.name), "contract", Modifier.PRIVATE)
-                                .addAnnotation(NestedConfigurationProperty.class)
+                                .addAnnotation(ClassName.get("org.springframework.boot.context.properties","NestedConfigurationProperty"))
                                 .build())
                 .build();
         return systemConfigBuilder;

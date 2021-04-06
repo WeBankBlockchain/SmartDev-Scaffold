@@ -7,10 +7,6 @@ import com.webank.scaffold.core.util.PackageNameUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.sdk.client.Client;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.util.List;
@@ -54,12 +50,12 @@ public class ServiceBeanConfigHandler {
         TypeSpec.Builder configClassBuilder
                 = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Configuration.class)
+                .addAnnotation(ClassName.get("org.springframework.context.annotation","Configuration"))
                 .addAnnotation(Data.class)
                 .addAnnotation(Slf4j.class)
                 .addField(FieldSpec.builder(
                         ClassName.get(configPkg, SystemConfigHandler.SYSTEN_CONFIG), "config", Modifier.PRIVATE)
-                        .addAnnotation(Autowired.class)
+                        .addAnnotation(ClassName.get("org.springframework.beans.factory.annotation","Autowired"))
                         .build());
         return configClassBuilder;
     }
@@ -73,7 +69,7 @@ public class ServiceBeanConfigHandler {
                         .returns(serviceClass)
                         .addParameter(ParameterSpec.builder(Client.class, "client").build())
                         .addException(Exception.class)
-                        .addAnnotation(Bean.class)
+                        .addAnnotation(ClassName.get("import org.springframework.context.annotation","Bean"))
                 .addStatement("String address = config.getContract().get$LAddress()", contract)
                 .addStatement("if (address == null) {log.warn(\"$L address not configured, so $L will not inject into spring\");}", contract, serviceName)
                 .addStatement("return new $L(address, client)",serviceName)
