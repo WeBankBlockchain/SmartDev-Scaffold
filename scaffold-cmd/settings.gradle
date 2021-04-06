@@ -1,3 +1,0 @@
-rootProject.name = 'scaffold-cmd'
-include ":scaffold-core"
-project(':scaffold-core').projectDir = new File('../scaffold-core')

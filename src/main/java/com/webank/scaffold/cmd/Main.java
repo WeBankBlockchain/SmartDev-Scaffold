@@ -13,18 +13,10 @@ import picocli.CommandLine;
  * @Description
  * @data 2021/01/20
  */
-@SpringBootApplication
-public class Main implements ApplicationRunner {
+public class Main {
 
     public static void main(String[] args) throws Exception{
-        SpringApplication.run(Main.class, args);
-    }
-
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
         CommandLine cmd = new CommandLine(new ScaffoldRunner());
-        cmd.execute(args.getSourceArgs());
-
-        System.exit(0);
+        cmd.execute(args);
     }
 }

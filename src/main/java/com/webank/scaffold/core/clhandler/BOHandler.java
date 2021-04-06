@@ -120,11 +120,16 @@ public class BOHandler {
                 .addAnnotation(NoArgsConstructor.class)
                 .addAnnotation(AllArgsConstructor.class);
         // Fields
+        int argIndex = 0;
         for(ABIDefinition.NamedType namedType: args){
             String argName = namedType.getName();
+            if(argName == null || argName.isEmpty()){
+                argName = "arg"+argIndex;
+            }
             String typeString = namedType.getTypeAsString();
             TypeName type = SolidityTypeHandler.convert(typeString);
             boBuilder.addField(type, argName, Modifier.PRIVATE);
+            argIndex++;
         }
 
         // Methods
