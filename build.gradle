@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'application'
+//apply plugin: 'application'
 
 
 group 'com.webank'
@@ -23,7 +23,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation ('com.webank:solc-gradle-plugin:1.0.0-SNAPSHOT')
-    implementation ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.1')
+    implementation ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.2')
     implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
     implementation ("org.slf4j:slf4j-api:1.7.30")
 }
@@ -47,13 +47,13 @@ jar {
     exclude '**/*.SF'
     manifestContentCharset 'utf-8'
     metadataCharset 'utf-8'
-    manifest{
-        attributes "Main-Class":"com.webank.scaffold.Main"
-    }
-
-    from {
-        sourceSets.main.compileClasspath.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
+//    manifest{
+//        attributes "Main-Class":"com.webank.scaffold.Main"
+//    }
+//
+//    from {
+//        sourceSets.main.compileClasspath.collect {
+//            it.isDirectory() ? it : zipTree(it)
+//        }
+//    }
 }
