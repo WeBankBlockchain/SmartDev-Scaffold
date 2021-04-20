@@ -1,15 +1,16 @@
 package com.webank.scaffold.factory;
 
 import com.webank.scaffold.artifact.*;
-import com.webank.scaffold.artifact.NewMainDir;
-import com.webank.scaffold.artifact.NewMainDir.SolInfo;
-import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.webase.NewMainDir;
+import com.webank.scaffold.artifact.webase.NewMainDir.SolInfo;
+import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.exception.ScaffoldException;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author aaronchu
@@ -59,10 +60,15 @@ public class ProjectFactory {
      * @param group
      * @param artifact
      * @param outputDir
+     * @param systemPeers can be null
+     * @param groupId can be null
+     * @param hexPrivateKey can be null
+     * @param sdkContentMap can be null
      * @return
      */
     public ProjectArtifact buildProjectDir(List<SolInfo> solList, List<ContractInfo> contractInfoList,
-        String group, String artifact, String outputDir){
+        String group, String artifact, String outputDir,
+        String systemPeers, Integer groupId, String hexPrivateKey, Map<String, String> sdkContentMap) {
         /**
          * 1. Create UserConfig object
          */
@@ -76,7 +82,8 @@ public class ProjectFactory {
          * 3. Create sub contents in project
          */
         try{
-            createSubContents(project, config, solList, contractInfoList);
+            createSubContents(project, config, solList, contractInfoList,
+                systemPeers, groupId, hexPrivateKey, sdkContentMap);
             System.out.println("Project build complete:"+project.toFile());
         }
         catch (Exception ex){
@@ -129,11 +136,13 @@ public class ProjectFactory {
         gradle.generate();
     }
 
-    private void createSubContents(ProjectArtifact project, UserConfig config, List<SolInfo> solList,
-        List<ContractInfo> contractInfoList)
+    private void createSubContents(ProjectArtifact project, UserConfig config,
+        List<SolInfo> solList, List<ContractInfo> contractInfoList,
+        String systemPeers, Integer groupId, String hexPrivateKey, Map<String, String> sdkContentMap)
         throws Exception {
         SrcDir srcDir = new SrcDir(project.toFile());
-        NewMainDir mainDir = new NewMainDir(srcDir.toFile(), config, solList, contractInfoList);
+        NewMainDir mainDir = new NewMainDir(srcDir.toFile(), config, solList, contractInfoList,
+            systemPeers, groupId, hexPrivateKey, sdkContentMap);
         TestDir testDir = new TestDir(srcDir.toFile());
         TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
         BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
