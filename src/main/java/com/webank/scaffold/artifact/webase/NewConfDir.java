@@ -45,9 +45,9 @@ public class NewConfDir extends DirectoryArtifact {
             return;
         }
         for (String fileName : this.sdkContentMap.keySet()) {
-            File certPath = this.getParentDir();
+            File certPath = new File(this.getParentDir().getPath() + File.separator + CONF_DIR);
             if (fileName.contains("gm")) {
-                certPath = new File(this.getParentDir().getPath() + File.separator + "gm");
+                certPath = new File(certPath.getPath() + File.separator + "gm");
             }
             String fileContent = sdkContentMap.get(fileName);
             IOUtil.writeStringToFile(fileContent, certPath, fileName);
