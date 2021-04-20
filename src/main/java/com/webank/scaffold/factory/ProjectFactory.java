@@ -1,9 +1,9 @@
 package com.webank.scaffold.factory;
 
 import com.webank.scaffold.artifact.*;
-import com.webank.scaffold.artifact.single.NewMainDir;
-import com.webank.scaffold.artifact.single.NewMainDir.SolInfo;
-import com.webank.scaffold.artifact.single.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.NewMainDir;
+import com.webank.scaffold.artifact.NewMainDir.SolInfo;
+import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.exception.ScaffoldException;
@@ -51,44 +51,9 @@ public class ProjectFactory {
         return project;
     }
 
-    private ProjectArtifact buildProjectDir(String outputDir, UserConfig config){
-        ProjectArtifact project = new ProjectArtifact(new File(outputDir), config);
-        if(project.toFile().exists()){
-            throw new ScaffoldException("Project is not clean, please remove the directory first:"+project.toFile().getAbsolutePath());
-        }
-        return project;
-    }
-
-    private UserConfig getUserConfig(String group, String artifact){
-
-        UserConfig config = new UserConfig();
-        config.put(GeneratorOptions.GENERATOR_GROUP, group);
-        config.put(GeneratorOptions.GENERATOR_ARTIFACT, artifact);
-
-        return config;
-    }
-
-    private void createSubContents(String need, ProjectArtifact project, String solidityDir, UserConfig config)
-    throws Exception {
-        SrcDir srcDir = new SrcDir(project.toFile());
-        MainDir mainDir = new MainDir(need, srcDir.toFile(), new File(solidityDir), config);
-        TestDir testDir = new TestDir(srcDir.toFile());
-        TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
-        BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
-        SettingsGradle settingsGradle = new SettingsGradle(project.toFile(), config);
-        GradleDir gradle = new GradleDir(project.toFile());
-        project.generate();
-        srcDir.generate();
-        mainDir.generate();
-        testDir.generate();
-        testJavaDir.generate();
-        buildGradle.generate();
-        settingsGradle.generate();
-        gradle.generate();
-    }
 
     /**
-     * parse raw content to generate project
+     * use raw content to generate project
      * @param solList
      * @param contractInfoList
      * @param group
@@ -125,6 +90,43 @@ public class ProjectFactory {
             catch (Exception e){}
         }
         return project;
+    }
+
+
+    private ProjectArtifact buildProjectDir(String outputDir, UserConfig config){
+        ProjectArtifact project = new ProjectArtifact(new File(outputDir), config);
+        if(project.toFile().exists()){
+            throw new ScaffoldException("Project is not clean, please remove the directory first:"+project.toFile().getAbsolutePath());
+        }
+        return project;
+    }
+
+    private UserConfig getUserConfig(String group, String artifact){
+
+        UserConfig config = new UserConfig();
+        config.put(GeneratorOptions.GENERATOR_GROUP, group);
+        config.put(GeneratorOptions.GENERATOR_ARTIFACT, artifact);
+
+        return config;
+    }
+
+    private void createSubContents(String need, ProjectArtifact project, String solidityDir, UserConfig config)
+    throws Exception {
+        SrcDir srcDir = new SrcDir(project.toFile());
+        MainDir mainDir = new MainDir(need, srcDir.toFile(), new File(solidityDir), config);
+        TestDir testDir = new TestDir(srcDir.toFile());
+        TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
+        BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
+        SettingsGradle settingsGradle = new SettingsGradle(project.toFile(), config);
+        GradleDir gradle = new GradleDir(project.toFile());
+        project.generate();
+        srcDir.generate();
+        mainDir.generate();
+        testDir.generate();
+        testJavaDir.generate();
+        buildGradle.generate();
+        settingsGradle.generate();
+        gradle.generate();
     }
 
     private void createSubContents(ProjectArtifact project, UserConfig config, List<SolInfo> solList,

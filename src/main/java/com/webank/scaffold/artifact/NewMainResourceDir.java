@@ -1,27 +1,14 @@
-package com.webank.scaffold.artifact.single;
+package com.webank.scaffold.artifact;
 
-import com.webank.scaffold.ContractCompiler;
-import com.webank.scaffold.artifact.ApplicationProperties;
-import com.webank.scaffold.artifact.ConfDir;
-import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
-import com.webank.scaffold.util.CommonUtil;
 import com.webank.scaffold.util.IOUtil;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.fisco.bcos.sdk.transaction.model.CommonConstant;
 
 /**
  *
@@ -79,11 +66,8 @@ public class NewMainResourceDir extends DirectoryArtifact {
         for (ContractInfo info : this.contractInfoList) {
             // get file path, ex: resources/abi/HelloWorld.abi, resources/bin/ecc/HelloWorld.bin
             File abiFile = new File(outputBase.getPath() + File.separator + CompileConstants.ABI_DIR);
-//                + info.contractName + CompileConstants.ABI_FILE_SUFFIX;
             File binFile = new File(outputBase.getPath() + File.separator + CompileConstants.BIN_DIR);
-//                + info.contractName + CompileConstants.BIN_FILE_SUFFIX;
             File smBinFile = new File(outputBase.getPath() + File.separator + CompileConstants.SMBIN_DIR);
-//                + info.contractName + CompileConstants.BIN_FILE_SUFFIX;
             // write to file
             IOUtil.writeStringToFile(info.abiStr, abiFile, info.contractName + CompileConstants.ABI_FILE_SUFFIX);
             IOUtil.writeStringToFile(info.binStr, binFile, info.contractName + CompileConstants.BIN_FILE_SUFFIX);

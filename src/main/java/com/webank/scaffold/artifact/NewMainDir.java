@@ -1,8 +1,6 @@
-package com.webank.scaffold.artifact.single;
+package com.webank.scaffold.artifact;
 
-import com.webank.scaffold.artifact.DirectoryArtifact;
-import com.webank.scaffold.artifact.MainJavaDir;
-import com.webank.scaffold.artifact.single.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
@@ -15,7 +13,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @author aaronchu
+ * @author marsli
  * @Description
  * @data 2021/01/19
  */
@@ -83,8 +81,6 @@ public class NewMainDir extends DirectoryArtifact {
         }
         File contractsDir = new File(this.toFile(), SOL_Dir);
         for (SolInfo info : solList) {
-//            String contractSolFilePath = contractsDir.getPath() + File.separator
-//                + info.contractName + CompileConstants.SOL_FILE_SUFFIX;
             IOUtil.writeStringToFile(info.getSolRawString(), contractsDir,
                 info.contractName + CompileConstants.SOL_FILE_SUFFIX);
         }
