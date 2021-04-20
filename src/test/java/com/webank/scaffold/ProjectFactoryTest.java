@@ -15,10 +15,9 @@
 package com.webank.scaffold;
 
 import com.webank.scaffold.artifact.ProjectArtifact;
-import com.webank.scaffold.artifact.single.NewMainDir.SolInfo;
-import com.webank.scaffold.artifact.single.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.webase.NewMainDir.SolInfo;
+import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.factory.ProjectFactory;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import org.junit.Test;
@@ -42,17 +41,22 @@ public class ProjectFactoryTest {
         SolInfo solInfo = new SolInfo();
         solInfo.setContractName(contractName);
         solInfo.setSolRawString(solSourceCode);
-        System.out.println("solInfo: " + solInfo);
+        System.out.println("solInfo: ");
+        System.out.println(solInfo);
 
         ContractInfo contractInfo = new ContractInfo();
         contractInfo.setContractName(contractName);
         contractInfo.setAbiStr(abiStr);
         contractInfo.setBinStr(binStr);
-        System.out.println("contractInfo: " + contractInfo);
+        System.out.println("contractInfo: ");
+        System.out.println(contractInfo);
 
         ProjectFactory projectFactory = new ProjectFactory();
         ProjectArtifact result = projectFactory.buildProjectDir(Collections.singletonList(solInfo),
-            Collections.singletonList(contractInfo), group, artifactName, outputDir);
-        System.out.println("result: " + result);
+            Collections.singletonList(contractInfo), group, artifactName, outputDir,
+            null, null, null, null);
+        System.out.println("result: ");
+        System.out.println(result);
+
     }
 }
