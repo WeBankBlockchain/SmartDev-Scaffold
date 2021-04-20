@@ -14,12 +14,15 @@
 
 package com.webank.scaffold;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webank.scaffold.artifact.ProjectArtifact;
 import com.webank.scaffold.artifact.webase.NewMainDir.SolInfo;
 import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.factory.ProjectFactory;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Map;
 import org.junit.Test;
 
 public class ProjectFactoryTest {
@@ -34,9 +37,10 @@ public class ProjectFactoryTest {
     String group = "org.webase.example";
     String artifactName = "demo_" + contractName.toLowerCase();
     String outputDir = "output";
+    String sdkMapStr = "{\"sdk.key\":\"-----BEGIN PRIVATE KEY-----\\nMIGEAgEAMBAGByqGSM49AgEGBSuBBAAKBG0wawIBAQQgxqr/d/VgQ0fAr/KvyAeW\\nJ6bD1tqxZ5gYOdfIJiK7WOmhRANCAAT3g/OsuSAD2I/dKLWnZTbMGQ8l9WnkD/wr\\npyoiQkMy1qI5/3Sj4WFKGcVu9vhsd0nLoP+y1QttYKM0m5QGcuhP\\n-----END PRIVATE KEY-----\\n\",\"ca.crt\":\"-----BEGIN CERTIFICATE-----\\nMIIBsDCCAVagAwIBAgIJAPwQ7ISyofOIMAoGCCqGSM49BAMCMDUxDjAMBgNVBAMM\\nBWNoYWluMRMwEQYDVQQKDApmaXNjby1iY29zMQ4wDAYDVQQLDAVjaGFpbjAgFw0y\\nMTA0MDYxMjMwNDBaGA8yMTIxMDMxMzEyMzA0MFowNTEOMAwGA1UEAwwFY2hhaW4x\\nEzARBgNVBAoMCmZpc2NvLWJjb3MxDjAMBgNVBAsMBWNoYWluMFYwEAYHKoZIzj0C\\nAQYFK4EEAAoDQgAE6UcrK7ukGBVvBmWYwgIloM38ibqtxF2zBnM9zgU4bujjJU1Y\\nCZsHGKVGuNstSOZYfYulnTtFUoHhUEyhddvql6NQME4wHQYDVR0OBBYEFBBSyZi8\\nk/Hz/Q2SAin5bMnE1nOFMB8GA1UdIwQYMBaAFBBSyZi8k/Hz/Q2SAin5bMnE1nOF\\nMAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIgEpuPZypVImOtDty9p50X\\njeD4wdgzHXpd3CDPui4CnZYCIQC4n+r97cCB51dPb+WjDNV5C18S2uI8LlNVj+xL\\ndSweAg==\\n-----END CERTIFICATE-----\\n\",\"sdk.crt\":\"-----BEGIN CERTIFICATE-----\\nMIIBeDCCAR+gAwIBAgIJAJoEtSMUsa8HMAoGCCqGSM49BAMCMDgxEDAOBgNVBAMM\\nB2FnZW5jeUExEzARBgNVBAoMCmZpc2NvLWJjb3MxDzANBgNVBAsMBmFnZW5jeTAg\\nFw0yMTA0MDYxMjMwNDBaGA8yMTIxMDMxMzEyMzA0MFowMTEMMAoGA1UEAwwDc2Rr\\nMRMwEQYDVQQKDApmaXNjby1iY29zMQwwCgYDVQQLDANzZGswVjAQBgcqhkjOPQIB\\nBgUrgQQACgNCAAT3g/OsuSAD2I/dKLWnZTbMGQ8l9WnkD/wrpyoiQkMy1qI5/3Sj\\n4WFKGcVu9vhsd0nLoP+y1QttYKM0m5QGcuhPoxowGDAJBgNVHRMEAjAAMAsGA1Ud\\nDwQEAwIF4DAKBggqhkjOPQQDAgNHADBEAiANbeRFiiS6mH+vcAOwV3wXd9YW/B2a\\n+vrHMm6NwtliRAIgRH4gSF0XLmpVOEO21bJFDGWm9siIX0cnj0R3kNGZcB4=\\n-----END CERTIFICATE-----\\n-----BEGIN CERTIFICATE-----\\nMIIBcTCCARegAwIBAgIJANrOZ+FrVNpIMAoGCCqGSM49BAMCMDUxDjAMBgNVBAMM\\nBWNoYWluMRMwEQYDVQQKDApmaXNjby1iY29zMQ4wDAYDVQQLDAVjaGFpbjAeFw0y\\nMTA0MDYxMjMwNDBaFw0zMTA0MDQxMjMwNDBaMDgxEDAOBgNVBAMMB2FnZW5jeUEx\\nEzARBgNVBAoMCmZpc2NvLWJjb3MxDzANBgNVBAsMBmFnZW5jeTBWMBAGByqGSM49\\nAgEGBSuBBAAKA0IABIqMDvvzvTq8WW1UtJrnnsifw9/OrPsMc9CrrYBsWdwOGhdx\\nfNTJA1ss+vngjrhAmWHczvbh+E1WOlDGzpCumeqjEDAOMAwGA1UdEwQFMAMBAf8w\\nCgYIKoZIzj0EAwIDSAAwRQIhALsAbAQ9BDeofk4VYzYx2ZAHB1HviDp9ndvXAkLN\\nsfHZAiAjViK97dDr3gxP/qHg0e8BG9ptEv7Do8caOPj33F+yOQ==\\n-----END CERTIFICATE-----\\n-----BEGIN CERTIFICATE-----\\nMIIBsDCCAVagAwIBAgIJAPwQ7ISyofOIMAoGCCqGSM49BAMCMDUxDjAMBgNVBAMM\\nBWNoYWluMRMwEQYDVQQKDApmaXNjby1iY29zMQ4wDAYDVQQLDAVjaGFpbjAgFw0y\\nMTA0MDYxMjMwNDBaGA8yMTIxMDMxMzEyMzA0MFowNTEOMAwGA1UEAwwFY2hhaW4x\\nEzARBgNVBAoMCmZpc2NvLWJjb3MxDjAMBgNVBAsMBWNoYWluMFYwEAYHKoZIzj0C\\nAQYFK4EEAAoDQgAE6UcrK7ukGBVvBmWYwgIloM38ibqtxF2zBnM9zgU4bujjJU1Y\\nCZsHGKVGuNstSOZYfYulnTtFUoHhUEyhddvql6NQME4wHQYDVR0OBBYEFBBSyZi8\\nk/Hz/Q2SAin5bMnE1nOFMB8GA1UdIwQYMBaAFBBSyZi8k/Hz/Q2SAin5bMnE1nOF\\nMAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIgEpuPZypVImOtDty9p50X\\njeD4wdgzHXpd3CDPui4CnZYCIQC4n+r97cCB51dPb+WjDNV5C18S2uI8LlNVj+xL\\ndSweAg==\\n-----END CERTIFICATE-----\\n\"}";
 
     @Test
-    public void testBuild() {
+    public void testBuild() throws JsonProcessingException {
         String solSourceCode = new String(Base64.getDecoder().decode(solSourceCodeBase64Str));
         SolInfo solInfo = new SolInfo();
         solInfo.setContractName(contractName);
@@ -48,13 +52,20 @@ public class ProjectFactoryTest {
         contractInfo.setContractName(contractName);
         contractInfo.setAbiStr(abiStr);
         contractInfo.setBinStr(binStr);
+        contractInfo.setContractAddress("0xd5d4fcf2a46831510f095bfb447bc945f99309f7");
         System.out.println("contractInfo: ");
         System.out.println(contractInfo);
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> sdkMap = mapper.readValue(sdkMapStr, Map.class);
+        System.out.println("sdkMap: ");
+        System.out.println(sdkMap);
 
         ProjectFactory projectFactory = new ProjectFactory();
         ProjectArtifact result = projectFactory.buildProjectDir(Collections.singletonList(solInfo),
             Collections.singletonList(contractInfo), group, artifactName, outputDir,
-            null, null, null, null);
+            //null, null, null, null);
+            "127.0.0.1:25200", 2, "0x123", sdkMap);
         System.out.println("result: ");
         System.out.println(result);
 
