@@ -15,7 +15,6 @@ public class MainDir extends DirectoryArtifact {
     private static final String SOL_Dir = "contracts";
 
 
-
     private File srcSolDir;
     private UserConfig config;
     private String need;
@@ -60,7 +59,6 @@ public class MainDir extends DirectoryArtifact {
     public String getName() {
         return MAIN_DIR;
     }
-
 
     private File generateContractsDir() throws Exception {
         File contractsDir = new File(this.toFile(), SOL_Dir);

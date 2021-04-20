@@ -1,9 +1,14 @@
 package com.webank.scaffold.util;
 
+import com.webank.scaffold.exception.ScaffoldException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.file.Files;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author aaronchu
@@ -34,6 +39,25 @@ public class IOUtil {
         ByteArrayInputStream baos = new ByteArrayInputStream(template.getBytes());
         try(FileOutputStream fos = new FileOutputStream(target, false)){
             copy(baos, fos);
+        }
+    }
+
+    /**
+     * @param content file content
+     * @param fileDir file's directory
+     * @param fileName fileName include suffix
+     */
+    public static void writeStringToFile(String content, File fileDir, String fileName) throws IOException {
+
+        if (StringUtils.isBlank(content)) {
+            return;
+        }
+        if (!fileDir.exists()) {
+            boolean res = fileDir.mkdirs();
+        }
+        Path filePath = Paths.get(fileDir + File.separator + fileName);
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
+            writer.write(content);
         }
     }
 
