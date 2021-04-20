@@ -10,3 +10,4 @@ tmp/
 *.lck
 .idea/
 out/
+/output/
