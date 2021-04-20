@@ -1,14 +1,17 @@
-package com.webank.scaffold.artifact;
+package com.webank.scaffold.artifact.webase;
 
+import com.webank.scaffold.artifact.ConfDir;
+import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
 import com.webank.scaffold.util.IOUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
+import org.fisco.bcos.sdk.abi.datatypes.Int;
 
 /**
  *
@@ -23,6 +26,10 @@ public class NewMainResourceDir extends DirectoryArtifact {
     private File smBinDir;
 
     List<ContractInfo> contractInfoList;
+    private String systemPeers;
+    private Integer groupId;
+    private String hexPrivateKey;
+    private Map<String, String> sdkContentMap;
     @Getter
     @Setter
     public static class ContractInfo {
@@ -30,6 +37,7 @@ public class NewMainResourceDir extends DirectoryArtifact {
         private String binStr;
         private String smBinStr;
         private String contractName;
+        private String contractAddress;
     }
 
     public NewMainResourceDir(File parentDir, List<ContractInfo> contractInfoList) {
@@ -37,21 +45,39 @@ public class NewMainResourceDir extends DirectoryArtifact {
         this.contractInfoList = contractInfoList;
     }
 
+    public NewMainResourceDir(File parentDir, List<ContractInfo> contractInfoList,
+        String systemPeers, Integer groupId, String hexPrivateKey, Map<String, String> sdkContentMap) {
+        super(parentDir);
+        this.contractInfoList = contractInfoList;
+        this.systemPeers = systemPeers;
+        this.groupId = groupId;
+        this.hexPrivateKey = hexPrivateKey;
+        this.sdkContentMap = sdkContentMap;
+    }
+
+    public NewMainResourceDir(File parentDir, List<ContractInfo> contractInfoList,
+        String systemPeers, Integer groupId, String hexPrivateKey) {
+        super(parentDir);
+        this.contractInfoList = contractInfoList;
+        this.systemPeers = systemPeers;
+        this.groupId = groupId;
+        this.hexPrivateKey = hexPrivateKey;
+    }
+
+
     @Override
     protected void doGenerateSubContents() throws Exception {
         if (contractInfoList == null || contractInfoList.isEmpty()) {
             throw new ScaffoldException("contractInfoList is empty!");
         }
         //1. Abi And Bin
-        List<String> contractNameList = contractInfoList.stream().map(ContractInfo::getContractName).collect(
-            Collectors.toList());
         this.generateAbiBinFile();
         //2. Conf
-        ConfDir confDir = new ConfDir(this.toFile());
+        NewConfDir confDir = new NewConfDir(this.toFile(), sdkContentMap);
         confDir.generate();
         //3. Application.properties
-
-        ApplicationProperties applicationProperties = new ApplicationProperties(this.toFile(), contractNameList);
+        NewApplicationProperties applicationProperties = new NewApplicationProperties(this.toFile(),
+            this.contractInfoList, this.systemPeers, this.groupId, this.hexPrivateKey);
         applicationProperties.generate();
     }
 
