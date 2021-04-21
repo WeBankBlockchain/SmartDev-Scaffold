@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.fisco.bcos.sdk.abi.datatypes.Int;
 
 /**
  * @author marsli
@@ -32,28 +30,18 @@ public class NewMainDir extends DirectoryArtifact {
     private String hexPrivateKey;
     private Map<String, String> sdkContentMap;
 
-    private List<SolInfo> solList;
-    @Getter
-    @Setter
-    public static class SolInfo {
-        private String solRawString;
-        private String contractName;
-    }
-
     private UserConfig config;
 
-    public NewMainDir(File basePath, UserConfig config, List<SolInfo> solList, List<ContractInfo> contractInfoList) {
+    public NewMainDir(File basePath, UserConfig config, List<ContractInfo> contractInfoList) {
         super(basePath);
         this.config = config;
-        this.solList = solList;
         this.contractInfoList = contractInfoList;
     }
 
-    public NewMainDir(File basePath, UserConfig config, List<SolInfo> solList, List<ContractInfo> contractInfoList,
+    public NewMainDir(File basePath, UserConfig config, List<ContractInfo> contractInfoList,
         String systemPeers, Integer groupId, String hexPrivateKey, Map<String, String> sdkContentMap) {
         super(basePath);
         this.config = config;
-        this.solList = solList;
         this.contractInfoList = contractInfoList;
         this.systemPeers = systemPeers;
         this.groupId = groupId;
@@ -100,13 +88,13 @@ public class NewMainDir extends DirectoryArtifact {
     }
 
     private File generateContractsDir() throws IOException {
-        if (solList == null || solList.isEmpty()) {
-            throw new ScaffoldException("solList is empty!");
+        if (contractInfoList == null || contractInfoList.isEmpty()) {
+            throw new ScaffoldException("contractInfoList is empty!");
         }
         File contractsDir = new File(this.toFile(), SOL_Dir);
-        for (SolInfo info : solList) {
+        for (ContractInfo info : contractInfoList) {
             IOUtil.writeStringToFile(info.getSolRawString(), contractsDir,
-                info.contractName + CompileConstants.SOL_FILE_SUFFIX);
+                info.getContractName() + CompileConstants.SOL_FILE_SUFFIX);
         }
         return contractsDir;
     }

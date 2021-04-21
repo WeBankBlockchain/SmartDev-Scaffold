@@ -1,6 +1,5 @@
 package com.webank.scaffold.artifact.webase;
 
-import com.webank.scaffold.artifact.ConfDir;
 import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
-import org.fisco.bcos.sdk.abi.datatypes.Int;
 
 /**
  *
@@ -37,7 +35,9 @@ public class NewMainResourceDir extends DirectoryArtifact {
         private String binStr;
         private String smBinStr;
         private String contractName;
+        // can be blank below
         private String contractAddress;
+        private String solRawString;
     }
 
     public NewMainResourceDir(File parentDir, List<ContractInfo> contractInfoList) {
