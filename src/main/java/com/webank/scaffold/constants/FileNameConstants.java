@@ -31,7 +31,6 @@ public class FileNameConstants {
     public static final String TEMPLATE_BUILD_GRADLE = "templates/build.gradle" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_SETTING_GRADLE = "templates/settings.gradle" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_APPLICATION = "templates/Application.java" + TEMPLATE_POSTFIX;
-    public static final String TEMPLATE_IOUTIL = "templates/IOUtil.java" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_COMMONRESPONSE = "templates/CommonResponse.java" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_DEMO_PKEY = "templates/DemoPkey.java" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_SDK_CONFIG = "templates/SdkBeanConfig.java" + TEMPLATE_POSTFIX;
@@ -42,7 +41,6 @@ public class FileNameConstants {
     public static final String APP_PRO = "application.properties";
     public static final String SETTINGS_GRADLE_FILE = "settings.gradle";
     public static final String APPLICATION_JAVA = "Application.java";
-    public static final String IOUTIL_JAVA = "IOUtil.java";
     public static final String COMMON_RESPONSE_JAVA = "CommonResponse.java";
     public static final String DEMO_PKEY_JAVA = "DemoPkey.java";
     public static final String SDK_CONFIG = "SdkBeanConfig.java";

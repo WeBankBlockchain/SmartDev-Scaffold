@@ -7,7 +7,6 @@ import org.apache.commons.io.FileUtils;
 
 import com.webank.scaffold.artifact.file.ApplicationJava;
 import com.webank.scaffold.artifact.file.CommonResponseJava;
-import com.webank.scaffold.artifact.file.IOUtilJava;
 import com.webank.scaffold.artifact.file.SdkBeanConfigJava;
 import com.webank.scaffold.builder.ConstructorBoFileBuilder;
 import com.webank.scaffold.builder.ContractConfigBuilder;
@@ -40,7 +39,7 @@ public class MainJavaDir extends DirectoryArtifact {
     @Override
     protected void doGenerateSubContents() throws Exception {
         //1. IOUtil
-        handleIOUtil();
+        handleUtil();
         //2. Bo and service
         handleBOAndService();
         //3. Application
@@ -61,10 +60,8 @@ public class MainJavaDir extends DirectoryArtifact {
         applicationJava.generate();
     }
 
-    private void handleIOUtil() throws Exception{
-        String utilsPackage = config.getGroup() + "." + config.getArtifact() + FileNameConstants.UTILS_PKG_POSTFIX;
-        IOUtilJava ioUtilJava = new IOUtilJava(IOUtil.convertPackageToFile(this.toFile(),utilsPackage), config);
-        ioUtilJava.generate();
+    private void handleUtil() throws Exception{
+        //hook
     }
 
     private void handleBOAndService() throws Exception{

@@ -60,9 +60,9 @@ echo end compiling scaffold...
 
 echo start generating $ARTIFACT...
 if [ -z "$SELECTOR" ]; then
-  java -jar dist/solscaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
+  java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
 else
-  java -jar dist/solscaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $SELECTOR
+  java -jar dist/WeBankBlockchain-Smartdev-Scaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -n $SELECTOR
 fi
 
 

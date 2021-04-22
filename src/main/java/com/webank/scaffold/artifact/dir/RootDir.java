@@ -1,11 +1,13 @@
 package com.webank.scaffold.artifact.dir;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import com.webank.scaffold.artifact.file.BuildGradle;
 import com.webank.scaffold.artifact.file.SettingsGradle;
 import com.webank.scaffold.config.UserConfig;
-import com.webank.scaffold.util.IOUtil;
 
 /**
  * @author aaronchu
@@ -43,7 +45,7 @@ public class RootDir extends DirectoryArtifact {
         gradle.generate();
     }
 
-    public void clean() {
-        IOUtil.removeItem(this.toFile());
+    public void clean() throws IOException {
+        FileUtils.forceDelete(this.toFile());
     }
 }
