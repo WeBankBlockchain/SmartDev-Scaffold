@@ -2,12 +2,6 @@ package com.webank.scaffold.artifact;
 
 import java.io.File;
 
-/**
- * Marks an item in target project
- * @author aaronchu
- * @Description
- * @data 2021/01/19
- */
 public interface Artifact {
 
     void generate() throws Exception;
@@ -23,5 +17,4 @@ public interface Artifact {
     File getParentDir();
 
     String getName();
-
 }
