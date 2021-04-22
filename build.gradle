@@ -27,16 +27,6 @@ dependencies {
     implementation ("org.slf4j:slf4j-api:1.7.30")
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        resources  {
-            srcDir 'src/main/resources'
-        }
-    }
-}
 jar {
     enabled = true
     destinationDirectory = file('dist')
