@@ -9,14 +9,13 @@ version '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
 repositories {
     mavenCentral()
     maven { url "https://maven.aliyun.com/nexus/content/groups/public/"}
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     maven { url "https://dl.bintray.com/ethereum/maven/" }
     mavenLocal()
-
-
 }
 
 dependencies {

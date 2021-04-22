@@ -1,6 +1,6 @@
 package com.webank.scaffold.config;
 
-import java.util.Properties;
+import lombok.Data;
 
 /**
  * Config files for users
@@ -8,8 +8,27 @@ import java.util.Properties;
  * @Description
  * @data 2021/01/15
  */
-public class UserConfig extends Properties {
 
+@Data
+public class UserConfig{
 
+    private String group;
+    private String artifact;
+    private String solidityDir;
+    private String outputDir;
+    private String need;
 
+    private UserConfig(){}
+
+    public static UserConfig getInstance(String group, String artifact, String solidityDir, String outputDir, String need){
+
+        UserConfig config = new UserConfig();
+        config.setGroup(group);
+        config.setArtifact(artifact);
+        config.setSolidityDir(solidityDir);
+        config.setOutputDir(outputDir);
+        config.setNeed(need);
+
+        return config;
+    }
 }

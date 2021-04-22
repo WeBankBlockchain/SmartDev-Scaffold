@@ -54,7 +54,6 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.slf4j:slf4j-api:1.7.5'
-    // implementation 'org.slf4j:slf4j-log4j12:1.7.5'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -79,6 +78,7 @@ sourceSets {
 test {
     useJUnitPlatform()
 }
+
 bootJar {
     destinationDir file('dist')
     archiveName project.name + '-exec.jar'
