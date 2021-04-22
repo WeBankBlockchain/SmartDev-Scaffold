@@ -15,12 +15,13 @@
  */
 package com.webank.scaffold.artifact.dir;
 
+import java.io.File;
+
+import org.apache.commons.io.FileUtils;
+
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.DirNameConstants;
 import com.webank.scaffold.exception.ScaffoldException;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import java.io.File;
 
 /**
  * ContractsDir
@@ -30,7 +31,6 @@ import java.io.File;
  * @Version 1.0
  * @Date: 2021-04-07 11:12
  **/
-@Slf4j
 public class ContractsDir extends DirectoryArtifact {
 
     private UserConfig config;

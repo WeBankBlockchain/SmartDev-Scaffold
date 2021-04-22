@@ -1,23 +1,28 @@
 package com.webank.scaffold.util;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author aaronchu
  * @Description
  * @data 2021/01/15
  */
-@Slf4j
 public class IOUtil {
 
     private IOUtil(){}
-
+    private static Logger log = LoggerFactory.getLogger(IOUtil.class);
     private static final int BUF_SIZE = 2048;
 
     public static String readAsString(InputStream inputStream) throws IOException {

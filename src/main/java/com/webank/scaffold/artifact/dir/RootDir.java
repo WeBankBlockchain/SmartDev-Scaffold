@@ -1,16 +1,11 @@
 package com.webank.scaffold.artifact.dir;
 
-import com.webank.scaffold.artifact.dir.DirectoryArtifact;
-import com.webank.scaffold.artifact.dir.GradleDir;
-import com.webank.scaffold.artifact.dir.SrcDir;
+import java.io.File;
+
 import com.webank.scaffold.artifact.file.BuildGradle;
 import com.webank.scaffold.artifact.file.SettingsGradle;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.util.IOUtil;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author aaronchu

@@ -1,20 +1,24 @@
 package com.webank.scaffold.artifact.dir;
 
+import java.io.File;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+
 import com.webank.scaffold.artifact.file.ApplicationJava;
 import com.webank.scaffold.artifact.file.CommonResponseJava;
 import com.webank.scaffold.artifact.file.IOUtilJava;
 import com.webank.scaffold.artifact.file.SdkBeanConfigJava;
-import com.webank.scaffold.builder.*;
+import com.webank.scaffold.builder.ConstructorBoFileBuilder;
+import com.webank.scaffold.builder.ContractConfigBuilder;
+import com.webank.scaffold.builder.FunctionBoFileBuilder;
+import com.webank.scaffold.builder.ServiceFileBuilder;
+import com.webank.scaffold.builder.SystemConfigBuilder;
+import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.DirNameConstants;
 import com.webank.scaffold.constants.FileNameConstants;
-import com.webank.scaffold.handler.ServicesHandler;
-import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.util.ABIUtil;
 import com.webank.scaffold.util.IOUtil;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * @author aaronchu
@@ -25,14 +29,11 @@ import java.util.List;
 public class MainJavaDir extends DirectoryArtifact {
 
     private File abiDir;
-
-    private ServicesHandler srvBuilder;
     private UserConfig config;
 
     public MainJavaDir(File parentDir, File abi, UserConfig config) {
         super(parentDir);
         this.abiDir = abi;
-        this.srvBuilder = new ServicesHandler(config);
         this.config = config;
     }
 

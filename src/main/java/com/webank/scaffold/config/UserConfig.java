@@ -1,7 +1,5 @@
 package com.webank.scaffold.config;
 
-import lombok.Data;
-
 /**
  * Config files for users
  * @author aaronchu
@@ -9,7 +7,6 @@ import lombok.Data;
  * @data 2021/01/15
  */
 
-@Data
 public class UserConfig{
 
     private String group;
@@ -31,4 +28,76 @@ public class UserConfig{
 
         return config;
     }
+
+    /**
+     * @return the group
+     */
+    public String getGroup() {
+        return group;
+    }
+
+    /**
+     * @param group the group to set
+     */
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    /**
+     * @return the artifact
+     */
+    public String getArtifact() {
+        return artifact;
+    }
+
+    /**
+     * @param artifact the artifact to set
+     */
+    public void setArtifact(String artifact) {
+        this.artifact = artifact;
+    }
+
+    /**
+     * @return the solidityDir
+     */
+    public String getSolidityDir() {
+        return solidityDir;
+    }
+
+    /**
+     * @param solidityDir the solidityDir to set
+     */
+    public void setSolidityDir(String solidityDir) {
+        this.solidityDir = solidityDir;
+    }
+
+    /**
+     * @return the outputDir
+     */
+    public String getOutputDir() {
+        return outputDir;
+    }
+
+    /**
+     * @param outputDir the outputDir to set
+     */
+    public void setOutputDir(String outputDir) {
+        this.outputDir = outputDir;
+    }
+
+    /**
+     * @return the need
+     */
+    public String getNeed() {
+        return need;
+    }
+
+    /**
+     * @param need the need to set
+     */
+    public void setNeed(String need) {
+        this.need = need;
+    }
+    
+    
 }
