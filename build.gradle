@@ -1,11 +1,13 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'application'
-
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'application'
+}
 
 group 'com.webank'
-version '1.0.0-SNAPSHOT'
+version '1.0.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -18,15 +20,15 @@ repositories {
     mavenLocal()
 }
 
-dependencies {
+dependencies {    
     implementation ('com.webank:solc-gradle-plugin:1.0.0-SNAPSHOT')
     implementation ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.1')
     implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
     implementation ("org.slf4j:slf4j-api:1.7.30")
 }
 
-jar {
-    enabled = true
+shadowJar {
+    mainClassName = 'com.webank.scaffold.Main'
     destinationDirectory = file('dist')
     archiveFileName = project.name + '.jar'
     exclude '**/*.DSA'
@@ -34,13 +36,9 @@ jar {
     exclude '**/*.SF'
     manifestContentCharset 'utf-8'
     metadataCharset 'utf-8'
-    manifest{
-        attributes "Main-Class":"com.webank.scaffold.Main"
-    }
-
-    from {
-        sourceSets.main.compileClasspath.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
+    
+    from("./"){
+        include 'build.gradle'
     }
 }
+ 
