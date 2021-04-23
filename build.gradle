@@ -30,7 +30,7 @@ dependencies {
 shadowJar {
     mainClassName = 'com.webank.scaffold.Main'
     destinationDirectory = file('dist')
-    archiveFileName = project.name + '.jar'
+    archiveFileName = project.name + version + '.jar'
     exclude '**/*.DSA'
     exclude '**/*.RSA'
     exclude '**/*.SF'
@@ -40,5 +40,10 @@ shadowJar {
     from("./"){
         include 'build.gradle'
     }
+}
+
+clean {
+    println "delete ${projectDir}/dist"
+    delete "${projectDir}/dist"
 }
  
