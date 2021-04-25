@@ -1,14 +1,27 @@
 package com.webank.scaffold.util;
 
 import com.webank.scaffold.exception.ScaffoldException;
+import com.webank.scaffold.factory.ProjectFactory;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.*;
-import java.nio.file.Files;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author aaronchu
@@ -17,6 +30,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Slf4j
 public class IOUtil {
+    private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
+
     private IOUtil(){}
 
     private static final int BUF_SIZE = 2048;
@@ -61,8 +76,12 @@ public class IOUtil {
         }
     }
 
-    public static void copyFolder(File srcDir, final File destDir) throws IOException{
-        for(File f: srcDir.listFiles()){
+    public static void copyFolder(File srcDir, final File destDir) throws IOException {
+        if (srcDir.listFiles() == null) {
+            logger.error("copyFolder srcDir is empty:{}", srcDir);
+            throw new ScaffoldException("copyFolder srcDir is empty " + srcDir);
+        }
+        for (File f : srcDir.listFiles()) {
             File fileCopyTo = new File(destDir, f.getName());
             if(!f.isDirectory()){
                 copyFile(f, fileCopyTo);
