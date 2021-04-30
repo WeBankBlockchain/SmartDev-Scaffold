@@ -22,7 +22,7 @@ public class ContractCompiler {
      * abi、bin、smbin、javacontract.
      * @throws Exception
      */
-    public void compile(File abiOut, File binOut, File smBinOut ) throws Exception{
+    public void compile(File abiOut, File binOut, File smBinOut) throws Exception {
         CompileSolToJava compiler = new CompileSolToJava();
         String solName = "*";//Compile everything
 

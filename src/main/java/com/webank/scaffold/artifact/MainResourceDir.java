@@ -42,7 +42,7 @@ public class MainResourceDir extends DirectoryArtifact {
         applicationProperties.generate();
     }
 
-    private void compileContract(File contractDir) throws Exception{
+    private void compileContract(File contractDir) throws Exception {
         ContractCompiler compiler = new ContractCompiler(contractDir);
         try{
             File outputBase = this.toFile();
