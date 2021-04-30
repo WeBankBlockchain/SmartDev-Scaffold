@@ -1,3 +1,12 @@
+#!/usr/bin/env bash
+LANG=zh_CN.UTF-8
+
+function LOG_ERROR()
+{
+    local content=${1}
+    echo -e "\033[31m"${content}"\033[0m"
+}
+
 function check_java(){
    version=$(java -version 2>&1 |grep version |awk '{print $3}')
    len=${#version}-2
@@ -54,8 +63,24 @@ fi
 
 TOOLS_DIR=$(pwd)
 echo start compiling scaffold...
+
+ver="0.4.25.1"
+while getopts "v:" arg
+do
+  case $arg in
+    v)
+      ver=$OPTARG
+      ;;
+    ?)
+      LOG_ERROR "unkonw argument\n usages: -v [solcJ version] default 0.4.25.1, optional: { 0.5.2.1, 0.6.10.1}"
+      exit 1
+      ;;
+  esac
+done
+
 cd ..
-gradle clean shadowJar
+echo "solcJ version is $ver"
+gradle clean shadowJar -PsolcVersion=$ver
 echo end compiling scaffold...
 
 echo start generating $ARTIFACT...

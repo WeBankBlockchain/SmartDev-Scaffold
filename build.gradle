@@ -12,6 +12,8 @@ version '1.0.1'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+def solcVersion = rootProject.hasProperty('solcVersion') ? solcVersion : "0.4.25.1"
+
 repositories {
     mavenCentral()
     maven { url "https://maven.aliyun.com/nexus/content/groups/public/"}
@@ -25,7 +27,9 @@ dependencies {
     implementation ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.2')
     implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
     implementation ("org.slf4j:slf4j-api:1.7.30")
+    implementation "org.fisco-bcos:solcJ:${solcVersion}"
 }
+
 
 shadowJar {
     mainClassName = 'com.webank.scaffold.Main'
