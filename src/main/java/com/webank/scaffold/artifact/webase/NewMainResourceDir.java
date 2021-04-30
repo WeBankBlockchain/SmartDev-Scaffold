@@ -1,5 +1,6 @@
 package com.webank.scaffold.artifact.webase;
 
+import com.webank.scaffold.ContractCompiler;
 import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
+import org.fisco.bcos.sdk.codegen.SolidityContractGenerator;
 
 /**
  *
@@ -98,6 +100,28 @@ public class NewMainResourceDir extends DirectoryArtifact {
             IOUtil.writeStringToFile(info.abiStr, abiFile, info.contractName + CompileConstants.ABI_FILE_SUFFIX);
             IOUtil.writeStringToFile(info.binStr, binFile, info.contractName + CompileConstants.BIN_FILE_SUFFIX);
             IOUtil.writeStringToFile(info.smBinStr, smBinFile, info.contractName + CompileConstants.BIN_FILE_SUFFIX);
+        }
+    }
+
+
+//    private void generateContractJava() {
+//        for (ContractInfo contractInfo : contractInfoList) {
+//            SolidityContractGenerator generator = new SolidityContractGenerator()
+//        }
+//    }
+
+
+    private void compileContract(File contractDir) throws Exception{
+        ContractCompiler compiler = new ContractCompiler(contractDir);
+        try{
+            File outputBase = this.toFile();
+            this.abiDir  = new File(outputBase, CompileConstants.ABI_DIR);
+            this.binDir = new File(outputBase, CompileConstants.BIN_DIR);
+            this.smBinDir = new File(outputBase, CompileConstants.SMBIN_DIR);
+            compiler.compile(abiDir, binDir, smBinDir);
+        }
+        catch (Exception ex){
+            throw new ScaffoldException(ex);
         }
     }
 

@@ -3,6 +3,7 @@ package com.webank.scaffold.artifact.webase;
 import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.artifact.MainJavaDir;
 import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
@@ -13,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.fisco.bcos.sdk.codegen.SolidityContractWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author marsli
@@ -21,6 +25,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Getter
 public class NewMainDir extends DirectoryArtifact {
+    private static final Logger logger = LoggerFactory.getLogger(NewMainDir.class);
+
     private static final String MAIN_DIR = "main";
     private static final String SOL_Dir = "contracts";
     
@@ -80,6 +86,13 @@ public class NewMainDir extends DirectoryArtifact {
                 need,
                 this.config);
         javas.generate();
+
+        /**
+         * 4. generate raw solidity java file
+         * generate raw java file of soldiity: 0.4.25
+         */
+        this.generateSolJavaFiles();
+
     }
 
     @Override
@@ -97,5 +110,36 @@ public class NewMainDir extends DirectoryArtifact {
                 info.getContractName() + CompileConstants.SOL_FILE_SUFFIX);
         }
         return contractsDir;
+    }
+
+    private void generateSolJavaFiles() {
+        String groupName = config.getProperty(GeneratorOptions.GENERATOR_GROUP);
+        String artifactName = config.getProperty(GeneratorOptions.GENERATOR_ARTIFACT);
+        String javaFileOutputDir = this.getParentDir().getPath() + File.separator + MAIN_DIR
+            + File.separator + "java" + File.separator + groupName.replace(".", File.separator)
+            + File.separator + artifactName + File.separator + "raw";
+        logger.info("generateSolJavaFiles javaFileOutputDir:{}", javaFileOutputDir);
+        File check = new File(javaFileOutputDir);
+        if (!check.exists()) {
+            boolean result = check.mkdirs();
+            logger.info("javaFileOutputDir mkdir:{}", result);
+        }
+        for (ContractInfo info : contractInfoList) {
+            System.out.println("now generate java file of " + info.getContractName());
+            logger.info("now generate java file of {}", info.getContractName());
+            try {
+                new SolidityContractWrapper().generateJavaFiles(
+                        info.getContractName(),
+                        info.getBinStr(),
+                        info.getSmBinStr(),
+                        info.getAbiStr(),
+                        javaFileOutputDir,
+                        "");
+            } catch (Exception e) {
+                System.out.println("generate java file error" + e.getMessage());
+                logger.error("generate java file of {} failed for error:{}", info.getContractName(), e);
+            }
+        }
+
     }
 }
