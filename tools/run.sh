@@ -49,13 +49,13 @@ TOOLS_DIR=$(pwd)
 ARTIFACT=$(grep artifact config.ini |  cut  -d '=' -f 2)
 GROUP=$(grep group config.ini |  cut  -d '=' -f 2)
 SELECTOR=$(grep selector config.ini |  cut  -d '=' -f 2)
-
+COMPILER=$(grep compiler config.ini |  cut  -d '=' -f 2)
 echo "GROUP=$GROUP"
 echo "ARTIFACT=$ARTIFACT"
 echo "SOL_DIR=$SOL_DIR"
 echo "TOOLS_DIR=$TOOLS_DIR"
 echo "SELECTOR=$SELECTOR"
-
+echo "COMPILER=$COMPILER"
 
 ARTIFACT_DIR="$(pwd)/$ARTIFACT"
 if [ -d "$ARTIFACT_DIR" ]; then
@@ -66,26 +66,13 @@ fi
 
 echo start compiling scaffold...
 
-ver="0.4.25.1"
-while getopts "v:" arg
-do
-  case $arg in
-    v)
-      ver=$OPTARG
-      ;;
-    ?)
-      LOG_ERROR "unkonw argument\n usages: -v [solcJ version] default 0.4.25.1, optional: { 0.5.2.1, 0.6.10.1}"
-      exit 1
-      ;;
-  esac
-done
 
 cd ..
-echo "solcJ version is $ver"
-gradle clean shadowJar -PsolcVersion=$ver
+gradle clean shadowJar -PsolcVersion=$COMPILER
 echo end compiling scaffold...
 
 echo start generating $ARTIFACT...
+
 if [ -z "$SELECTOR" ]; then
   java -jar dist/WeBankBlockchain-SmartDev-Scaffold*.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR
 else

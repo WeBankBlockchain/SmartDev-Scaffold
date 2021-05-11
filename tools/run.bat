@@ -13,7 +13,7 @@ echo ARTIFACT=%ARTIFACT%
 echo SOL_DIR=%SOL_DIR%
 echo TOOLS_DIR=%TOOLS_DIR%
 echo SELECTOR=%SELECTOR%
-
+echo COMPILER=%COMPILER%
 
 if exist %ARTIFACT% (
     echo Artifact "%ARTIFACT%" ALREADY exists. Please remove it if you want to override
@@ -22,8 +22,7 @@ if exist %ARTIFACT% (
 
 echo start compiling scaffold...
 cd ..
-SET lf=-
-FOR /F "delims=" %%i IN ('gradle clean shadowJar ') DO if ("!out!"=="") (set out=%%i) else (set out=!out!%lf%%%i)
+gradle clean shadowJar -PsolcVersion=%COMPILER% | more
 echo end compiling scaffold...
 
 echo start generating %ARTIFACT%...
