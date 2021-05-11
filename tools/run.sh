@@ -45,6 +45,7 @@ function check_sol_dir(){
 
 check_java
 check_sol_dir
+TOOLS_DIR=$(pwd)
 ARTIFACT=$(grep artifact config.ini |  cut  -d '=' -f 2)
 GROUP=$(grep group config.ini |  cut  -d '=' -f 2)
 SELECTOR=$(grep selector config.ini |  cut  -d '=' -f 2)
@@ -52,6 +53,7 @@ SELECTOR=$(grep selector config.ini |  cut  -d '=' -f 2)
 echo "GROUP=$GROUP"
 echo "ARTIFACT=$ARTIFACT"
 echo "SOL_DIR=$SOL_DIR"
+echo "TOOLS_DIR=$TOOLS_DIR"
 echo "SELECTOR=$SELECTOR"
 
 
@@ -61,7 +63,7 @@ if [ -d "$ARTIFACT_DIR" ]; then
    exit 0
 fi
 
-TOOLS_DIR=$(pwd)
+
 echo start compiling scaffold...
 
 ver="0.4.25.1"
