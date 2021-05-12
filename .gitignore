@@ -11,3 +11,5 @@ tmp/
 .idea/
 out/
 /output/
+gradle.properties
+secring.gpg

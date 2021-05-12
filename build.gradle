@@ -2,13 +2,17 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 //apply plugin: 'application'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
-
-group 'com.webank'
+group 'com.webank.webase'
 version '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
 repositories {
     mavenCentral()
     maven { url "https://maven.aliyun.com/nexus/content/groups/public/"}
@@ -39,22 +43,68 @@ sourceSets {
         }
     }
 }
+
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+jar.dependsOn(sourcesJar)
+
 jar {
     enabled = true
     destinationDirectory = file('dist')
-    archiveFileName = project.name + '.jar'
+    // archiveName project.name + "-" + "${project.version}" + ".jar"
+    archiveName project.name + "-" + "${project.version}" + ".jar"
     exclude '**/*.DSA'
     exclude '**/*.RSA'
     exclude '**/*.SF'
     manifestContentCharset 'utf-8'
     metadataCharset 'utf-8'
-//    manifest{
-//        attributes "Main-Class":"com.webank.scaffold.Main"
-//    }
-//
-//    from {
-//        sourceSets.main.compileClasspath.collect {
-//            it.isDirectory() ? it : zipTree(it)
-//        }
-//    }
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
 }
+
+
+publishing {
+    println "name" + project.name
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        maven {
+            if (project.version.endsWith('-SNAPSHOT')) {
+                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            } else {
+                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            }
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign configurations.archives
+}
+
