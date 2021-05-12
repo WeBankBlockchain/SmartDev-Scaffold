@@ -3,16 +3,12 @@ package com.webank.scaffold.artifact.dir;
 import java.io.File;
 import java.util.List;
 
+import com.webank.scaffold.builder.*;
 import org.apache.commons.io.FileUtils;
 
 import com.webank.scaffold.artifact.file.ApplicationJava;
 import com.webank.scaffold.artifact.file.CommonResponseJava;
 import com.webank.scaffold.artifact.file.SdkBeanConfigJava;
-import com.webank.scaffold.builder.ConstructorBoFileBuilder;
-import com.webank.scaffold.builder.ContractConfigBuilder;
-import com.webank.scaffold.builder.FunctionBoFileBuilder;
-import com.webank.scaffold.builder.ServiceFileBuilder;
-import com.webank.scaffold.builder.SystemConfigBuilder;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.DirNameConstants;
 import com.webank.scaffold.constants.FileNameConstants;
@@ -40,18 +36,27 @@ public class MainJavaDir extends DirectoryArtifact {
     protected void doGenerateSubContents() throws Exception {
         //1. IOUtil
         handleUtil();
-        //2. Bo and service
-        handleBOAndService();
-        //3. Application
-        handleApplication();
-        //4. System Config
+        //2. System Config
         handleSystemConfig();
-        //5. Contract config
+        //3. Contract config
         handleContractConfig();
-        //6. Sdk Bean config
+        //4. Contract Constants
+        handleContractConstants();
+        //5. Bo and service
+        handleBOAndService();
+        //6. Application
+        handleApplication();
+        //7. Sdk Bean config
         handleSdkBeanConfig();
-        //7. Common response
+        //8. Common response
         handleCommonResponse();
+    }
+
+    private void handleContractConstants() throws Exception{
+        List<String> contractList = ABIUtil.contracts(abiDir, this.config.getNeed());
+        ContractConstantsBuilder constantsBuilder = new ContractConstantsBuilder(this.config, contractList);
+        File javaDir = this.toFile();
+        constantsBuilder.generateJavaFile(FileNameConstants.CONSTANT_PKG_POSTFIX, javaDir);
     }
 
     private void handleApplication() throws Exception{

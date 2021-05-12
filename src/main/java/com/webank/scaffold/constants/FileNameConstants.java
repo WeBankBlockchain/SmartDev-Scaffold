@@ -51,6 +51,7 @@ public class FileNameConstants {
 
     public static final String SYSTEM_CONFIG = "SystemConfig";
     public static final String CONTRACT_CONFIG = "ContractConfig";
+    public static final String CONTRACT_CONSTANTS = "ContractConstants";
 
     //package or file postfix
     public static final String CONFIG_PKG_POSTFIX = ".config";
@@ -59,7 +60,11 @@ public class FileNameConstants {
     public static final String MODEL_FILE_POSTFIX = ".model";
     public static final String BO_PKG_POSTFIX = ".model.bo";
     public static final String SERVICE_PKG_POSTFIX = ".service";
+    public static final String CONSTANT_PKG_POSTFIX = ".constants";
 
     public final static String CTOR = "CtorBO";
     public final static String INPUT = "InputBO";
+    public final static String ABI_POSTFIX = "Abi";
+    public final static String BINARY_POSTFIX = "Binary";
+    public final static String BINARY_GM_POSTFIX = "GmBinary";
 }

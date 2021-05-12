@@ -45,12 +45,12 @@ public class FunctionBoFileBuilder implements JavaFileBuilder {
     }
 
     @Override
-    public String getJavaFilePackage(String pkgName) {
-        return config.getGroup() + "." + config.getArtifact() + pkgName;
+    public String getJavaFilePackage(String relativePackage) {
+        return config.getGroup() + "." + config.getArtifact() + relativePackage;
     }
 
     @Override
-    public List<TypeSpec> buildTypeSpec(String pkg) {
+    public List<TypeSpec> buildTypeSpec(String fullPkg) {
         Map<ABIDefinition,TypeSpec> result = ABIUtil.buildAbiDefAndTypeSpec(contractName,abiStr);
         return result.values().stream().collect(Collectors.toList());
     }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.lang.model.element.Modifier;
 
+import com.webank.scaffold.builder.ContractConstantsBuilder;
 import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
 import org.fisco.bcos.sdk.client.Client;
 import org.fisco.bcos.sdk.transaction.manager.AssembleTransactionProcessor;
@@ -32,10 +33,6 @@ import lombok.NoArgsConstructor;
  */
 public class ServicesHandler {
 
-    private static final String ABI = "ABI";
-    private static final String BIN = "BINARY";
-    private static final String SMBIN = "SM_BINARY";
-
     private UserConfig config;
 
     public ServicesHandler(UserConfig config) {
@@ -50,17 +47,14 @@ public class ServicesHandler {
                 .addAnnotation(ClassName.get("org.springframework.stereotype", "Service"))
                 .addAnnotation(NoArgsConstructor.class).addAnnotation(Data.class);
 
-        // 2. Add static field: ABI | BIN | SM_BIN
-        typeBuilder = this.populateStaticFields(contract, typeBuilder);
-
-        // 3. Instance fields: String address|Client client |AssemblyTransactionProcessor processor
+        // 2. Instance fields: String address|Client client |AssemblyTransactionProcessor processor
         typeBuilder = this.populateInstanceFields(contract, typeBuilder);
 
-        // 4. Add post constructor
+        // 3. Add post constructor
         typeBuilder = this.populateInitializer(contract, typeBuilder);
 
-        // 5. Add method: transaction | call
-        typeBuilder = this.populateMethods(typeBuilder, functionWithInputBO);
+        // 4. Add method: transaction | call
+        typeBuilder = this.populateMethods(contract, typeBuilder, functionWithInputBO);
         return typeBuilder.build();
     }
 
@@ -68,18 +62,6 @@ public class ServicesHandler {
         String pkg = config.getGroup() + "." + config.getArtifact();
         String serviceName = contract + "Service";
         return ClassName.get(pkg + ".service", serviceName);
-    }
-
-    private TypeSpec.Builder populateStaticFields(String contract, TypeSpec.Builder typeBuilder) {
-
-        FieldSpec abiField =
-                FieldSpec.builder(String.class, ABI).addModifiers(Modifier.PUBLIC, Modifier.STATIC).build();
-
-        FieldSpec bin = FieldSpec.builder(String.class, BIN).addModifiers(Modifier.PUBLIC, Modifier.STATIC).build();
-
-        FieldSpec smbin = FieldSpec.builder(String.class, SMBIN).addModifiers(Modifier.PUBLIC, Modifier.STATIC).build();
-
-        return typeBuilder.addField(abiField).addField(bin).addField(smbin);
     }
 
     private TypeSpec.Builder populateInstanceFields(String contract, TypeSpec.Builder typeBuilder) {
@@ -96,66 +78,72 @@ public class ServicesHandler {
     }
 
     private TypeSpec.Builder populateInitializer(String contract, TypeSpec.Builder typeBuilder) {
-        String readUtilFullName =
-                "org.apache.commons.io.IOUtils.toString(Thread.currentThread().getContextClassLoader().getResource(\"$L/$L\"))";
         MethodSpec.Builder txBuilder = MethodSpec.methodBuilder("init");
         txBuilder.addModifiers(Modifier.PUBLIC).addAnnotation(ClassName.get("javax.annotation", "PostConstruct"))
                 .addException(Exception.class);
         txBuilder.addStatement(
                 "this.txProcessor = $T.createAssembleTransactionProcessor(this.client, this.client.getCryptoSuite().getCryptoKeyPair())",
-                TransactionProcessorFactory.class)
-                .addStatement(ABI + " = " + readUtilFullName, DirNameConstants.ABI_DIR, contract + ".abi")
-                .addStatement(BIN + " = " + readUtilFullName, DirNameConstants.BIN_DIR, contract + ".bin")
-                .addStatement(SMBIN + " = " + readUtilFullName, DirNameConstants.SMBIN_DIR, contract + ".bin");
+                TransactionProcessorFactory.class);
         typeBuilder.addMethod(txBuilder.build());
         return typeBuilder;
     }
 
-    private TypeSpec.Builder populateMethods(TypeSpec.Builder typeBuilder,
+    private TypeSpec.Builder populateMethods(String contract, TypeSpec.Builder typeBuilder,
             Map<ABIDefinition, TypeSpec> functionWithInputBO) {
 
         for (Map.Entry<ABIDefinition, TypeSpec> entrySet : functionWithInputBO.entrySet()) {
             ABIDefinition function = entrySet.getKey();
             TypeSpec inputBO = entrySet.getValue();
             if (!function.isConstant()) {
-                typeBuilder.addMethod(getTransactionMethod(function.getName(), inputBO));
+                typeBuilder.addMethod(getTransactionMethod(contract, function.getName(), inputBO));
             } else {
-                typeBuilder.addMethod(getCallMethod(function.getName(), inputBO));
+                typeBuilder.addMethod(getCallMethod(contract, function.getName(), inputBO));
             }
         }
 
         return typeBuilder;
     }
 
-    private MethodSpec getTransactionMethod(String function, TypeSpec inputType) {
+    private MethodSpec getTransactionMethod(String contract, String function, TypeSpec inputType) {
+        ClassName constantsClass = constantsClassName();
+        String abiField = contract+FileNameConstants.ABI_POSTFIX;
         String pkg = config.getGroup() + "." + config.getArtifact() + FileNameConstants.BO_PKG_POSTFIX;
         MethodSpec.Builder txBuilder = MethodSpec.methodBuilder(function);
         txBuilder.addModifiers(Modifier.PUBLIC).addException(Exception.class).returns(TransactionResponse.class);
         if (inputType != null) {
             txBuilder.addParameter(ClassName.get(pkg, inputType.name), "input").addStatement(
-                    "return this.txProcessor.sendTransactionAndGetResponse(this.address, ABI, \"$L\", input.toArgs())",
-                    function);
+                    "return this.txProcessor.sendTransactionAndGetResponse(this.address, $T.$L, \"$L\", input.toArgs())",
+                    constantsClass, abiField,function);
         } else {
             txBuilder.addStatement(
-                    "return this.txProcessor.sendTransactionAndGetResponse(this.address, ABI, \"$L\", $T.asList())",
-                    function, Arrays.class);
+                    "return this.txProcessor.sendTransactionAndGetResponse(this.address, $T.$L, \"$L\", $T.asList())",
+                    constantsClass, abiField, function, Arrays.class);
         }
         return txBuilder.build();
     }
 
-    private MethodSpec getCallMethod(String function, TypeSpec inputType) {
+    private MethodSpec getCallMethod(String contract, String function, TypeSpec inputType) {
+        ClassName constantsClass = constantsClassName();
+        String abiField = contract+FileNameConstants.ABI_POSTFIX;
         String pkg = config.getGroup() + "." + config.getArtifact() + FileNameConstants.BO_PKG_POSTFIX;
         MethodSpec.Builder txBuilder = MethodSpec.methodBuilder(function);
         txBuilder.addModifiers(Modifier.PUBLIC).addException(Exception.class).returns(CallResponse.class);
         if (inputType != null) {
             txBuilder.addParameter(ClassName.get(pkg, inputType.name), "input").addStatement(
-                    "return this.txProcessor.sendCall(this.client.getCryptoSuite().getCryptoKeyPair().getAddress(), this.address, ABI, \"$L\", input.toArgs())",
-                    function);
+                    "return this.txProcessor.sendCall(this.client.getCryptoSuite().getCryptoKeyPair().getAddress(), this.address, $T.$L, \"$L\", input.toArgs())",
+                    constantsClass, abiField, function);
         } else {
             txBuilder.addStatement(
-                    "return this.txProcessor.sendCall(this.client.getCryptoSuite().getCryptoKeyPair().getAddress(), this.address, ABI, \"$L\", $T.asList())",
-                    function, Arrays.class);
+                    "return this.txProcessor.sendCall(this.client.getCryptoSuite().getCryptoKeyPair().getAddress(), this.address, $T.$L, \"$L\", $T.asList())",
+                    constantsClass, abiField, function, Arrays.class);
         }
         return txBuilder.build();
+    }
+
+
+    private ClassName constantsClassName() {
+        String pkg = new ContractConstantsBuilder(config, Arrays.asList()).getJavaFilePackage(FileNameConstants.CONSTANT_PKG_POSTFIX);
+        String simpleName = "ContractConstants";
+        return ClassName.get(pkg , simpleName);
     }
 }

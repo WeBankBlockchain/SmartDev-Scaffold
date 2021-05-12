@@ -41,13 +41,13 @@ public class SystemConfigBuilder implements JavaFileBuilder {
     }
 
     @Override
-    public String getJavaFilePackage(String pkgName) {
-        return config.getGroup() + "." + config.getArtifact() + pkgName;
+    public String getJavaFilePackage(String relativePackage) {
+        return config.getGroup() + "." + config.getArtifact() + relativePackage;
     }
 
     @Override
-    public List<TypeSpec> buildTypeSpec(String pkg) {
-        ClassName className = ClassName.get(pkg, FileNameConstants.SYSTEM_CONFIG);
+    public List<TypeSpec> buildTypeSpec(String fullPkg) {
+        ClassName className = ClassName.get(fullPkg, FileNameConstants.SYSTEM_CONFIG);
         TypeSpec systemConfigBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Data.class)
