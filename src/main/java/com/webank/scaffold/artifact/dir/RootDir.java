@@ -41,7 +41,7 @@ public class RootDir extends DirectoryArtifact {
         SettingsGradle settingsGradle = new SettingsGradle(this.toFile(), config);
         settingsGradle.generate();
 
-        GradleDir gradle = new GradleDir(this.toFile());
+        GradleDir gradle = new GradleDir(this.toFile(), this.config);
         gradle.generate();
     }
 

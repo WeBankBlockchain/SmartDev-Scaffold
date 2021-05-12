@@ -14,10 +14,15 @@ public class UserConfig{
     private String solidityDir;
     private String outputDir;
     private String need;
+    private String gradle;
+
+    public String getGradle() {
+        return gradle;
+    }
 
     private UserConfig(){}
 
-    public static UserConfig getInstance(String group, String artifact, String solidityDir, String outputDir, String need){
+    public static UserConfig getInstance(String group, String artifact, String solidityDir, String outputDir, String need, String gradle){
 
         UserConfig config = new UserConfig();
         config.setGroup(group);
@@ -25,8 +30,12 @@ public class UserConfig{
         config.setSolidityDir(solidityDir);
         config.setOutputDir(outputDir);
         config.setNeed(need);
-
+        config.setGradle(gradle);
         return config;
+    }
+
+    private void setGradle(String gradle) {
+        this.gradle = gradle;
     }
 
     /**

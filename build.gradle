@@ -35,6 +35,7 @@ shadowJar {
     mainClassName = 'com.webank.scaffold.Main'
     destinationDirectory = file('dist')
     archiveFileName = project.name+'.jar'
+
     exclude '**/*.DSA'
     exclude '**/*.RSA'
     exclude '**/*.SF'

@@ -14,6 +14,7 @@ echo SOL_DIR=%SOL_DIR%
 echo TOOLS_DIR=%TOOLS_DIR%
 echo SELECTOR=%SELECTOR%
 echo COMPILER=%COMPILER%
+echo GRADLE=%GRADLE%
 
 if exist %ARTIFACT% (
     echo Artifact "%ARTIFACT%" ALREADY exists. Please remove it if you want to override
@@ -29,9 +30,9 @@ echo start generating %ARTIFACT%...
 
 echo %TOOLS_DIR%
 if [%SELECTOR%]==[] (
-    java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g %GROUP% -a %ARTIFACT% -s %SOL_DIR% -o %TOOLS_DIR%
+    java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g %GROUP% -a %ARTIFACT% -s %SOL_DIR% -o %TOOLS_DIR% -gv %GRADLE%
 ) else (
-    java -jar dist/WeBankBlockchain-Smartdev-Scaffold.jar -g %GROUP% -a %ARTIFACT% -s %SOL_DIR% -o %TOOLS_DIR% -n %SELECTOR%
+    java -jar dist/WeBankBlockchain-Smartdev-Scaffold.jar -g %GROUP% -a %ARTIFACT% -s %SOL_DIR% -o %TOOLS_DIR% -gv %GRADLE% -n %SELECTOR%
 )
 
 

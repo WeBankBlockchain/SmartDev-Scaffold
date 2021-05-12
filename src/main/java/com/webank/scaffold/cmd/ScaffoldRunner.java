@@ -27,9 +27,12 @@ public class ScaffoldRunner implements Runnable{
     @CommandLine.Option(names = {"-n", "--need"}, required = false,defaultValue = "",description = "Optional. The contracts you need,for example Contract1,Contract2,Contract3")
     private String need;
 
+    @CommandLine.Option(names = {"-gv", "--gradle"}, required = false,defaultValue = "6.3",description = "Optional. Gradle version.")
+    private String gradle;
+
     @Override
     public void run() {
-        ProjectFactory factory = new ProjectFactory(group, artifact, solidityDir,  output, need);
+        ProjectFactory factory = new ProjectFactory(group, artifact, solidityDir,  output, need, gradle);
         factory.createProject();
     }
 

@@ -1,7 +1,10 @@
 package com.webank.scaffold;
 
 import com.webank.scaffold.cmd.ScaffoldRunner;
+import com.webank.scaffold.constants.FileNameConstants;
 import picocli.CommandLine;
+
+import java.io.InputStream;
 
 /**
  * @author aaronchu
