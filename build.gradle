@@ -79,32 +79,32 @@ jar {
     }
 }
 
-
-publishing {
-    println "name" + project.name
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-    repositories {
-        maven {
-            if (project.version.endsWith('-SNAPSHOT')) {
-                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-            } else {
-                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            }
-            credentials {
-                username = ossrhUsername
-                password = ossrhPassword
-            }
-        }
-    }
-}
-
-signing {
-    sign configurations.archives
-}
+//
+//publishing {
+//    println "name" + project.name
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//            artifact sourcesJar
+//            artifact javadocJar
+//        }
+//    }
+//    repositories {
+//        maven {
+//            if (project.version.endsWith('-SNAPSHOT')) {
+//                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+//            } else {
+//                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+//            }
+//            credentials {
+//                username = ossrhUsername
+//                password = ossrhPassword
+//            }
+//        }
+//    }
+//}
+//
+//signing {
+//    sign configurations.archives
+//}
 
