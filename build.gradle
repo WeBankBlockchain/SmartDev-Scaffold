@@ -26,6 +26,7 @@ repositories {
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compile ('com.webank:SmartDev-Scaffold:1.0.0-SNAPSHOT')
     implementation ('com.webank:solc-gradle-plugin:1.0.0-SNAPSHOT')
     implementation ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.2')
     implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
