@@ -1,5 +1,7 @@
-package com.webank.scaffold.artifact;
+package com.webank.scaffold.artifact.webase;
 
+import com.webank.scaffold.artifact.DemoPkeyTestJava;
+import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.util.PackageNameUtil;
@@ -11,11 +13,11 @@ import java.io.File;
  * @Description
  * @data 2021/01/20
  */
-public class TestJavaDir extends DirectoryArtifact {
+public class NewTestJavaDir extends DirectoryArtifact {
 
     private UserConfig config;
 
-    public TestJavaDir(File parentDir,  UserConfig userConfig) {
+    public NewTestJavaDir(File parentDir,  UserConfig userConfig) {
         super(parentDir);
         this.config = userConfig;
     }

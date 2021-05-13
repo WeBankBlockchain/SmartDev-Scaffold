@@ -11,6 +11,7 @@ import com.webank.scaffold.artifact.TestJavaDir;
 import com.webank.scaffold.artifact.webase.NewGradleDir;
 import com.webank.scaffold.artifact.webase.NewMainDir;
 import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.webase.NewTestJavaDir;
 import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.exception.ScaffoldException;
@@ -156,7 +157,7 @@ public class ProjectFactory {
         NewMainDir mainDir = new NewMainDir(srcDir.toFile(), config, contractInfoList,
             systemPeers, groupId, hexPrivateKey, sdkContentMap);
         TestDir testDir = new TestDir(srcDir.toFile());
-        TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
+        NewTestJavaDir testJavaDir = new NewTestJavaDir(testDir.toFile(), config);
         BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
         SettingsGradle settingsGradle = new SettingsGradle(project.toFile(), config);
 
