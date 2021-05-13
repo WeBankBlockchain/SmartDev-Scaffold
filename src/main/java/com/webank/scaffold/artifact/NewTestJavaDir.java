@@ -1,24 +1,24 @@
-package com.webank.scaffold.artifact.webase;
+package com.webank.scaffold.artifact;
 
-import com.webank.scaffold.artifact.DemoPkeyTestJava;
-import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.util.PackageNameUtil;
-
 import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author aaronchu
  * @Description
  * @data 2021/01/20
  */
-public class NewTestJavaDir extends DirectoryArtifact {
+public class NewTestJavaDir extends TestJavaDir {
+    private static final Logger logger = LoggerFactory.getLogger(NewTestJavaDir.class);
 
     private UserConfig config;
 
     public NewTestJavaDir(File parentDir,  UserConfig userConfig) {
-        super(parentDir);
+        super(parentDir, userConfig);
         this.config = userConfig;
     }
 

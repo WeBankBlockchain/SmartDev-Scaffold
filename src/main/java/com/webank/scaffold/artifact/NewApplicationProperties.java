@@ -12,10 +12,9 @@
  * the License.
  */
 
-package com.webank.scaffold.artifact.webase;
+package com.webank.scaffold.artifact;
 
-import com.webank.scaffold.artifact.Artifact;
-import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.exception.ScaffoldException;
 import com.webank.scaffold.util.CommonUtil;
 import java.io.BufferedWriter;
@@ -23,11 +22,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author marsli
  */
-public class NewApplicationProperties implements Artifact {
+public class NewApplicationProperties extends ApplicationProperties {
+
+    private static final Logger logger = LoggerFactory.getLogger(NewApplicationProperties.class);
 
     private File parentDir;
     private List<ContractInfo> contractInfoList;
@@ -41,6 +44,7 @@ public class NewApplicationProperties implements Artifact {
      * @param contracts
      */
     public NewApplicationProperties(File parentDir, List<ContractInfo> contracts){
+        super(parentDir, null);
         this.parentDir = parentDir;
         this.contractInfoList = contracts;
     }
@@ -55,6 +59,7 @@ public class NewApplicationProperties implements Artifact {
      */
     public NewApplicationProperties(File parentDir,
         List<ContractInfo> contracts, String systemPeers, Integer groupId, String hexPrivateKey) {
+        super(parentDir, null);
         this.parentDir = parentDir;
         this.contractInfoList = contracts;
         this.systemPeers = systemPeers;
@@ -72,6 +77,7 @@ public class NewApplicationProperties implements Artifact {
             writer.flush();
         }
     }
+
     private void writeSdkConnectKeys(BufferedWriter writer) throws IOException {
         writer.write("### Required\n");
         if (systemPeers != null) {
@@ -108,7 +114,7 @@ public class NewApplicationProperties implements Artifact {
         if (contractInfoList == null || contractInfoList.isEmpty()) {
             throw new ScaffoldException("contractInfoList is empty!");
         }
-        for(ContractInfo info :contractInfoList){
+        for(ContractInfo info :contractInfoList) {
             String contractName = CommonUtil.makeFirstCharLowerCase(info.getContractName());
             writer.write("### Optional. Please fill this address if you want to use related service\n");
             if (info.getContractAddress() != null) {

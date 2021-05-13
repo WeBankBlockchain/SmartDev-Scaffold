@@ -16,7 +16,7 @@ package com.webank.scaffold;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webank.scaffold.artifact.ProjectArtifact;
-import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.factory.ProjectFactory;
 import java.io.IOException;
 import java.util.Arrays;

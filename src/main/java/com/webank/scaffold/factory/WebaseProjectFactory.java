@@ -1,17 +1,14 @@
 package com.webank.scaffold.factory;
 
 import com.webank.scaffold.artifact.BuildGradle;
-import com.webank.scaffold.artifact.GradleDir;
-import com.webank.scaffold.artifact.MainDir;
+import com.webank.scaffold.artifact.NewGradleDir;
+import com.webank.scaffold.artifact.NewMainDir;
+import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.NewTestJavaDir;
 import com.webank.scaffold.artifact.ProjectArtifact;
 import com.webank.scaffold.artifact.SettingsGradle;
 import com.webank.scaffold.artifact.SrcDir;
 import com.webank.scaffold.artifact.TestDir;
-import com.webank.scaffold.artifact.TestJavaDir;
-import com.webank.scaffold.artifact.webase.NewGradleDir;
-import com.webank.scaffold.artifact.webase.NewMainDir;
-import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
-import com.webank.scaffold.artifact.webase.NewTestJavaDir;
 import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.exception.ScaffoldException;
@@ -27,43 +24,9 @@ import org.slf4j.LoggerFactory;
  * @Description
  * @data 2021/01/20
  */
-public class ProjectFactory {
+public class WebaseProjectFactory extends ProjectFactory {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProjectFactory.class);
-
-    /**
-     * Build project, which can be ran by users by using gradle test.
-     */
-    public ProjectArtifact buildProjectDir(String solidityDir, String group, String artifact, String outputDir, String need){
-        /**
-         * 1. Create UserConfig object
-         */
-        UserConfig config = getUserConfig(group, artifact);
-        /**
-         * 2. Create root project directory
-         */
-        ProjectArtifact project = buildProjectDir(outputDir, config);
-
-        /**
-         * 3. Create sub contents in project
-         */
-        try{
-            createSubContents(need, project, solidityDir, config);
-            System.out.println("Project build complete:"+project.toFile());
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-            /**
-             * 4. Delete all project data in case of exception
-             */
-            try{
-                project.clean();
-            }
-            catch (Exception e){}
-        }
-        return project;
-    }
-
+    private static final Logger logger = LoggerFactory.getLogger(WebaseProjectFactory.class);
 
     /**
      * use raw content to generate project
@@ -130,24 +93,6 @@ public class ProjectFactory {
         return config;
     }
 
-    private void createSubContents(String need, ProjectArtifact project, String solidityDir, UserConfig config)
-    throws Exception {
-        SrcDir srcDir = new SrcDir(project.toFile());
-        MainDir mainDir = new MainDir(need, srcDir.toFile(), new File(solidityDir), config);
-        TestDir testDir = new TestDir(srcDir.toFile());
-        TestJavaDir testJavaDir = new TestJavaDir(testDir.toFile(), config);
-        BuildGradle buildGradle = new BuildGradle(project.toFile(), config);
-        SettingsGradle settingsGradle = new SettingsGradle(project.toFile(), config);
-        GradleDir gradle = new GradleDir(project.toFile());
-        project.generate();
-        srcDir.generate();
-        mainDir.generate();
-        testDir.generate();
-        testJavaDir.generate();
-        buildGradle.generate();
-        settingsGradle.generate();
-        gradle.generate();
-    }
 
     private void createSubContents(ProjectArtifact project, UserConfig config,
         List<ContractInfo> contractInfoList, String gradleDir,
@@ -168,6 +113,10 @@ public class ProjectFactory {
         testJavaDir.generate();
         buildGradle.generate();
         settingsGradle.generate();
+        this.generateGradle(project, gradleDir);
+    }
+
+    private void generateGradle(ProjectArtifact project, String gradleDir) throws Exception {
         // gradle wrapper if needed
         if (StringUtils.isNotBlank(gradleDir)) {
             logger.info("copy gradle wrapper from :{}", gradleDir);

@@ -1,13 +1,10 @@
-package com.webank.scaffold.artifact.webase;
+package com.webank.scaffold.artifact;
 
-import com.webank.scaffold.artifact.DirectoryArtifact;
-import com.webank.scaffold.artifact.MainJavaDir;
-import com.webank.scaffold.artifact.webase.NewMainResourceDir.ContractInfo;
+import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.config.GeneratorOptions;
 import com.webank.scaffold.config.UserConfig;
-import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
-import com.webank.scaffold.util.IOUtil;
+import com.webank.scaffold.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -24,11 +21,12 @@ import org.slf4j.LoggerFactory;
  * @data 2021/01/19
  */
 @Getter
-public class NewMainDir extends DirectoryArtifact {
+public class NewMainDir extends MainDir {
     private static final Logger logger = LoggerFactory.getLogger(NewMainDir.class);
 
     private static final String MAIN_DIR = "main";
     private static final String SOL_Dir = "contracts";
+    public static final String SOL_FILE_SUFFIX = ".sol";
     
     private List<ContractInfo> contractInfoList;
     private String systemPeers;
@@ -39,14 +37,14 @@ public class NewMainDir extends DirectoryArtifact {
     private UserConfig config;
 
     public NewMainDir(File basePath, UserConfig config, List<ContractInfo> contractInfoList) {
-        super(basePath);
+        super(null, basePath, null, config);
         this.config = config;
         this.contractInfoList = contractInfoList;
     }
 
     public NewMainDir(File basePath, UserConfig config, List<ContractInfo> contractInfoList,
         String systemPeers, Integer groupId, String hexPrivateKey, Map<String, String> sdkContentMap) {
-        super(basePath);
+        super(null, basePath, null, config);
         this.config = config;
         this.contractInfoList = contractInfoList;
         this.systemPeers = systemPeers;
@@ -106,8 +104,8 @@ public class NewMainDir extends DirectoryArtifact {
         }
         File contractsDir = new File(this.toFile(), SOL_Dir);
         for (ContractInfo info : contractInfoList) {
-            IOUtil.writeStringToFile(info.getSolRawString(), contractsDir,
-                info.getContractName() + CompileConstants.SOL_FILE_SUFFIX);
+            FileUtils.writeStringToFile(info.getSolRawString(), contractsDir,
+                info.getContractName() + SOL_FILE_SUFFIX);
         }
         return contractsDir;
     }

@@ -1,17 +1,17 @@
-package com.webank.scaffold.artifact.webase;
+package com.webank.scaffold.artifact;
 
 import com.webank.scaffold.ContractCompiler;
-import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.constant.CompileConstants;
 import com.webank.scaffold.exception.ScaffoldException;
-import com.webank.scaffold.util.IOUtil;
+import com.webank.scaffold.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
-import org.fisco.bcos.sdk.codegen.SolidityContractGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,6 +21,11 @@ import org.fisco.bcos.sdk.codegen.SolidityContractGenerator;
  */
 @Getter
 public class NewMainResourceDir extends DirectoryArtifact {
+    private static final Logger logger = LoggerFactory.getLogger(NewMainResourceDir.class);
+
+    public static final String ABI_FILE_SUFFIX = ".abi";
+    public static final String BIN_FILE_SUFFIX = ".bin";
+
     private File abiDir;
     private File binDir;
     private File smBinDir;
@@ -97,18 +102,11 @@ public class NewMainResourceDir extends DirectoryArtifact {
             File binFile = new File(outputBase.getPath() + File.separator + CompileConstants.BIN_DIR);
             File smBinFile = new File(outputBase.getPath() + File.separator + CompileConstants.SMBIN_DIR);
             // write to file
-            IOUtil.writeStringToFile(info.abiStr, abiFile, info.contractName + CompileConstants.ABI_FILE_SUFFIX);
-            IOUtil.writeStringToFile(info.binStr, binFile, info.contractName + CompileConstants.BIN_FILE_SUFFIX);
-            IOUtil.writeStringToFile(info.smBinStr, smBinFile, info.contractName + CompileConstants.BIN_FILE_SUFFIX);
+            FileUtils.writeStringToFile(info.abiStr, abiFile, info.contractName + ABI_FILE_SUFFIX);
+            FileUtils.writeStringToFile(info.binStr, binFile, info.contractName + BIN_FILE_SUFFIX);
+            FileUtils.writeStringToFile(info.smBinStr, smBinFile, info.contractName + BIN_FILE_SUFFIX);
         }
     }
-
-
-//    private void generateContractJava() {
-//        for (ContractInfo contractInfo : contractInfoList) {
-//            SolidityContractGenerator generator = new SolidityContractGenerator()
-//        }
-//    }
 
 
     private void compileContract(File contractDir) throws Exception{

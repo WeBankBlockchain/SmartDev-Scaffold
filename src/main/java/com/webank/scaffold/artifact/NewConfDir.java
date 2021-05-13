@@ -12,19 +12,21 @@
  * the License.
  */
 
-package com.webank.scaffold.artifact.webase;
+package com.webank.scaffold.artifact;
 
-import com.webank.scaffold.artifact.DirectoryArtifact;
-import com.webank.scaffold.util.IOUtil;
+import com.webank.scaffold.util.FileUtils;
 import java.io.File;
 import java.util.Map;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author marsli
  */
 @Getter
-public class NewConfDir extends DirectoryArtifact {
+public class NewConfDir extends ConfDir {
+    private static final Logger logger = LoggerFactory.getLogger(NewConfDir.class);
 
     private static final String CONF_DIR = "conf";
     private Map<String, String> sdkContentMap;
@@ -50,7 +52,7 @@ public class NewConfDir extends DirectoryArtifact {
                 certPath = new File(certPath.getPath() + File.separator + "gm");
             }
             String fileContent = sdkContentMap.get(fileName);
-            IOUtil.writeStringToFile(fileContent, certPath, fileName);
+            FileUtils.writeStringToFile(fileContent, certPath, fileName);
         }
     }
 

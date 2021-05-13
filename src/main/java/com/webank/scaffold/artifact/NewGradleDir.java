@@ -1,17 +1,19 @@
-package com.webank.scaffold.artifact.webase;
+package com.webank.scaffold.artifact;
 
-import com.webank.scaffold.artifact.DirectoryArtifact;
 import com.webank.scaffold.util.IOUtil;
-
 import java.io.File;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * get source gradle dir
  * @author marsli
  */
 @Getter
-public class NewGradleDir extends DirectoryArtifact {
+public class NewGradleDir extends GradleDir {
+    private static final Logger logger = LoggerFactory.getLogger(NewGradleDir.class);
 
     private String sourceDir;
     public NewGradleDir(File parentDir, String sourceDir) {
@@ -21,6 +23,7 @@ public class NewGradleDir extends DirectoryArtifact {
 
     @Override
     protected void doGenerateSubContents() throws Exception {
+        logger.info("doGenerateSubContents parentDir:{} sourceDir:{}", parentDir.getAbsolutePath(), sourceDir);
         IOUtil.copyFolder(new File(this.sourceDir), this.toFile());
     }
 
