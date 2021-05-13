@@ -3,6 +3,7 @@ package com.webank.scaffold.artifact.dir;
 import java.io.File;
 import java.util.List;
 
+import com.webank.scaffold.artifact.file.BcosConfigJava;
 import com.webank.scaffold.builder.*;
 import org.apache.commons.io.FileUtils;
 
@@ -34,21 +35,14 @@ public class MainJavaDir extends DirectoryArtifact {
 
     @Override
     protected void doGenerateSubContents() throws Exception {
-        //1. IOUtil
         handleUtil();
-        //2. System Config
         handleSystemConfig();
-        //3. Contract config
+        handleBcosConfig();
         handleContractConfig();
-        //4. Contract Constants
         handleContractConstants();
-        //5. Bo and service
         handleBOAndService();
-        //6. Application
         handleApplication();
-        //7. Sdk Bean config
         handleSdkBeanConfig();
-        //8. Common response
         handleCommonResponse();
     }
 
@@ -93,6 +87,12 @@ public class MainJavaDir extends DirectoryArtifact {
     private void handleSystemConfig() throws Exception {
         SystemConfigBuilder systemConfigBuilder = new SystemConfigBuilder(config);
         systemConfigBuilder.generateJavaFile(FileNameConstants.CONFIG_PKG_POSTFIX, this.toFile());
+    }
+
+    private void handleBcosConfig() throws Exception {
+        String configPackage = config.getGroup() + "." + config.getArtifact() + FileNameConstants.CONFIG_PKG_POSTFIX;;
+        BcosConfigJava bcosConfigJava = new BcosConfigJava(IOUtil.convertPackageToFile(this.toFile(),configPackage), config);
+        bcosConfigJava.generate();
     }
 
     private void handleContractConfig() throws Exception {

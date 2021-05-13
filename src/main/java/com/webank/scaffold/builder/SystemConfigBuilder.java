@@ -60,19 +60,8 @@ public class SystemConfigBuilder implements JavaFileBuilder {
                 .addField(
                         FieldSpec
                                 .builder(
-                                        String.class, "peers", Modifier.PRIVATE)
-                                .build())
-                .addField(
-                        FieldSpec
-                                .builder(
                                         TypeName.INT, "groupId", Modifier.PRIVATE)
                                 .initializer("1")
-                                .build())
-                .addField(
-                        FieldSpec
-                                .builder(
-                                        String.class, "certPath", Modifier.PRIVATE)
-                                .initializer("\"conf\"")
                                 .build())
                 .addField(
                         FieldSpec
