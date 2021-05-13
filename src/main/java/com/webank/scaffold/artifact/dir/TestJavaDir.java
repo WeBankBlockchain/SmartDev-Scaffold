@@ -25,11 +25,6 @@ public class TestJavaDir extends DirectoryArtifact {
         /**
          * 1. Build sub directory due to package name
          */
-        String groupName = this.config.getGroup();
-        String artifactName = this.config.getArtifact();
-        String packageName = groupName + "." + artifactName;
-        File packageDir = new File(this.toFile(), packageName);
-        packageDir.mkdirs();
         handleDemoPkey();
     }
 
