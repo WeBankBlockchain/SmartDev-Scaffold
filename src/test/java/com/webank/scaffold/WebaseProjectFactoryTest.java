@@ -17,7 +17,7 @@ package com.webank.scaffold;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webank.scaffold.artifact.ProjectArtifact;
 import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
-import com.webank.scaffold.factory.ProjectFactory;
+import com.webank.scaffold.factory.WebaseProjectFactory;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -26,7 +26,7 @@ import org.fisco.bcos.sdk.codegen.SolidityContractWrapper;
 import org.fisco.bcos.sdk.codegen.exceptions.CodeGenException;
 import org.junit.Test;
 
-public class ProjectFactoryTest {
+public class WebaseProjectFactoryTest {
 
     // hello world
     String contractName = "HelloWorld";
@@ -65,9 +65,10 @@ public class ProjectFactoryTest {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> sdkMap = mapper.readValue(sdkMapStr, Map.class);
 
-        ProjectFactory projectFactory = new ProjectFactory();
+        WebaseProjectFactory webaseProjectFactory = new WebaseProjectFactory();
         // ProjectArtifact result = projectFactory.buildProjectDir(Collections.singletonList(contractInfo),
-        ProjectArtifact result = projectFactory.buildProjectDir(Arrays.asList(contractInfo, creditContract),
+        ProjectArtifact result = webaseProjectFactory
+            .buildProjectDir(Arrays.asList(contractInfo, creditContract),
             group, artifactName, outputDir, gradleDir,
             //null, null, null, null);
             "127.0.0.1:25200", 2, "0x123", sdkMap);
