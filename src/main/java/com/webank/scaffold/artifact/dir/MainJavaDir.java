@@ -3,10 +3,12 @@ package com.webank.scaffold.artifact.dir;
 import java.io.File;
 import java.util.List;
 
-import com.webank.scaffold.artifact.file.*;
 import com.webank.scaffold.builder.*;
 import org.apache.commons.io.FileUtils;
 
+import com.webank.scaffold.artifact.file.ApplicationJava;
+import com.webank.scaffold.artifact.file.CommonResponseJava;
+import com.webank.scaffold.artifact.file.SdkBeanConfigJava;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.DirNameConstants;
 import com.webank.scaffold.constants.FileNameConstants;
@@ -39,7 +41,7 @@ public class MainJavaDir extends DirectoryArtifact {
         //3. Contract config
         handleContractConfig();
         //4. Contract Constants
-        handleConstants();
+        handleContractConstants();
         //5. Bo and service
         handleBOAndService();
         //6. Application
@@ -48,39 +50,13 @@ public class MainJavaDir extends DirectoryArtifact {
         handleSdkBeanConfig();
         //8. Common response
         handleCommonResponse();
-        //9. HandleTools
-        handleJavaTools();
     }
 
-    private void handleJavaTools() throws Exception{
-        String toolPkg = config.getGroup() + "." + config.getArtifact() + FileNameConstants.TOOL_PKG_POSTFIX;
-        File javaDir = this.toFile();
-        File toolPkgFile = IOUtil.convertPackageToFile(javaDir, toolPkg);
-
-        ToolJava toolJava = new ToolJava(toolPkgFile, config);
-        toolJava.generate();
-
-        DeployToolJava deployToolJava = new DeployToolJava(toolPkgFile, config);
-        deployToolJava.generate();
-
-        KeyToolJava keyToolJava = new KeyToolJava(toolPkgFile, config);
-        keyToolJava.generate();
-
-        CommandHandlerJava commandHandlerJava = new CommandHandlerJava(toolPkgFile, config);
-        commandHandlerJava.generate();
-    }
-
-    private void handleConstants() throws Exception{
-        String constantsPkg = config.getGroup() + "." + config.getArtifact() + FileNameConstants.CONSTANT_PKG_POSTFIX;
-
+    private void handleContractConstants() throws Exception{
         List<String> contractList = ABIUtil.contracts(abiDir, this.config.getNeed());
         ContractConstantsBuilder constantsBuilder = new ContractConstantsBuilder(this.config, contractList);
         File javaDir = this.toFile();
         constantsBuilder.generateJavaFile(FileNameConstants.CONSTANT_PKG_POSTFIX, javaDir);
-
-
-        CryptoConstantsJava cryptoConstantsJava = new CryptoConstantsJava(IOUtil.convertPackageToFile(javaDir, constantsPkg), config);
-        cryptoConstantsJava.generate();
     }
 
     private void handleApplication() throws Exception{

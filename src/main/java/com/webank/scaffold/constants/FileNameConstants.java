@@ -36,11 +36,7 @@ public class FileNameConstants {
     public static final String TEMPLATE_SDK_CONFIG = "templates/SdkBeanConfig.java" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_GRADLE_WRAPPER_JAR = "templates/gradle/wrapper/gradle-wrapper.jar" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_GRADLE_WRAPPER_PROPERTIES = "templates/gradle/wrapper/gradle-wrapper.properties"+TEMPLATE_POSTFIX;
-    public static final String TEMPLATE_CRYPTOCONSTANTS= "templates/CryptoConstants.java"+TEMPLATE_POSTFIX;
-    public static final String TEMPLATE_TOOL_JAVA = "templates/Tool.java"+TEMPLATE_POSTFIX;
-    public static final String TEMPLATE_DEPLOY_TOOL_JAVA = "templates/DeployTool.java"+TEMPLATE_POSTFIX;
-    public static final String TEMPLATE_KEY_TOOL_JAVA = "templates/KeyTool.java"+TEMPLATE_POSTFIX;
-    public static final String TEMPLATE_COMMAND_HANDLER_JAVA = "templates/CommandHandler.java"+TEMPLATE_POSTFIX;
+
 
     //generated file name
     public static final String BUILD_GRADLE_FILE = "build.gradle";
@@ -52,11 +48,6 @@ public class FileNameConstants {
     public static final String SDK_CONFIG = "SdkBeanConfig.java";
     public static final String GRADLE_WRAPPER_JAR = "gradle-wrapper.jar";
     public static final String GRADLE_WRAPPER_PROPERTIES = "gradle-wrapper.properties";
-    public static final String CRYPTO_CONSTANTS = "CryptoConstants.java";
-    public static final String TOOL_JAVA = "Tool.java";
-    public static final String DEPLOY_TOOL_JAVA = "DeployTool.java";
-    public static final String KEY_TOOL_JAVA = "KeyTool.java";
-    public static final String COMMAND_HANDLER_JAVA = "CommandHandler.java";
 
     public static final String SYSTEM_CONFIG = "SystemConfig";
     public static final String CONTRACT_CONFIG = "ContractConfig";
@@ -70,12 +61,10 @@ public class FileNameConstants {
     public static final String BO_PKG_POSTFIX = ".model.bo";
     public static final String SERVICE_PKG_POSTFIX = ".service";
     public static final String CONSTANT_PKG_POSTFIX = ".constants";
-    public static final String TOOL_PKG_POSTFIX = ".tool";
 
     public final static String CTOR = "CtorBO";
     public final static String INPUT = "InputBO";
     public final static String ABI_POSTFIX = "Abi";
     public final static String BINARY_POSTFIX = "Binary";
     public final static String BINARY_GM_POSTFIX = "GmBinary";
-
 }
