@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webank.scaffold.artifact.ProjectArtifact;
 import com.webank.scaffold.artifact.NewMainResourceDir.ContractInfo;
 import com.webank.scaffold.factory.WebaseProjectFactory;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -78,17 +79,17 @@ public class WebaseProjectFactoryTest {
     }
 
 
-    @Test
-    public void testGenerateByString()
-        throws CodeGenException, IOException, ClassNotFoundException {
-        new SolidityContractWrapper()
-            .generateJavaFiles(
-                contractName,
-                binStr,
-                "",
-                abiStr,
-                outputDir,
-                "");
-
-    }
+//    @Test
+//    public void testGenerateByString()
+//        throws CodeGenException, IOException, ClassNotFoundException {
+//        new SolidityContractWrapper()
+//            .generateJavaFiles(
+//                contractName,
+//                binStr,
+//                "",
+//                abiStr,
+//                outputDir,
+//                "");
+//
+//    }
 }

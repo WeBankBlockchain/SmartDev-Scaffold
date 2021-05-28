@@ -49,15 +49,25 @@ javadoc {
     options.addStringOption('encoding', 'UTF-8')
     options.addStringOption('charSet', 'UTF-8')
 }
+//
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from sourceSets.main.allJava
+//}
+//
+//task javadocJar(type: Jar) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
     from sourceSets.main.allJava
+    archiveClassifier = 'sources'
 }
 
 task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+    from javadoc
+    archiveClassifier = 'javadoc'
 }
 
 jar.dependsOn(sourcesJar)
@@ -78,34 +88,88 @@ jar {
     }
 }
 
+//
+//publishing {
+//    println "name: " + project.name
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//            artifact sourcesJar
+//            artifact javadocJar
+//        }
+//    }
+//    repositories {
+//        maven {
+//            if (project.version.endsWith('-SNAPSHOT')) {
+//                println "push snapshot version"
+//                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+//            } else {
+//                println "push stable version"
+//                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+//            }
+//            credentials {
+//                username = ossrhUsername
+//                password = ossrhPassword
+//            }
+//        }
+//    }
+//}
+//
+//signing {
+//    sign configurations.archives
+//}
 
 publishing {
-    println "name: " + project.name
     publications {
         mavenJava(MavenPublication) {
+
+            artifactId project.name
+            groupId project.group
+            version project.version
+
             from components.java
             artifact sourcesJar
             artifact javadocJar
+
+            pom {
+                name = 'webase-solscaffold'
+                description = 'webase solscaffold'
+                url = 'https://github.com/WeBankFinTech/WeBASE'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'marsli'
+                        name = 'marsli'
+                        email = 'marsli@webank.com'
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/WeBankBlockchain/SmartDev-Scaffold/tree/webase'
+                    url = 'https://github.com/WeBankBlockchain/SmartDev-Scaffold/tree/webase'
+                }
+            }
         }
     }
     repositories {
         maven {
-            if (project.version.endsWith('-SNAPSHOT')) {
-                println "push snapshot version"
-                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-            } else {
-                println "push stable version"
-                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            }
+            def releasesRepoURL = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoURL = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = !version.endsWith("SNAPSHOT") ? releasesRepoURL : snapshotsRepoURL
+
             credentials {
-                username = ossrhUsername
-                password = ossrhPassword
+                username ossrhUsername
+                password ossrhPassword
             }
         }
     }
-}
 
-signing {
-    sign configurations.archives
+    signing {
+        sign publishing.publications.mavenJava
+    }
 }
-
