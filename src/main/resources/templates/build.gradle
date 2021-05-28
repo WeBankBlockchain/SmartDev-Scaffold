@@ -60,7 +60,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    compile ('org.fisco-bcos.java-sdk:java-sdk:2.7.2'){
+    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.2'){
         exclude group: 'org.slf4j'
     }
 }
