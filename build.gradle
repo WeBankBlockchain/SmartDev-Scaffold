@@ -1,7 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-//apply plugin: 'application'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
@@ -66,7 +65,6 @@ jar.dependsOn(sourcesJar)
 jar {
     enabled = true
     destinationDirectory = file('dist')
-    // archiveName project.name + "-" + "${project.version}" + ".jar"
     archiveName project.name + "-" + "${project.version}" + ".jar"
     exclude '**/*.DSA'
     exclude '**/*.RSA'
@@ -80,32 +78,32 @@ jar {
     }
 }
 
-//
-//publishing {
-//    println "name" + project.name
-//    publications {
-//        mavenJava(MavenPublication) {
-//            from components.java
-//            artifact sourcesJar
-//            artifact javadocJar
-//        }
-//    }
-//    repositories {
-//        maven {
-//            if (project.version.endsWith('-SNAPSHOT')) {
-//                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-//            } else {
-//                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-//            }
-//            credentials {
-//                username = ossrhUsername
-//                password = ossrhPassword
-//            }
-//        }
-//    }
-//}
-//
-//signing {
-//    sign configurations.archives
-//}
+
+publishing {
+    println "name" + project.name
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        maven {
+            if (project.version.endsWith('-SNAPSHOT')) {
+                url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            } else {
+                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            }
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign configurations.archives
+}
 
