@@ -69,15 +69,15 @@ echo start compiling scaffold...
 
 
 cd ..
-gradle clean shadowJar -PsolcVersion=$COMPILER
+./gradlew clean shadowJar -PsolcVersion=$COMPILER
 echo end compiling scaffold...
 
 echo start generating $ARTIFACT...
 
 if [ -z "$SELECTOR" ]; then
-  java -jar dist/WeBankBlockchain-SmartDev-Scaffold*.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -gv $GRADLEVERSION
+  java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -gv $GRADLEVERSION
 else
-  java -jar dist/WeBankBlockchain-Smartdev-Scaffold*.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -gv $GRADLEVERSION -n $SELECTOR
+  java -jar dist/WeBankBlockchain-Smartdev-Scaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -gv $GRADLEVERSION -n $SELECTOR
 fi
 
 
