@@ -44,7 +44,6 @@ public class GradleDir extends DirectoryArtifact {
         try(InputStream jarIn = classLoader.getResourceAsStream(FileNameConstants.TEMPLATE_GRADLE_WRAPPER_JAR);
             OutputStream jarOut = new FileOutputStream(new File(wrapperDir, FileNameConstants.GRADLE_WRAPPER_JAR))
         ){
-            System.out.println(jarIn);
             IOUtils.copy(jarIn, jarOut);
         }
 
