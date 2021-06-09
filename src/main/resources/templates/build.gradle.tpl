@@ -7,7 +7,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.webank:solc-gradle-plugin:1.0.0'
+        classpath 'com.webank:solc-gradle-plugin:1.0.1'
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
     }
 }
