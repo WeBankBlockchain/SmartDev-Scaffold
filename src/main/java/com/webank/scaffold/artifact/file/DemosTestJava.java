@@ -10,12 +10,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DemoPkeyTestJava implements Artifact {
+public class DemosTestJava implements Artifact {
 
     private File parentDir;
     private UserConfig config;
 
-    public DemoPkeyTestJava(File parentDir, UserConfig config){
+    public DemosTestJava(File parentDir, UserConfig config){
         this.parentDir = parentDir;
         this.config = config;
     }
@@ -26,7 +26,7 @@ public class DemoPkeyTestJava implements Artifact {
         String pkg = config.getGroup() + "." + config.getArtifact();
         Map<String, String> map = new HashMap<>();
         map.put(ReplaceConstants.PACKAGE, pkg);
-        IOUtil.replaceAllStr(FileNameConstants.TEMPLATE_DEMO_PKEY, map, this.toFile());
+        IOUtil.replaceAllStr(FileNameConstants.TEMPLATE_DEMOS, map, this.toFile());
     }
 
     @Override
@@ -36,6 +36,6 @@ public class DemoPkeyTestJava implements Artifact {
 
     @Override
     public String getName() {
-        return FileNameConstants.DEMO_PKEY_JAVA;
+        return FileNameConstants.DEMOS_JAVA;
     }
 }

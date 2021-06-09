@@ -7,7 +7,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.webank:solc-gradle-plugin:1.0.0'
+        classpath 'com.webank:solc-gradle-plugin:1.0.1'
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
     }
 }
@@ -52,13 +52,15 @@ configurations {
 
 dependencies {
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.slf4j:slf4j-api:1.7.5'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.slf4j:slf4j-api:1.7.5'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
     compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.2'){
         exclude group: 'org.slf4j'
     }
@@ -75,6 +77,7 @@ sourceSets {
         }
     }
 }
+
 test {
     useJUnitPlatform()
 }

@@ -46,12 +46,12 @@ public class ServiceFileBuilder implements JavaFileBuilder {
     }
 
     @Override
-    public String getJavaFilePackage(String pkgName) {
-        return config.getGroup() + "." + config.getArtifact() + pkgName;
+    public String getJavaFilePackage(String relativePackage) {
+        return config.getGroup() + "." + config.getArtifact() + relativePackage;
     }
 
     @Override
-    public List<TypeSpec> buildTypeSpec(String pkg) {
+    public List<TypeSpec> buildTypeSpec(String fullPkg) {
         Map<ABIDefinition, TypeSpec> functions = ABIUtil.buildAbiDefAndTypeSpec(contractName, abiStr);
         ServicesHandler servicesHandler = new ServicesHandler(config);
         TypeSpec serviceType = servicesHandler.build(contractName, functions);

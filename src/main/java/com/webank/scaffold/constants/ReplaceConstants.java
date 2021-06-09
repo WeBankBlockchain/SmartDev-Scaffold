@@ -28,5 +28,6 @@ public class ReplaceConstants {
     public static String GENERATOR_ARTIFACT = "generator.artifact";
     public static String GENERATOR_GROUP = "generator.group";
     public static String PACKAGE = "package";
+    public static String GRADLE = "gradle";
 
 }

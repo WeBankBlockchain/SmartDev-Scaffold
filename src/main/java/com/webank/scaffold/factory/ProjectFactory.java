@@ -16,8 +16,8 @@ public class ProjectFactory {
 
     private UserConfig config;
 
-    public ProjectFactory(String group, String artifact, String solidityDir,  String output, String need){
-        this.config = UserConfig.getInstance(group, artifact, solidityDir, output, need);
+    public ProjectFactory(String group, String artifact, String solidityDir,  String output, String need, String gradle){
+        this.config = UserConfig.getInstance(group, artifact, solidityDir, output, need, gradle);
     }
 
     public boolean createProject(){

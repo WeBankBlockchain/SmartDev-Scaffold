@@ -46,14 +46,14 @@ public class ContractConfigBuilder implements JavaFileBuilder {
     }
 
     @Override
-    public String getJavaFilePackage(String pkgName) {
-        return config.getGroup() + "." + config.getArtifact() + pkgName;
+    public String getJavaFilePackage(String relativePackage) {
+        return config.getGroup() + "." + config.getArtifact() + relativePackage;
     }
 
     @Override
-    public List<TypeSpec> buildTypeSpec(String pkg) {
+    public List<TypeSpec> buildTypeSpec(String fullPkg) {
         //1. Basic initializations
-        ClassName contractConfigClass = ClassName.get(pkg, FileNameConstants.CONTRACT_CONFIG);
+        ClassName contractConfigClass = ClassName.get(fullPkg, FileNameConstants.CONTRACT_CONFIG);
         TypeSpec.Builder contractConfigBuilder = TypeSpec.classBuilder(contractConfigClass)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Data.class)

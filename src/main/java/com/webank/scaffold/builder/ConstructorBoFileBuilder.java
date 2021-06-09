@@ -48,12 +48,12 @@ public class ConstructorBoFileBuilder implements JavaFileBuilder {
     }
 
     @Override
-    public String getJavaFilePackage(String pkgName) {
-        return config.getGroup() + "." + config.getArtifact() + pkgName;
+    public String getJavaFilePackage(String relativePackage) {
+        return config.getGroup() + "." + config.getArtifact() + relativePackage;
     }
 
     @Override
-    public List<TypeSpec> buildTypeSpec(String pkg) {
+    public List<TypeSpec> buildTypeSpec(String fullPkg) {
 
         // 1.Get Constructor ABIDefinition
         ABIDefinitionFactory factory = new ABIDefinitionFactory(new CryptoSuite(0));

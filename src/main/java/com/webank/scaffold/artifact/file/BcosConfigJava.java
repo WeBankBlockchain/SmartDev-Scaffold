@@ -13,27 +13,25 @@ import java.util.Map;
 /**
  * @author aaronchu
  * @Description
- * @data 2021/03/02
+ * @data 2021/05/13
  */
-public class IOUtilJava implements Artifact {
+public class BcosConfigJava implements Artifact {
 
     private File parentDir;
     private UserConfig config;
 
-    public IOUtilJava(File parentDir, UserConfig config){
+    public BcosConfigJava(File parentDir, UserConfig config){
         this.parentDir = parentDir;
         this.config = config;
     }
-
     @Override
     public void generate() throws Exception {
         this.parentDir.mkdirs();
-        String pkg = config.getGroup() + "." + config.getArtifact() + FileNameConstants.UTILS_PKG_POSTFIX;
+        String pkg = config.getGroup() + "." + config.getArtifact();
         Map<String, String> map = new HashMap<>();
         map.put(ReplaceConstants.PACKAGE, pkg);
-        IOUtil.replaceAllStr(FileNameConstants.TEMPLATE_IOUTIL, map, this.toFile());
+        IOUtil.replaceAllStr(FileNameConstants.TEMPLATE_BCOS_CONFIG, map, this.toFile());
     }
-
 
     @Override
     public File getParentDir() {
@@ -42,7 +40,6 @@ public class IOUtilJava implements Artifact {
 
     @Override
     public String getName() {
-        return FileNameConstants.IOUTIL_JAVA;
+        return FileNameConstants.BCOS_CONFIG;
     }
-
 }

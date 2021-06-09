@@ -1,13 +1,12 @@
 package com.webank.scaffold.artifact.dir;
 
-import com.webank.scaffold.compiler.ContractCompiler;
+import java.io.File;
+
 import com.webank.scaffold.artifact.file.ApplicationProperties;
+import com.webank.scaffold.compiler.ContractCompiler;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.DirNameConstants;
 import com.webank.scaffold.util.ABIUtil;
-import lombok.Getter;
-
-import java.io.File;
 
 /**
  *
@@ -15,7 +14,6 @@ import java.io.File;
  * @Description
  * @data 2021/03/02
  */
-@Getter
 public class MainResourceDir extends DirectoryArtifact {
 
     private UserConfig config;
@@ -48,5 +46,33 @@ public class MainResourceDir extends DirectoryArtifact {
     @Override
     public String getName() {
         return DirNameConstants.RESOURCE;
+    }
+
+    /**
+     * @return the config
+     */
+    public UserConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * @param config the config to set
+     */
+    public void setConfig(UserConfig config) {
+        this.config = config;
+    }
+
+    /**
+     * @return the abiDir
+     */
+    public File getAbiDir() {
+        return abiDir;
+    }
+
+    /**
+     * @param abiDir the abiDir to set
+     */
+    public void setAbiDir(File abiDir) {
+        this.abiDir = abiDir;
     }
 }

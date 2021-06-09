@@ -41,13 +41,13 @@ public class SystemConfigBuilder implements JavaFileBuilder {
     }
 
     @Override
-    public String getJavaFilePackage(String pkgName) {
-        return config.getGroup() + "." + config.getArtifact() + pkgName;
+    public String getJavaFilePackage(String relativePackage) {
+        return config.getGroup() + "." + config.getArtifact() + relativePackage;
     }
 
     @Override
-    public List<TypeSpec> buildTypeSpec(String pkg) {
-        ClassName className = ClassName.get(pkg, FileNameConstants.SYSTEM_CONFIG);
+    public List<TypeSpec> buildTypeSpec(String fullPkg) {
+        ClassName className = ClassName.get(fullPkg, FileNameConstants.SYSTEM_CONFIG);
         TypeSpec systemConfigBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Data.class)
@@ -60,19 +60,8 @@ public class SystemConfigBuilder implements JavaFileBuilder {
                 .addField(
                         FieldSpec
                                 .builder(
-                                        String.class, "peers", Modifier.PRIVATE)
-                                .build())
-                .addField(
-                        FieldSpec
-                                .builder(
                                         TypeName.INT, "groupId", Modifier.PRIVATE)
                                 .initializer("1")
-                                .build())
-                .addField(
-                        FieldSpec
-                                .builder(
-                                        String.class, "certPath", Modifier.PRIVATE)
-                                .initializer("\"conf\"")
                                 .build())
                 .addField(
                         FieldSpec

@@ -31,7 +31,7 @@ public class ContractCompiler {
         File smBinDir = new File(this.output, DirNameConstants.SMBIN_DIR);
 
         CompileSolToJava compiler = new CompileSolToJava();
-        String solName = "*";//Compile everything
+        String solName = "";//Compile everything
 
         compiler.compileSolToJava(
                 solName,

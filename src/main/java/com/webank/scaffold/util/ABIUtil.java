@@ -56,6 +56,7 @@ public class ABIUtil {
 
         // 3.Fields
         int argIndex = 0;
+        List<String> fixedArgs = new ArrayList<>();
         for(ABIDefinition.NamedType namedType: args){
             String argName = namedType.getName();
             if(argName == null || argName.isEmpty()){
@@ -65,6 +66,7 @@ public class ABIUtil {
             TypeName type = SolidityTypeHandler.convert(typeString);
             boBuilder.addField(type, argName, Modifier.PRIVATE);
             argIndex++;
+            fixedArgs.add(argName);
         }
 
         // 4.Methods
@@ -72,8 +74,8 @@ public class ABIUtil {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(ListObject.class.getGenericInterfaces()[0])
                 .addStatement("$T args = new $T()", List.class, ArrayList.class);
-        for(ABIDefinition.NamedType arg: args){
-            toArgsMethodBuilder.addStatement("args.add($L)", arg.getName());
+        for(String arg: fixedArgs){
+            toArgsMethodBuilder.addStatement("args.add($L)", arg);
         }
         toArgsMethodBuilder.addStatement("return args");
         boBuilder.addMethod(toArgsMethodBuilder.build());

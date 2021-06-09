@@ -1,20 +1,20 @@
 package com.webank.scaffold.artifact.dir;
 
-import com.webank.scaffold.artifact.file.ApplicationJava;
-import com.webank.scaffold.artifact.file.CommonResponseJava;
-import com.webank.scaffold.artifact.file.IOUtilJava;
-import com.webank.scaffold.artifact.file.SdkBeanConfigJava;
-import com.webank.scaffold.builder.*;
-import com.webank.scaffold.constants.DirNameConstants;
-import com.webank.scaffold.constants.FileNameConstants;
-import com.webank.scaffold.handler.ServicesHandler;
-import com.webank.scaffold.config.UserConfig;
-import com.webank.scaffold.util.ABIUtil;
-import com.webank.scaffold.util.IOUtil;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.util.List;
+
+import com.webank.scaffold.artifact.file.BcosConfigJava;
+import com.webank.scaffold.builder.*;
+import org.apache.commons.io.FileUtils;
+
+import com.webank.scaffold.artifact.file.ApplicationJava;
+import com.webank.scaffold.artifact.file.CommonResponseJava;
+import com.webank.scaffold.artifact.file.SdkBeanConfigJava;
+import com.webank.scaffold.config.UserConfig;
+import com.webank.scaffold.constants.DirNameConstants;
+import com.webank.scaffold.constants.FileNameConstants;
+import com.webank.scaffold.util.ABIUtil;
+import com.webank.scaffold.util.IOUtil;
 
 /**
  * @author aaronchu
@@ -25,33 +25,32 @@ import java.util.List;
 public class MainJavaDir extends DirectoryArtifact {
 
     private File abiDir;
-
-    private ServicesHandler srvBuilder;
     private UserConfig config;
 
     public MainJavaDir(File parentDir, File abi, UserConfig config) {
         super(parentDir);
         this.abiDir = abi;
-        this.srvBuilder = new ServicesHandler(config);
         this.config = config;
     }
 
     @Override
     protected void doGenerateSubContents() throws Exception {
-        //1. IOUtil
-        handleIOUtil();
-        //2. Bo and service
-        handleBOAndService();
-        //3. Application
-        handleApplication();
-        //4. System Config
+        handleUtil();
         handleSystemConfig();
-        //5. Contract config
+        handleBcosConfig();
         handleContractConfig();
-        //6. Sdk Bean config
+        handleContractConstants();
+        handleBOAndService();
+        handleApplication();
         handleSdkBeanConfig();
-        //7. Common response
         handleCommonResponse();
+    }
+
+    private void handleContractConstants() throws Exception{
+        List<String> contractList = ABIUtil.contracts(abiDir, this.config.getNeed());
+        ContractConstantsBuilder constantsBuilder = new ContractConstantsBuilder(this.config, contractList);
+        File javaDir = this.toFile();
+        constantsBuilder.generateJavaFile(FileNameConstants.CONSTANT_PKG_POSTFIX, javaDir);
     }
 
     private void handleApplication() throws Exception{
@@ -60,10 +59,8 @@ public class MainJavaDir extends DirectoryArtifact {
         applicationJava.generate();
     }
 
-    private void handleIOUtil() throws Exception{
-        String utilsPackage = config.getGroup() + "." + config.getArtifact() + FileNameConstants.UTILS_PKG_POSTFIX;
-        IOUtilJava ioUtilJava = new IOUtilJava(IOUtil.convertPackageToFile(this.toFile(),utilsPackage), config);
-        ioUtilJava.generate();
+    private void handleUtil() throws Exception{
+        //hook
     }
 
     private void handleBOAndService() throws Exception{
@@ -90,6 +87,12 @@ public class MainJavaDir extends DirectoryArtifact {
     private void handleSystemConfig() throws Exception {
         SystemConfigBuilder systemConfigBuilder = new SystemConfigBuilder(config);
         systemConfigBuilder.generateJavaFile(FileNameConstants.CONFIG_PKG_POSTFIX, this.toFile());
+    }
+
+    private void handleBcosConfig() throws Exception {
+        String configPackage = config.getGroup() + "." + config.getArtifact() + FileNameConstants.CONFIG_PKG_POSTFIX;;
+        BcosConfigJava bcosConfigJava = new BcosConfigJava(IOUtil.convertPackageToFile(this.toFile(),configPackage), config);
+        bcosConfigJava.generate();
     }
 
     private void handleContractConfig() throws Exception {
