@@ -1,59 +1,54 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'application'
-
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'application'
+}
 
 group 'com.webank'
-version '1.0.0-SNAPSHOT'
+version '1.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+def solcVersion = rootProject.hasProperty('solcVersion') ? solcVersion : "0.4.25.1"
+
 repositories {
     mavenCentral()
     maven { url "https://maven.aliyun.com/nexus/content/groups/public/"}
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     maven { url "https://dl.bintray.com/ethereum/maven/" }
     mavenLocal()
-
-
 }
 
-dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
-    implementation ('com.webank:solc-gradle-plugin:1.0.0')
+dependencies {    
+    implementation ('com.webank:solc-gradle-plugin:1.0.1')
     implementation ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.2')
     implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
     implementation ("org.slf4j:slf4j-api:1.7.30")
+    implementation "org.fisco-bcos:solcJ:${solcVersion}"
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        resources  {
-            srcDir 'src/main/resources'
-        }
-    }
-}
-jar {
-    enabled = true
+
+shadowJar {
+    mainClassName = 'com.webank.scaffold.Main'
     destinationDirectory = file('dist')
-    archiveFileName = project.name + '.jar'
+    archiveFileName = project.name+'.jar'
+
     exclude '**/*.DSA'
     exclude '**/*.RSA'
     exclude '**/*.SF'
     manifestContentCharset 'utf-8'
     metadataCharset 'utf-8'
-    manifest{
-        attributes "Main-Class":"com.webank.scaffold.Main"
-    }
-
-    from {
-        sourceSets.main.compileClasspath.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
+    
+    from("./"){
+        include 'build.gradle'
     }
 }
+
+clean {
+    println "delete ${projectDir}/dist"
+    delete "${projectDir}/dist"
+}
+ 
