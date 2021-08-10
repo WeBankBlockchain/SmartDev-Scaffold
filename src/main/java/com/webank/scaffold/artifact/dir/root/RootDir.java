@@ -1,8 +1,11 @@
-package com.webank.scaffold.artifact.dir;
+package com.webank.scaffold.artifact.dir.root;
 
 import java.io.File;
 import java.io.IOException;
 
+import com.webank.scaffold.artifact.dir.DirectoryArtifact;
+import com.webank.scaffold.artifact.dir.GradleDir;
+import com.webank.scaffold.artifact.dir.SrcDir;
 import org.apache.commons.io.FileUtils;
 
 import com.webank.scaffold.artifact.file.BuildGradle;
@@ -15,9 +18,9 @@ import com.webank.scaffold.config.UserConfig;
  * @Description
  * @data 2021/01/19
  */
-public class RootDir extends DirectoryArtifact {
+public abstract class RootDir extends DirectoryArtifact {
 
-    private UserConfig config;
+    protected UserConfig config;
 
     public RootDir(File basePath, UserConfig config) {
         super(basePath);
