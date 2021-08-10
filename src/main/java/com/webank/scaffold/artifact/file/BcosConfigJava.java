@@ -27,7 +27,7 @@ public class BcosConfigJava implements Artifact {
     @Override
     public void generate() throws Exception {
         this.parentDir.mkdirs();
-        String pkg = config.getGroup() + "." + config.getArtifact();
+        String pkg = config.getGroup() + "." + config.getArtifact()+ ".config";
         Map<String, String> map = new HashMap<>();
         map.put(ReplaceConstants.PACKAGE, pkg);
         IOUtil.replaceAllStr(FileNameConstants.TEMPLATE_BCOS_CONFIG, map, this.toFile());
