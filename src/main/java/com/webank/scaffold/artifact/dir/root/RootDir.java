@@ -37,15 +37,6 @@ public abstract class RootDir extends DirectoryArtifact {
 
         SrcDir srcDir = new SrcDir(this.toFile(), config);
         srcDir.generate();
-
-        BuildGradle buildGradle = new BuildGradle(this.toFile(), config);
-        buildGradle.generate();
-
-        SettingsGradle settingsGradle = new SettingsGradle(this.toFile(), config);
-        settingsGradle.generate();
-
-        GradleDir gradle = new GradleDir(this.toFile(), this.config);
-        gradle.generate();
     }
 
     public void clean() throws IOException {

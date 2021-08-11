@@ -50,6 +50,7 @@ ARTIFACT=$(grep artifact config.ini |  cut  -d '=' -f 2)
 GROUP=$(grep group config.ini |  cut  -d '=' -f 2)
 SELECTOR=$(grep selector config.ini |  cut  -d '=' -f 2)
 COMPILER=$(grep compiler config.ini |  cut  -d '=' -f 2)
+TYPE=$(grep type config.ini |  cut  -d '=' -f 2)
 GRADLEVERSION=$(grep gradleVersion config.ini |  cut  -d '=' -f 2)
 echo "GROUP=$GROUP"
 echo "ARTIFACT=$ARTIFACT"
@@ -57,6 +58,7 @@ echo "SOL_DIR=$SOL_DIR"
 echo "TOOLS_DIR=$TOOLS_DIR"
 echo "SELECTOR=$SELECTOR"
 echo "COMPILER=$COMPILER"
+echo "TYPE=$TYPE"
 echo "GRADLEVERSION=$GRADLEVERSION"
 ARTIFACT_DIR="$(pwd)/$ARTIFACT"
 if [ -d "$ARTIFACT_DIR" ]; then
@@ -74,11 +76,20 @@ echo end compiling scaffold...
 
 echo start generating $ARTIFACT...
 
-if [ -z "$SELECTOR" ]; then
-  java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -gv $GRADLEVERSION
-else
-  java -jar dist/WeBankBlockchain-Smartdev-Scaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR -gv $GRADLEVERSION -n $SELECTOR
+if [ ! -z "$SELECTOR" ]; then
+  SELECTOR_OPTION="-n $SELECTOR"
 fi
 
+
+if [ ! -z "$GRADLEVERSION" ]; then
+  GRADLEVERSION_OPTION="-gv $GRADLEVERSION"
+fi
+
+
+if [ ! -z "$TYPE" ]; then
+  TYPE_OPTION="-t $TYPE"
+fi
+
+java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g $GROUP -a $ARTIFACT -s $SOL_DIR -o $TOOLS_DIR $SELECTOR_OPTION $TYPE_OPTION $GRADLEVERSION_OPTION
 
 

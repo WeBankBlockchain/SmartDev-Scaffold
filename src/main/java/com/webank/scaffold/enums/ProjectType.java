@@ -7,11 +7,15 @@ import lombok.Getter;
  * @Description
  * @date 2021/08/10
  */
-@Getter
+
 public enum ProjectType {
     Gradle("gradle"),
 
     Maven("maven");
+
+    public String getName() {
+        return name;
+    }
 
     private String name;
 
