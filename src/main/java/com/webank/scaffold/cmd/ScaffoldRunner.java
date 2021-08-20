@@ -1,6 +1,7 @@
 package com.webank.scaffold.cmd;
 
 
+import com.webank.scaffold.enums.ProjectType;
 import com.webank.scaffold.factory.ProjectFactory;
 import picocli.CommandLine;
 
@@ -27,12 +28,15 @@ public class ScaffoldRunner implements Runnable{
     @CommandLine.Option(names = {"-n", "--need"}, required = false,defaultValue = "",description = "Optional. The contracts you need,for example Contract1,Contract2,Contract3")
     private String need;
 
+    @CommandLine.Option(names = {"-t", "--type"}, required = false,defaultValue = "gradle",description = "Optional. Project type.")
+    private String projectType;
+
     @CommandLine.Option(names = {"-gv", "--gradle"}, required = false,defaultValue = "6.3",description = "Optional. Gradle version.")
     private String gradle;
 
     @Override
     public void run() {
-        ProjectFactory factory = new ProjectFactory(group, artifact, solidityDir,  output, need, gradle);
+        ProjectFactory factory = new ProjectFactory(group, artifact, solidityDir,  output, need, projectType, gradle);
         factory.createProject();
     }
 

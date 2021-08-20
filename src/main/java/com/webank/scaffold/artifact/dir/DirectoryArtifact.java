@@ -21,9 +21,9 @@ public abstract class DirectoryArtifact implements Artifact {
 
     @Override
     public final void generate() throws Exception {
-
-        if(!this.toFile().mkdirs()){
-            throw new ScaffoldException(this.getName() + " directory has exist");
+        File f = this.toFile();
+        if(!f.mkdirs()){
+            throw new ScaffoldException(f.getAbsolutePath() + " directory has exist");
         }
         this.doGenerateSubContents();
     }
