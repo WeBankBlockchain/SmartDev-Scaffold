@@ -46,7 +46,7 @@ public class ApplicationProperties implements Artifact {
     private void writeSystemConfigKeys(BufferedWriter writer) throws IOException {
         writer.write("### System configuration\n");
         writer.write("system.groupId=1\n");
-        writer.write("system.privateKey=\n");
+        writer.write("system.hexPrivateKey=\n");
         writer.newLine();
     }
 

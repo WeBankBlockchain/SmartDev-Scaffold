@@ -29,7 +29,10 @@ public class FileNameConstants {
 
     //template file name
     public static final String TEMPLATE_BUILD_GRADLE = "templates/build.gradle" + TEMPLATE_POSTFIX;
+    public static final String TEMPLATE_POM = "templates/pom.xml" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_SETTING_GRADLE = "templates/settings.gradle" + TEMPLATE_POSTFIX;
+    public static final String TEMPLATE_MVNW = "templates/mvnw" + TEMPLATE_POSTFIX;
+    public static final String TEMPLATE_MVNW_CMD = "templates/mvnw.cmd" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_APPLICATION = "templates/Application.java" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_COMMONRESPONSE = "templates/CommonResponse.java" + TEMPLATE_POSTFIX;
     public static final String TEMPLATE_DEMOS = "templates/Demos.java" + TEMPLATE_POSTFIX;
@@ -40,8 +43,11 @@ public class FileNameConstants {
 
     //generated file name
     public static final String BUILD_GRADLE_FILE = "build.gradle";
+    public static final String POM_FILE = "pom.xml";
     public static final String APP_PRO = "application.properties";
     public static final String SETTINGS_GRADLE_FILE = "settings.gradle";
+    public static final String MVNW_FILE = "mvnw";
+    public static final String MVNW_CMD_FILE = "mvnw.cmd";
     public static final String APPLICATION_JAVA = "Application.java";
     public static final String COMMON_RESPONSE_JAVA = "CommonResponse.java";
     public static final String DEMOS_JAVA = "Demos.java";
