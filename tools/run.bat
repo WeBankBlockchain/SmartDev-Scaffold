@@ -13,6 +13,7 @@ echo ARTIFACT=%ARTIFACT%
 echo SOL_DIR=%SOL_DIR%
 echo TOOLS_DIR=%TOOLS_DIR%
 echo SELECTOR=%SELECTOR%
+echo TYPE=%TYPE%
 echo COMPILER=%COMPILER%
 echo GRADLEVERSION=%GRADLEVERSION%
 
@@ -28,13 +29,11 @@ echo end compiling scaffold...
 
 echo start generating %ARTIFACT%...
 
-echo %TOOLS_DIR%
-if [%SELECTOR%]==[] (
-    java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g %GROUP% -a %ARTIFACT% -s %SOL_DIR% -o %TOOLS_DIR% -gv %GRADLEVERSION%
-) else (
-    java -jar dist/WeBankBlockchain-Smartdev-Scaffold.jar -g %GROUP% -a %ARTIFACT% -s %SOL_DIR% -o %TOOLS_DIR% -gv %GRADLEVERSION% -n %SELECTOR%
-)
+if defined SELECTOR set SELECTOR_OPTION=-n %SELECTOR%
+if defined TYPE set TYPE_OPTION=-t %TYPE%
+if defined GRADLEVERSION set GRADLEVERSION_OPTION=-gv %GRADLEVERSION%
 
+java -jar dist/WeBankBlockchain-SmartDev-Scaffold.jar -g %GROUP% -a %ARTIFACT% -s %SOL_DIR% -o %TOOLS_DIR% %SELECTOR_OPTION% %TYPE_OPTION% %GRADLEVERSION_OPTION%
 
 exit /B 0
 

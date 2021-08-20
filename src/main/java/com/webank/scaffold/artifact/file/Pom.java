@@ -13,33 +13,32 @@ import java.util.Map;
 /**
  * @author aaronchu
  * @Description
- * @data 2021/05/13
+ * @date 2021/08/10
  */
-public class BcosConfigJava implements Artifact {
-
-    private File parentDir;
+public class Pom implements Artifact {
+    private File parent;
     private UserConfig config;
 
-    public BcosConfigJava(File parentDir, UserConfig config){
-        this.parentDir = parentDir;
+    public Pom(File parent, UserConfig config){
+        this.parent = parent;
         this.config = config;
     }
+
     @Override
     public void generate() throws Exception {
-        this.parentDir.mkdirs();
-        String pkg = config.getGroup() + "." + config.getArtifact()+ ".config";
         Map<String, String> map = new HashMap<>();
-        map.put(ReplaceConstants.PACKAGE, pkg);
-        IOUtil.replaceAllStr(FileNameConstants.TEMPLATE_BCOS_CONFIG, map, this.toFile());
+        map.put(ReplaceConstants.GENERATOR_GROUP, config.getGroup());
+        map.put(ReplaceConstants.GENERATOR_ARTIFACT, config.getArtifact());
+        IOUtil.replaceAllStr(FileNameConstants.TEMPLATE_POM, map, this.toFile());
     }
 
     @Override
     public File getParentDir() {
-        return parentDir;
+        return this.parent;
     }
 
     @Override
     public String getName() {
-        return FileNameConstants.BCOS_CONFIG;
+        return FileNameConstants.POM_FILE;
     }
 }

@@ -1,5 +1,7 @@
 package com.webank.scaffold.config;
 
+import com.webank.scaffold.enums.ProjectType;
+
 /**
  * Config files for users
  * @author aaronchu
@@ -15,6 +17,7 @@ public class UserConfig{
     private String outputDir;
     private String need;
     private String gradle;
+    private ProjectType projectType;
 
     public String getGradle() {
         return gradle;
@@ -22,7 +25,7 @@ public class UserConfig{
 
     private UserConfig(){}
 
-    public static UserConfig getInstance(String group, String artifact, String solidityDir, String outputDir, String need, String gradle){
+    public static UserConfig getInstance(String group, String artifact, String solidityDir, String outputDir, String need, ProjectType projectType, String gradle){
 
         UserConfig config = new UserConfig();
         config.setGroup(group);
@@ -31,6 +34,7 @@ public class UserConfig{
         config.setOutputDir(outputDir);
         config.setNeed(need);
         config.setGradle(gradle);
+        config.setProjectType(projectType);
         return config;
     }
 
@@ -107,6 +111,13 @@ public class UserConfig{
     public void setNeed(String need) {
         this.need = need;
     }
-    
-    
+
+
+    public ProjectType getProjectType() {
+        return projectType;
+    }
+
+    public void setProjectType(ProjectType projectType) {
+        this.projectType = projectType;
+    }
 }
