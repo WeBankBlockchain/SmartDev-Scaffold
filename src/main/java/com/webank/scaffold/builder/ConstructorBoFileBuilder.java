@@ -19,10 +19,10 @@ import com.squareup.javapoet.TypeSpec;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.FileNameConstants;
 import com.webank.scaffold.util.ABIUtil;
-import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
-import org.fisco.bcos.sdk.abi.wrapper.ABIDefinitionFactory;
-import org.fisco.bcos.sdk.abi.wrapper.ContractABIDefinition;
-import org.fisco.bcos.sdk.crypto.CryptoSuite;
+import org.fisco.bcos.sdk.v3.codec.wrapper.ABIDefinition;
+import org.fisco.bcos.sdk.v3.codec.wrapper.ABIDefinitionFactory;
+import org.fisco.bcos.sdk.v3.codec.wrapper.ContractABIDefinition;
+import org.fisco.bcos.sdk.v3.crypto.CryptoSuite;
 
 import java.util.Arrays;
 import java.util.List;

@@ -6,13 +6,6 @@ import java.util.Map;
 import javax.lang.model.element.Modifier;
 
 import com.webank.scaffold.builder.ContractConstantsBuilder;
-import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
-import org.fisco.bcos.sdk.client.Client;
-import org.fisco.bcos.sdk.transaction.manager.AssembleTransactionProcessor;
-import org.fisco.bcos.sdk.transaction.manager.TransactionProcessorFactory;
-import org.fisco.bcos.sdk.transaction.model.dto.CallResponse;
-import org.fisco.bcos.sdk.transaction.model.dto.TransactionResponse;
-import org.fisco.bcos.sdk.utils.StringUtils;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
@@ -25,6 +18,13 @@ import com.webank.scaffold.constants.FileNameConstants;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.fisco.bcos.sdk.v3.client.Client;
+import org.fisco.bcos.sdk.v3.codec.wrapper.ABIDefinition;
+import org.fisco.bcos.sdk.v3.transaction.manager.AssembleTransactionProcessor;
+import org.fisco.bcos.sdk.v3.transaction.manager.TransactionProcessorFactory;
+import org.fisco.bcos.sdk.v3.transaction.model.dto.CallResponse;
+import org.fisco.bcos.sdk.v3.transaction.model.dto.TransactionResponse;
+import org.fisco.bcos.sdk.v3.utils.StringUtils;
 
 /**
  * @author aaronchu

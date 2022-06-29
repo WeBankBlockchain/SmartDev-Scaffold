@@ -21,7 +21,7 @@ import com.squareup.javapoet.TypeSpec;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.FileNameConstants;
 import lombok.Data;
-import org.fisco.bcos.sdk.utils.StringUtils;
+import org.fisco.bcos.sdk.v3.utils.StringUtils;
 
 import javax.lang.model.element.Modifier;
 import java.util.Arrays;

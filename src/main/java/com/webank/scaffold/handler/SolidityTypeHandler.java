@@ -1,14 +1,18 @@
 package com.webank.scaffold.handler;
 
 import com.squareup.javapoet.TypeName;
-import org.fisco.bcos.sdk.codegen.SolidityContractWrapper;
+import org.fisco.bcos.sdk.v3.codegen.ContractWrapper;
 
 /**
  * @author aaronchu
  * @Description
  * @data 2021/01/26
  */
-public class SolidityTypeHandler extends SolidityContractWrapper {
+public class SolidityTypeHandler extends ContractWrapper {
+
+    public SolidityTypeHandler() {
+        super(false);
+    }
 
     /**
      * Convert a strong typed solidity type.
@@ -20,8 +24,12 @@ public class SolidityTypeHandler extends SolidityContractWrapper {
      * @return
      */
     public static TypeName convert(String typeName){
-        TypeName solType = SolidityContractWrapper.buildTypeName(typeName);
-        TypeName nativeType = SolidityContractWrapper.getNativeType(solType);
-        return nativeType;
+        try{
+            TypeName solType = ContractWrapper.buildTypeName(typeName);
+            TypeName nativeType = ContractWrapper.getNativeType(solType);
+            return nativeType;
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 }

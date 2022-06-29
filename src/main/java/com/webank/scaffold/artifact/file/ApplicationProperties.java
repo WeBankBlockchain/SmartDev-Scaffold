@@ -2,7 +2,7 @@ package com.webank.scaffold.artifact.file;
 
 import com.webank.scaffold.artifact.Artifact;
 import com.webank.scaffold.constants.FileNameConstants;
-import org.fisco.bcos.sdk.utils.StringUtils;
+import org.fisco.bcos.sdk.v3.utils.StringUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;

@@ -18,7 +18,7 @@ package com.webank.scaffold.builder;
 import com.squareup.javapoet.TypeSpec;
 import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.util.ABIUtil;
-import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
+import org.fisco.bcos.sdk.v3.codec.wrapper.ABIDefinition;
 
 import java.util.List;
 import java.util.Map;

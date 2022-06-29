@@ -5,8 +5,8 @@ import com.webank.scaffold.config.UserConfig;
 import com.webank.scaffold.constants.FileNameConstants;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.fisco.bcos.sdk.client.Client;
-import org.fisco.bcos.sdk.utils.StringUtils;
+import org.fisco.bcos.sdk.v3.client.Client;
+import org.fisco.bcos.sdk.v3.utils.StringUtils;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;

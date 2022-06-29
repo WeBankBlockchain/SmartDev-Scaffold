@@ -1,9 +1,8 @@
-pragma solidity ^0.4.25;
+pragma solidity ^0.8.11;
 
 
 contract HelloWorld{
     string name;
-
 
     function set(string memory n) public{
 		emit test(n);
