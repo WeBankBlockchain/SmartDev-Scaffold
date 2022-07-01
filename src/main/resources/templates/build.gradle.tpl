@@ -7,7 +7,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.webank:solc-gradle-plugin:1.0.1'
+        classpath 'com.webank:solc-gradle-plugin:1.0.2-SNAPSHOT'
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
     }
 }
@@ -61,7 +61,7 @@ dependencies {
     }
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
-    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.7.2'){
+    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.0.0-rc3'){
         exclude group: 'org.slf4j'
     }
 }
