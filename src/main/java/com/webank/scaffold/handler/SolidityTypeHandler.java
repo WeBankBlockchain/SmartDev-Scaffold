@@ -1,14 +1,19 @@
 package com.webank.scaffold.handler;
 
 import com.squareup.javapoet.TypeName;
-import org.fisco.bcos.sdk.codegen.SolidityContractWrapper;
+import com.squareup.javapoet.TypeSpec;
+import org.fisco.bcos.sdk.abi.wrapper.ABIDefinition;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author aaronchu
  * @Description
  * @data 2021/01/26
  */
-public class SolidityTypeHandler extends SolidityContractWrapper {
+public class SolidityTypeHandler {
+
 
     /**
      * Convert a strong typed solidity type.
@@ -16,12 +21,24 @@ public class SolidityTypeHandler extends SolidityContractWrapper {
      * uint256[] -> DynamicArray[Uint256].class
      * uint256[2] ->StaticArray2[Uint256].class
      * uint256[][2] ->DynamicArray[StaticArray2[Uint256]].class
-     * @param typeName
+     * @param namedType
      * @return
      */
-    public static TypeName convert(String typeName){
-        TypeName solType = SolidityContractWrapper.buildTypeName(typeName);
-        TypeName nativeType = SolidityContractWrapper.getNativeType(solType);
-        return nativeType;
+    public static TypeName convert(ABIDefinition.NamedType namedType){
+        ContractHandler handler = new ContractHandler();
+        try{
+            //如果是结构体，那么返回结构体对应类型的名字，比如xxx.xxx.xxx.Entry
+            if (!namedType.getComponents().isEmpty()){
+                List<ABIDefinition.NamedType> list = new ArrayList<>();
+                list.add(namedType);
+                TypeName typeName = handler.buildTypeNames(list).get(0);
+                return typeName;
+            }
+            TypeName solType = handler.buildTypeName(namedType.getType());
+            TypeName nativeType = handler.getNativeType(solType);
+            return nativeType;
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 }

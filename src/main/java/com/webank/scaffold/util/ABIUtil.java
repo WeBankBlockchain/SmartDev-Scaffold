@@ -62,8 +62,7 @@ public class ABIUtil {
             if(argName == null || argName.isEmpty()){
                 argName = "arg"+argIndex;
             }
-            String typeString = namedType.getTypeAsString();
-            TypeName type = SolidityTypeHandler.convert(typeString);
+            TypeName type = SolidityTypeHandler.convert(namedType);
             boBuilder.addField(type, argName, Modifier.PRIVATE);
             argIndex++;
             fixedArgs.add(argName);
