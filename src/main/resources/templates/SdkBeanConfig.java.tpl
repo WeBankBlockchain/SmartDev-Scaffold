@@ -1,10 +1,10 @@
 package ${package};
 
 import lombok.extern.slf4j.Slf4j;
-import org.fisco.bcos.sdk.BcosSDK;
-import org.fisco.bcos.sdk.client.Client;
-import org.fisco.bcos.sdk.config.ConfigOption;
-import org.fisco.bcos.sdk.config.model.ConfigProperty;
+import org.fisco.bcos.sdk.v3.BcosSDK;
+import org.fisco.bcos.sdk.v3.client.Client;
+import org.fisco.bcos.sdk.v3.config.ConfigOption;
+import org.fisco.bcos.sdk.v3.config.model.ConfigProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,6 +56,6 @@ public class SdkBeanConfig {
         if(systemConfig.getHexPrivateKey().startsWith("0x") || systemConfig.getHexPrivateKey().startsWith("0X")){
             systemConfig.setHexPrivateKey(systemConfig.getHexPrivateKey().substring(2));
         }
-        client.getCryptoSuite().setCryptoKeyPair(client.getCryptoSuite().createKeyPair(systemConfig.getHexPrivateKey()));
+        client.getCryptoSuite().setCryptoKeyPair(client.getCryptoSuite().loadKeyPair(systemConfig.getHexPrivateKey()));
     }
 }

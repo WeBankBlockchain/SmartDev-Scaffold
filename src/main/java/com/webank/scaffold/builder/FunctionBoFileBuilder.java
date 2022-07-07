@@ -51,6 +51,8 @@ public class FunctionBoFileBuilder implements JavaFileBuilder {
 
     @Override
     public List<TypeSpec> buildTypeSpec(String fullPkg) {
+        //Build struct bos
+
         Map<ABIDefinition,TypeSpec> result = ABIUtil.buildAbiDefAndTypeSpec(contractName,abiStr);
         return result.values().stream().collect(Collectors.toList());
     }
