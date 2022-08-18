@@ -74,6 +74,10 @@ public class MainJavaDir extends DirectoryArtifact {
             ConstructorBoFileBuilder cbBuilder = new ConstructorBoFileBuilder(contractName, abiStr, this.config);
             cbBuilder.generateJavaFile(FileNameConstants.BO_PKG_POSTFIX, javaDir);
 
+            // create struct bo
+            StructsFileBuilder structsBuilder = new StructsFileBuilder(abiStr, this.config);
+            structsBuilder.generateJavaFile(FileNameConstants.BO_PKG_POSTFIX, javaDir);
+
             // create function bo
             FunctionBoFileBuilder fbBuilder = new FunctionBoFileBuilder(contractName, abiStr, this.config);
             fbBuilder.generateJavaFile(FileNameConstants.BO_PKG_POSTFIX, javaDir);
