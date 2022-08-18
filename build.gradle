@@ -22,7 +22,15 @@ repositories {
     mavenLocal()
 }
 
+def log4j_version="2.16.0"
+List logger = [
+        "org.apache.logging.log4j:log4j-api:$log4j_version",
+        "org.apache.logging.log4j:log4j-core:$log4j_version",
+        "org.apache.logging.log4j:log4j-to-slf4j:$log4j_version",
+]
+
 dependencies {    
+    compile logger
     implementation ('com.webank:solc-gradle-plugin:1.0.1')
     implementation ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:2.9.1')
     implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
