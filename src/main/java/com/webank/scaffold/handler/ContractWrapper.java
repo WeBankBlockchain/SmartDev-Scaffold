@@ -384,7 +384,7 @@ public class ContractWrapper {
 
             final TypeSpec.Builder builder =
                     TypeSpec.classBuilder(structName)
-                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+                            .addModifiers(Modifier.PUBLIC);
 
             final MethodSpec.Builder constructorBuilder =
                     MethodSpec.constructorBuilder()
@@ -483,6 +483,37 @@ public class ContractWrapper {
         return namedType.getType().startsWith("tuple");
     }
 
+//    private List<ABIDefinition.NamedType> extractStructs(
+//            final List<ABIDefinition> functionDefinitions) {
+//        final HashMap<Integer, ABIDefinition.NamedType> structMap = new LinkedHashMap<>();
+//        functionDefinitions.stream()
+//                .flatMap(
+//                        definition -> {
+//                            List<ABIDefinition.NamedType> parameters =
+//                                    new ArrayList<>(definition.getInputs());
+//                            List<ABIDefinition.NamedType> outputs = definition.getOutputs();
+//                            if (outputs != null) {
+//                                parameters.addAll(definition.getOutputs());
+//                            }
+//                            return parameters.stream()
+//                                    .map(this::normalizeNamedType)
+//                                    .filter(namedType -> namedType.getType().startsWith("tuple"));
+//                        })
+//                .forEach(
+//                        namedType -> {
+//                            int structIdentifier = namedType.structIdentifier();
+//                            if (!structMap.containsKey(structIdentifier)) {
+//                                structMap.put(structIdentifier, namedType);
+//                            }
+//                            // Note: structA in structB, structA must exist in struct map, so no
+//                            // need to exact struct again
+//                        });
+//
+//        return structMap.values().stream()
+//                .sorted(Comparator.comparingInt(ABIDefinition.NamedType::nestedness))
+//                .collect(Collectors.toList());
+//    }
+
     private List<ABIDefinition.NamedType> extractStructs(
             final List<ABIDefinition> functionDefinitions) {
         final HashMap<Integer, ABIDefinition.NamedType> structMap = new LinkedHashMap<>();
@@ -505,8 +536,13 @@ public class ContractWrapper {
                             if (!structMap.containsKey(structIdentifier)) {
                                 structMap.put(structIdentifier, namedType);
                             }
-                            // Note: structA in structB, structA must exist in struct map, so no
-                            // need to exact struct again
+                            extractNested(namedType).stream()
+                                    .filter(this::isStructType)
+                                    .forEach(
+                                            nestedNamedType ->
+                                                    structMap.put(
+                                                            nestedNamedType.structIdentifier(),
+                                                            nestedNamedType));
                         });
 
         return structMap.values().stream()
