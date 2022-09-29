@@ -341,6 +341,7 @@ public class ContractWrapper {
         int structCounter = 0;
         List<TypeSpec> structs = new ArrayList<>();
         for (final ABIDefinition.NamedType namedType : orderedKeys) {
+
             if (!isStructType(namedType)) {
                 List<TypeName> elementTypes = new ArrayList<>();
                 for (ABIDefinition.NamedType component : namedType.getComponents()) {
