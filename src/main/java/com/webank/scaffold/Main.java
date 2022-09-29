@@ -4,7 +4,6 @@ import com.squareup.javapoet.TypeName;
 import com.webank.scaffold.cmd.ScaffoldRunner;
 import com.webank.scaffold.constants.FileNameConstants;
 import com.webank.scaffold.handler.SolidityTypeHandler;
-import org.fisco.bcos.sdk.v3.codegen.ContractWrapper;
 import picocli.CommandLine;
 
 import java.io.InputStream;
