@@ -61,7 +61,7 @@ dependencies {
     }
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
-    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.0.0-rc3'){
+    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.0.0'){
         exclude group: 'org.slf4j'
     }
 }

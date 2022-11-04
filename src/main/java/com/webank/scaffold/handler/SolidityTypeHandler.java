@@ -1,9 +1,7 @@
 package com.webank.scaffold.handler;
 
 import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
 import org.fisco.bcos.sdk.v3.codec.wrapper.ABIDefinition;
-import org.fisco.bcos.sdk.v3.codegen.ContractWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +24,15 @@ public class SolidityTypeHandler {
      * @return
      */
     public static TypeName convert(ABIDefinition.NamedType namedType){
-        ContractHandler handler = new ContractHandler(false);
+        ContractWrapper handler = new ContractWrapper(false);
         try{
             //如果是结构体，那么返回结构体对应类型的名字，比如xxx.xxx.xxx.Entry
             if (!namedType.getComponents().isEmpty()){
+
                 List<ABIDefinition.NamedType> list = new ArrayList<>();
                 list.add(namedType);
                 TypeName typeName = handler.buildTypeNames(list).get(0);
+//                System.out.println("aaa"+ typeName);
                 return typeName;
             }
             TypeName solType = handler.buildTypeName(namedType.getType());

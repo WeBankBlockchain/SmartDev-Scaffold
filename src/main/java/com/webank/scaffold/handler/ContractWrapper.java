@@ -1,17 +1,36 @@
 package com.webank.scaffold.handler;
 
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
+import org.fisco.bcos.codegen.v3.utils.CodeGenUtils;
 import org.fisco.bcos.sdk.v3.client.Client;
-import org.fisco.bcos.sdk.v3.client.protocol.model.Transaction;
+import org.fisco.bcos.sdk.v3.client.protocol.model.TransactionAttribute;
 import org.fisco.bcos.sdk.v3.codec.datatypes.Address;
 import org.fisco.bcos.sdk.v3.codec.datatypes.Bool;
 import org.fisco.bcos.sdk.v3.codec.datatypes.DynamicArray;
@@ -25,7 +44,6 @@ import org.fisco.bcos.sdk.v3.codec.datatypes.Type;
 import org.fisco.bcos.sdk.v3.codec.datatypes.TypeReference;
 import org.fisco.bcos.sdk.v3.codec.datatypes.Utf8String;
 import org.fisco.bcos.sdk.v3.codec.wrapper.ABIDefinition;
-import org.fisco.bcos.sdk.v3.codegen.CodeGenUtils;
 import org.fisco.bcos.sdk.v3.contract.Contract;
 import org.fisco.bcos.sdk.v3.crypto.CryptoSuite;
 import org.fisco.bcos.sdk.v3.crypto.keypair.CryptoKeyPair;
@@ -40,9 +58,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** Generate Java Classes based on generated Solidity bin and abi files. */
-public class ContractHandler {
+public class ContractWrapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(ContractHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ContractWrapper.class);
 
     private static final int MAX_BIN_SIZE = 0x40000;
     private static final int MAX_FIELD = 8 * 1024;
@@ -78,7 +96,7 @@ public class ContractHandler {
     private static final HashMap<Integer, TypeName> structClassNameMap = new HashMap<>();
     private static final List<ABIDefinition.NamedType> structsNamedTypeList = new ArrayList<>();
 
-    public ContractHandler(boolean isWasm) {
+    public ContractWrapper(boolean isWasm) {
         this.isWasm = isWasm;
     }
 
@@ -281,14 +299,35 @@ public class ContractHandler {
             final ABIDefinition.NamedType component = components.get(i);
             stringBuilder.append(i > 0 ? "," : "");
             if (useNativeJavaTypes) {
-                stringBuilder.append(
-                        !component.getType().startsWith("tuple")
-                                ? "new "
-                                        + buildTypeName(component.getType())
-                                        + "("
-                                        + component.getName()
-                                        + ")"
-                                : component.getName());
+                String state = "";
+                if (component.getType().startsWith("tuple")) {
+                    // if struct
+                    state = component.getName();
+                } else if (component.getType().endsWith("]")) {
+                    // if list
+                    ParameterizedTypeName typeName =
+                            (ParameterizedTypeName) buildTypeName(component.getType());
+                    TypeName argumentType = typeName.typeArguments.get(0);
+                    state =
+                            "new "
+                                    + buildTypeName(component.getType())
+                                    + "("
+                                    + argumentType.toString()
+                                    + ".class, "
+                                    + component.getName()
+                                    + ".stream().map("
+                                    + argumentType
+                                    + "::new).collect(java.util.stream.Collectors.toList())"
+                                    + ")";
+                } else {
+                    state =
+                            "new "
+                                    + buildTypeName(component.getType())
+                                    + "("
+                                    + component.getName()
+                                    + ")";
+                }
+                stringBuilder.append(state);
             } else {
                 stringBuilder.append(component.getName());
             }
@@ -302,6 +341,7 @@ public class ContractHandler {
         int structCounter = 0;
         List<TypeSpec> structs = new ArrayList<>();
         for (final ABIDefinition.NamedType namedType : orderedKeys) {
+
             if (!isStructType(namedType)) {
                 List<TypeName> elementTypes = new ArrayList<>();
                 for (ABIDefinition.NamedType component : namedType.getComponents()) {
@@ -352,7 +392,7 @@ public class ContractHandler {
                             .addStatement(
                                     "super("
                                             + buildStructConstructorParameterDefinition(
-                                                    namedType.getComponents(), false)
+                                            namedType.getComponents(), false)
                                             + ")");
             final MethodSpec.Builder nativeConstructorBuilder =
                     MethodSpec.constructorBuilder()
@@ -360,10 +400,11 @@ public class ContractHandler {
                             .addStatement(
                                     "super("
                                             + buildStructConstructorParameterDefinition(
-                                                    namedType.getComponents(), true)
+                                            namedType.getComponents(), true)
                                             + ")");
 
             for (ABIDefinition.NamedType component : namedType.getComponents()) {
+                String getValue = ".getValue()";
                 if (component.getType().equals("tuple")) {
                     final TypeName typeName = structClassNameMap.get(component.structIdentifier());
                     builder.addField(typeName, component.getName(), Modifier.PUBLIC);
@@ -375,6 +416,21 @@ public class ContractHandler {
                     builder.addField(typeName, component.getName(), Modifier.PUBLIC);
                     constructorBuilder.addParameter(typeName, component.getName());
                     nativeConstructorBuilder.addParameter(typeName, component.getName());
+
+                    getValue = "";
+                } else if (component.getType().endsWith("]")) {
+                    final TypeName typeName = buildTypeName(component.getType());
+                    final TypeName nativeTypeName = getNativeType(typeName);
+                    builder.addField(nativeTypeName, component.getName(), Modifier.PUBLIC);
+                    constructorBuilder.addParameter(typeName, component.getName());
+                    nativeConstructorBuilder.addParameter(nativeTypeName, component.getName());
+
+                    ParameterizedTypeName parameterizedTypeName = (ParameterizedTypeName) typeName;
+                    TypeName argumentType = parameterizedTypeName.typeArguments.get(0);
+                    getValue +=
+                            ".stream().map("
+                                    + argumentType
+                                    + "::getValue).collect(java.util.stream.Collectors.toList())";
                 } else {
                     final TypeName typeName = buildTypeName(component.getType());
                     final TypeName nativeTypeName = getNativeType(typeName);
@@ -390,23 +446,23 @@ public class ContractHandler {
                                 + " = "
                                 + component.getName()
                                 + (structClassNameMap.keySet().stream()
-                                                .noneMatch(i -> i == component.structIdentifier())
-                                        ? ".getValue()"
-                                        : ""));
+                                .noneMatch(i -> i == component.structIdentifier())
+                                ? getValue
+                                : ""));
             }
 
             builder.superclass(namedType.isDynamic() ? DynamicStruct.class : StaticStruct.class);
             builder.addMethod(constructorBuilder.build());
             if (!namedType.getComponents().isEmpty()
                     && namedType.getComponents().stream()
-                            .anyMatch(
-                                    component ->
-                                            structClassNameMap.keySet().stream()
-                                                    .noneMatch(
-                                                            i ->
-                                                                    i
-                                                                            == component
-                                                                                    .structIdentifier()))) {
+                    .anyMatch(
+                            component ->
+                                    structClassNameMap.keySet().stream()
+                                            .noneMatch(
+                                                    i ->
+                                                            i
+                                                                    == component
+                                                                    .structIdentifier()))) {
                 builder.addMethod(nativeConstructorBuilder.build());
             }
             structClassNameMap.put(namedType.structIdentifier(), ClassName.get("", structName));
@@ -426,6 +482,37 @@ public class ContractHandler {
         }
         return namedType.getType().startsWith("tuple");
     }
+
+//    private List<ABIDefinition.NamedType> extractStructs(
+//            final List<ABIDefinition> functionDefinitions) {
+//        final HashMap<Integer, ABIDefinition.NamedType> structMap = new LinkedHashMap<>();
+//        functionDefinitions.stream()
+//                .flatMap(
+//                        definition -> {
+//                            List<ABIDefinition.NamedType> parameters =
+//                                    new ArrayList<>(definition.getInputs());
+//                            List<ABIDefinition.NamedType> outputs = definition.getOutputs();
+//                            if (outputs != null) {
+//                                parameters.addAll(definition.getOutputs());
+//                            }
+//                            return parameters.stream()
+//                                    .map(this::normalizeNamedType)
+//                                    .filter(namedType -> namedType.getType().startsWith("tuple"));
+//                        })
+//                .forEach(
+//                        namedType -> {
+//                            int structIdentifier = namedType.structIdentifier();
+//                            if (!structMap.containsKey(structIdentifier)) {
+//                                structMap.put(structIdentifier, namedType);
+//                            }
+//                            // Note: structA in structB, structA must exist in struct map, so no
+//                            // need to exact struct again
+//                        });
+//
+//        return structMap.values().stream()
+//                .sorted(Comparator.comparingInt(ABIDefinition.NamedType::nestedness))
+//                .collect(Collectors.toList());
+//    }
 
     private List<ABIDefinition.NamedType> extractStructs(
             final List<ABIDefinition> functionDefinitions) {
@@ -465,7 +552,7 @@ public class ContractHandler {
 
     private java.util.Collection<? extends ABIDefinition.NamedType> extractNested(
             final ABIDefinition.NamedType namedType) {
-        if (namedType.getComponents().size() == 0) {
+        if (namedType.getComponents().isEmpty()) {
             return new ArrayList<>();
         } else {
             List<ABIDefinition.NamedType> nestedStructs = new ArrayList<>();
@@ -544,13 +631,13 @@ public class ContractHandler {
     private static MethodSpec buildGetBinaryMethod() {
         MethodSpec.Builder toReturn =
                 MethodSpec.methodBuilder(GET_BINARY_FUNC)
-                        .addParameter(CryptoSuite.class, ContractHandler.CRYPTO_SUITE)
+                        .addParameter(CryptoSuite.class, ContractWrapper.CRYPTO_SUITE)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .returns(String.class);
 
         toReturn.addStatement(
                 "return ($N.getCryptoTypeConfig() == $T.ECDSA_TYPE ? $N : $N)",
-                ContractHandler.CRYPTO_SUITE,
+                ContractWrapper.CRYPTO_SUITE,
                 CryptoType.class,
                 BINARY_NAME,
                 SM_BINARY_NAME);
@@ -573,13 +660,13 @@ public class ContractHandler {
                         .addModifiers(Modifier.PROTECTED)
                         .addParameter(String.class, CONTRACT_ADDRESS)
                         .addParameter(Client.class, CLIENT)
-                        .addParameter(CryptoKeyPair.class, ContractHandler.CREDENTIAL)
+                        .addParameter(CryptoKeyPair.class, ContractWrapper.CREDENTIAL)
                         .addStatement(
                                 "super($N, $N, $N, $N)",
                                 getBinaryFuncDefinition(),
                                 CONTRACT_ADDRESS,
                                 CLIENT,
-                                ContractHandler.CREDENTIAL);
+                                ContractWrapper.CREDENTIAL);
         return toReturn.build();
     }
 
@@ -616,7 +703,7 @@ public class ContractHandler {
                         "return deploy(" + "$L.class, $L, $L, $L, $L, encodedConstructor, $L)",
                         className,
                         CLIENT,
-                        ContractHandler.CREDENTIAL,
+                        ContractWrapper.CREDENTIAL,
                         getBinaryFuncDefinition(),
                         getABIFuncDefinition(),
                         isWasm ? PATH : "null");
@@ -629,7 +716,7 @@ public class ContractHandler {
                 "return deploy($L.class, $L, $L, $L, $L, null, $L)",
                 className,
                 CLIENT,
-                ContractHandler.CREDENTIAL,
+                ContractWrapper.CREDENTIAL,
                 getBinaryFuncDefinition(),
                 getABIFuncDefinition(),
                 isWasm ? PATH : "null");
@@ -643,7 +730,7 @@ public class ContractHandler {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .returns(TypeVariableName.get(className, Type.class))
                         .addParameter(Client.class, CLIENT)
-                        .addParameter(CryptoKeyPair.class, ContractHandler.CREDENTIAL);
+                        .addParameter(CryptoKeyPair.class, ContractWrapper.CREDENTIAL);
         if (isWasm) {
             methodSpec.addParameter(String.class, PATH);
         }
@@ -657,13 +744,13 @@ public class ContractHandler {
                         .returns(TypeVariableName.get(className, Type.class))
                         .addParameter(String.class, CONTRACT_ADDRESS)
                         .addParameter(Client.class, CLIENT)
-                        .addParameter(CryptoKeyPair.class, ContractHandler.CREDENTIAL)
+                        .addParameter(CryptoKeyPair.class, ContractWrapper.CREDENTIAL)
                         .addStatement(
                                 "return new $L($L, $L, $L)",
                                 className,
                                 CONTRACT_ADDRESS,
                                 CLIENT,
-                                ContractHandler.CREDENTIAL);
+                                ContractWrapper.CREDENTIAL);
         return toReturn.build();
     }
 
@@ -693,7 +780,12 @@ public class ContractHandler {
                 typeName = structClassNameMap.get(namedTypes.get(i).structIdentifier());
             } else if (namedTypes.get(i).getType().startsWith("tuple")
                     && namedTypes.get(i).getType().contains("[")) {
-                typeName = buildStructArrayTypeName(namedTypes.get(i));
+                TypeName argument =
+                        ((ParameterizedTypeName) buildStructArrayTypeName(namedTypes.get(i)))
+                                .typeArguments.get(0);
+                typeName =
+                        ParameterizedTypeName.get(
+                                ClassName.get(List.class), ClassName.get("", argument.toString()));
             } else {
                 typeName = getNativeType(inputParameterTypes.get(i).type);
             }
@@ -974,7 +1066,6 @@ public class ContractHandler {
         } else {
             this.buildTransactionFunction(functionDefinition, methodBuilder, inputParams);
         }
-
         return methodBuilder.build();
     }
 
@@ -1166,7 +1257,12 @@ public class ContractHandler {
                 nativeReturnTypeName = structClassNameMap.get(outputType.structIdentifier());
             } else if (outputType.getType().startsWith("tuple")
                     && outputType.getType().contains("[")) {
-                nativeReturnTypeName = buildStructArrayTypeName(outputType);
+                TypeName argument =
+                        ((ParameterizedTypeName) buildStructArrayTypeName(outputType))
+                                .typeArguments.get(0);
+                nativeReturnTypeName =
+                        ParameterizedTypeName.get(
+                                ClassName.get(List.class), ClassName.get("", argument.toString()));
             } else {
                 nativeReturnTypeName = this.getWrapperRawType(typeName);
             }
@@ -1203,6 +1299,10 @@ public class ContractHandler {
                 callCode.addStatement("return convertToNative(result)");
                 methodBuilder.returns(nativeReturnTypeName).addCode(callCode.build());
             } else {
+                if (outputType.getType().startsWith("tuple")
+                        && outputType.getType().contains("[")) {
+                    nativeReturnTypeName = ClassName.get(List.class);
+                }
                 methodBuilder.addStatement(
                         "return executeCallWithSingleValueReturn(function, $T.class)",
                         nativeReturnTypeName);
@@ -1267,7 +1367,7 @@ public class ContractHandler {
                     return dagAttribute;
                 }
             }
-            dagAttribute = Transaction.DAG;
+            dagAttribute = TransactionAttribute.DAG;
         }
         return dagAttribute;
     }

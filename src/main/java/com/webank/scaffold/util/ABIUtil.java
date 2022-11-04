@@ -43,7 +43,6 @@ import java.util.stream.Collectors;
 public class ABIUtil {
 
     public static TypeSpec buildBOType(String className, List<ABIDefinition.NamedType> args){
-
         // 1.Check: No need to generate BO for functions with no args
         if(args.isEmpty()) return null;//No need
 
