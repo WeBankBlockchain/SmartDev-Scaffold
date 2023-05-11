@@ -31,9 +31,9 @@ List logger = [
 
 dependencies {    
     compile logger
-    implementation ('com.webank:solc-gradle-plugin:1.0.2-SNAPSHOT')
+    implementation ('com.webank:solc-gradle-plugin:3.3.0-SNAPSHOT')
     compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.0.0')
-    compile('org.fisco-bcos.code-generator:bcos-code-generator:1.0.0') {
+    compile('org.fisco-bcos.code-generator:bcos-code-generator:1.1.0') {
         exclude group: "org.fisco-bcos.java-sdk"
         exclude group: "org.slf4j"
     }
