@@ -35,7 +35,7 @@ public class MainDir extends DirectoryArtifact {
         resources.generate();
 
         // process java code dir
-        MainJavaDir javas = new MainJavaDir(this.toFile(), resources.getAbiDir(), this.config);
+        MainJavaDir javas = new MainJavaDir(this.toFile(), resources.getAbiDir(), resources.getBinDir(), resources.getSmBinDir(), this.config);
         javas.generate();
     }
 

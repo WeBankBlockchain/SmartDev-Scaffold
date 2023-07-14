@@ -2,11 +2,10 @@ package com.webank.scaffold.builder;
 
 import com.squareup.javapoet.TypeSpec;
 import com.webank.scaffold.config.UserConfig;
-import com.webank.scaffold.handler.ContractWrapper;
+import com.webank.scaffold.handler.ContractWrapperHelper;
 import org.fisco.bcos.sdk.v3.codec.wrapper.ABIDefinition;
 import org.fisco.bcos.codegen.v3.utils.CodeGenUtils;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -16,12 +15,12 @@ import java.util.List;
 public class StructsFileBuilder implements JavaFileBuilder{
 
     private UserConfig config;
-    private ContractWrapper handler;
+    private ContractWrapperHelper handler;
     private List<ABIDefinition> abis;
 
     public StructsFileBuilder(String abiStr, UserConfig config) throws Exception{
         this.config = config;
-        this.handler = new ContractWrapper(false);
+        this.handler = ContractWrapperHelper.INSTANCE;
         this.abis =  CodeGenUtils.loadContractAbiDefinition(abiStr);
     }
 

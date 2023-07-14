@@ -4,10 +4,12 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'application'
+    id 'signing'
+    id 'maven'
 }
 
 group 'com.webank'
-version '3.0.0'
+version '3.3.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -32,7 +34,7 @@ List logger = [
 dependencies {    
     compile logger
     implementation ('com.webank:solc-gradle-plugin:3.3.0-SNAPSHOT')
-    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.0.0')
+    compile ('org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.3.0')
     compile('org.fisco-bcos.code-generator:bcos-code-generator:1.1.0') {
         exclude group: "org.fisco-bcos.java-sdk"
         exclude group: "org.slf4j"
@@ -64,4 +66,88 @@ clean {
     println "delete ${projectDir}/dist"
     delete "${projectDir}/dist"
 }
- 
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+jar {
+    baseName = project.name
+    destinationDir file('dist/app')
+    archiveName project.name + "-" + version + ".jar"
+
+    exclude '**/*.xml'
+    exclude '**/*.properties'
+
+    doLast {
+        copy {
+            from file('src/main/resources/')
+            into 'dist/conf'
+        }
+    }
+}
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+////
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+                name = project.name
+                packaging ='jar'
+                description ='SmartDev-Scaffold SDK'
+                url= 'https://github.com/WeBankBlockchain/SmartDev-Scaffold'
+
+                scm {
+                    url ='scm:git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
+                    connection ='scm:git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
+                    developerConnection = 'git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
+                }
+
+                licenses {
+                    license {
+                        name ='Apache License, Version 2.0'
+                        url ='http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'aaronchu'
+                        name ='aaronchu'
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    required { gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}

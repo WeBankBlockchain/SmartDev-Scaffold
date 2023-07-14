@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.webank.scaffold.artifact.file.BcosConfigJava;
 import com.webank.scaffold.builder.*;
+import com.webank.scaffold.handler.ContractWrapperHelper;
 import org.apache.commons.io.FileUtils;
 
 import com.webank.scaffold.artifact.file.ApplicationJava;
@@ -25,16 +26,21 @@ import com.webank.scaffold.util.IOUtil;
 public class MainJavaDir extends DirectoryArtifact {
 
     private File abiDir;
+    private File binDir;
+    private File smBinDir;
     private UserConfig config;
 
-    public MainJavaDir(File parentDir, File abi, UserConfig config) {
+    public MainJavaDir(File parentDir, File abiDir, File binDir, File smBinDir, UserConfig config) {
         super(parentDir);
-        this.abiDir = abi;
+        this.abiDir = abiDir;
+        this.binDir = binDir;
+        this.smBinDir = smBinDir;
         this.config = config;
     }
 
     @Override
     protected void doGenerateSubContents() throws Exception {
+        handleJavaContract();
         handleUtil();
         handleSystemConfig();
         handleBcosConfig();
@@ -61,6 +67,23 @@ public class MainJavaDir extends DirectoryArtifact {
 
     private void handleUtil() throws Exception{
         //hook
+    }
+
+    private void handleJavaContract() throws Exception{
+        File javaDir = this.toFile();
+        String javaPackage = config.getGroup() + "." + config.getArtifact() + "." + FileNameConstants.CONTRACTS;
+        List<String> contractList = ABIUtil.contracts(abiDir, this.config.getNeed());
+        for(String contractName :contractList) {
+            File abiFile = new File(abiDir, contractName + FileNameConstants.ABI_FILE_POSTFIX);
+            String abiStr = FileUtils.readFileToString(abiFile);
+
+            File binFile = new File(binDir, contractName + FileNameConstants.BIN_FILE_POSTFIX);
+            String binStr = FileUtils.readFileToString(binFile);
+            File smBinFile = new File(smBinDir, contractName + FileNameConstants.BIN_FILE_POSTFIX);
+            String smBinStr = FileUtils.readFileToString(smBinFile);
+
+            ContractWrapperHelper.INSTANCE.generateJavaFiles(contractName, binStr, smBinStr, abiStr, javaDir.getAbsolutePath(), javaPackage, true);
+        }
     }
 
     private void handleBOAndService() throws Exception{

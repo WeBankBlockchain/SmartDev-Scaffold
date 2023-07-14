@@ -19,10 +19,16 @@ public class MainResourceDir extends DirectoryArtifact {
     private UserConfig config;
     private File abiDir;
 
+    private File binDir;
+
+    private File smBinDir;
+
     public MainResourceDir(File parentDir, UserConfig config) {
         super(parentDir);
         this.config = config;
         this.abiDir = new File(this.toFile(), DirNameConstants.ABI_DIR);
+        this.binDir = new File(this.toFile(), DirNameConstants.BIN_DIR);
+        this.smBinDir = new File(this.toFile(), DirNameConstants.SMBIN_DIR);
     }
 
     @Override
@@ -69,10 +75,11 @@ public class MainResourceDir extends DirectoryArtifact {
         return abiDir;
     }
 
-    /**
-     * @param abiDir the abiDir to set
-     */
-    public void setAbiDir(File abiDir) {
-        this.abiDir = abiDir;
+    public File getBinDir() {
+        return binDir;
+    }
+
+    public File getSmBinDir() {
+        return smBinDir;
     }
 }

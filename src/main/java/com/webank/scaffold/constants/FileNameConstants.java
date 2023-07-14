@@ -60,10 +60,14 @@ public class FileNameConstants {
     public static final String CONTRACT_CONFIG = "ContractConfig";
     public static final String CONTRACT_CONSTANTS = "ContractConstants";
 
+    public static final String CONTRACTS = "contracts";
+
     //package or file postfix
     public static final String CONFIG_PKG_POSTFIX = ".config";
     public static final String UTILS_PKG_POSTFIX = ".utils";
     public static final String ABI_FILE_POSTFIX = ".abi";
+
+    public static final String BIN_FILE_POSTFIX = ".bin";
     public static final String MODEL_FILE_POSTFIX = ".model";
     public static final String BO_PKG_POSTFIX = ".model.bo";
     public static final String SERVICE_PKG_POSTFIX = ".service";

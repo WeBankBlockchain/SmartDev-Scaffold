@@ -24,7 +24,8 @@ public class SolidityTypeHandler {
      * @return
      */
     public static TypeName convert(ABIDefinition.NamedType namedType){
-        ContractWrapper handler = new ContractWrapper(false);
+        ContractWrapperHelper handler = ContractWrapperHelper.INSTANCE;
+
         try{
             //如果是结构体，那么返回结构体对应类型的名字，比如xxx.xxx.xxx.Entry
             if (!namedType.getComponents().isEmpty()){
