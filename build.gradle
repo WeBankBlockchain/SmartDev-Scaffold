@@ -103,49 +103,49 @@ artifacts {
     archives javadocJar
 }
 ////
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+////
+//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+//                authentication(userName: ossrhUsername, password: ossrhPassword)
+//            }
 //
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            pom.project {
-                name = project.name
-                packaging ='jar'
-                description ='SmartDev-Scaffold SDK'
-                url= 'https://github.com/WeBankBlockchain/SmartDev-Scaffold'
-
-                scm {
-                    url ='scm:git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
-                    connection ='scm:git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
-                    developerConnection = 'git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
-                }
-
-                licenses {
-                    license {
-                        name ='Apache License, Version 2.0'
-                        url ='http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution = 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'aaronchu'
-                        name ='aaronchu'
-                    }
-                }
-            }
-        }
-    }
-}
+//            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+//                authentication(userName: sonatypeUsername, password: sonatypePassword)
+//            }
+//
+//            pom.project {
+//                name = project.name
+//                packaging ='jar'
+//                description ='SmartDev-Scaffold SDK'
+//                url= 'https://github.com/WeBankBlockchain/SmartDev-Scaffold'
+//
+//                scm {
+//                    url ='scm:git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
+//                    connection ='scm:git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
+//                    developerConnection = 'git@github.com:WeBankBlockchain/SmartDev-Scaffold.git'
+//                }
+//
+//                licenses {
+//                    license {
+//                        name ='Apache License, Version 2.0'
+//                        url ='http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                        distribution = 'repo'
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id = 'aaronchu'
+//                        name ='aaronchu'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 signing {
     required { gradle.taskGraph.hasTask("uploadArchives") }
